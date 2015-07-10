@@ -20,6 +20,11 @@ namespace Prediktor.ExcelImport
         {
         }
 
+        protected override Microsoft.Office.Core.IRibbonExtensibility CreateRibbonExtensibilityObject()
+        {
+            return Globals.Factory.GetRibbonFactory().CreateRibbonManager(new Microsoft.Office.Tools.Ribbon.IRibbonExtension[] { new Ribbon() });
+        }
+
         #region VSTO generated code
 
         /// <summary>
