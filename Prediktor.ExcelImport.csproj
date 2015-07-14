@@ -28,10 +28,11 @@
     <RootNamespace>Prediktor.ExcelImport</RootNamespace>
     <AssemblyName>Prediktor.ExcelImport</AssemblyName>
     <LoadBehavior>3</LoadBehavior>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <DefineConstants>VSTO40</DefineConstants>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <BootstrapperComponentsLocation>HomeSite</BootstrapperComponentsLocation>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
@@ -81,6 +82,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
     <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <!--
     This section defines properties that are set when the "Release" configuration is selected.
@@ -105,21 +107,41 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
     <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <!--
     This section specifies references for the project.
   -->
   <ItemGroup>
     <Reference Include="Accessibility" />
+    <Reference Include="Castle.Core, Version=2.5.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Dependencies\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor, Version=2.5.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Dependencies\Castle.Windsor.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism">
+      <HintPath>..\..\..\Dependencies\Prism\Desktop\Microsoft.Practices.Prism.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Dependencies\Prism\Desktop\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Office.Tools.v4.0.Framework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
@@ -157,6 +179,8 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="ApplicationProperties.cs" />
+    <Compile Include="DialogManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -168,10 +192,12 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="Ribbon.resx">
       <DependentUpon>Ribbon.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="Prediktor.ExcelImport_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -180,6 +206,7 @@
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Ribbon.cs">
       <SubType>Component</SubType>
@@ -197,6 +224,66 @@
       <DependentUpon>ThisAddIn.Designer.xml</DependentUpon>
     </Compile>
     <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Framework\Application Services\Prediktor.Ioc\Prediktor.Ioc.csproj">
+      <Project>{6a504db5-d6c0-4d7f-8ce3-18d5e65843e6}</Project>
+      <Name>Prediktor.Ioc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Framework\Application Services\Prediktor.Log4Net\Prediktor.Log4Net.csproj">
+      <Project>{73cbb5a6-9342-448b-a37a-39dd3737bb93}</Project>
+      <Name>Prediktor.Log4Net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Framework\Application Services\Prediktor.Log\Prediktor.Log.csproj">
+      <Project>{f8668e99-0a51-4e5c-bea2-2425096811b3}</Project>
+      <Name>Prediktor.Log</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Framework\Application Services\Prediktor.Services\Prediktor.Services.csproj">
+      <Project>{4976f972-c1b0-4196-9a96-dd3b64b9749b}</Project>
+      <Name>Prediktor.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Application Services\Prediktor.Configuration.Windsor\Prediktor.Configuration.Windsor.csproj">
+      <Project>{0981fb82-ca39-4708-8dab-485af0f8f4e7}</Project>
+      <Name>Prediktor.Configuration.Windsor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Application Services\Prediktor.Configuration\Prediktor.Configuration.csproj">
+      <Project>{2ff539ce-c67c-4dee-be51-3d65c782766e}</Project>
+      <Name>Prediktor.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Prediktor.Carbon.Configuration.Hive\Prediktor.Carbon.Configuration.Hive.csproj">
+      <Project>{bb5697ef-936a-48e9-84b1-681b3aa2e7a3}</Project>
+      <Name>Prediktor.Carbon.Configuration.Hive</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Prediktor.Carbon.Configuration.Windsor\Prediktor.Carbon.Configuration.Windsor.csproj">
+      <Project>{f5d2323e-1ec9-4f3c-b0e0-ee3752c0b8b7}</Project>
+      <Name>Prediktor.Carbon.Configuration.Windsor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Prediktor.Carbon.Configuration\Prediktor.Carbon.Configuration.csproj">
+      <Project>{d23cb3bd-68bb-41df-a983-f807c327a36a}</Project>
+      <Name>Prediktor.Carbon.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Prediktor.Carbon.Controls\Prediktor.Carbon.Controls.csproj">
+      <Project>{534967ea-bd8f-4694-90d5-148cd28f76b4}</Project>
+      <Name>Prediktor.Carbon.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Prediktor.Carbon.Infrastructure\Prediktor.Carbon.Infrastructure.csproj">
+      <Project>{bda71c62-0e50-42d9-824b-7e91ca2358aa}</Project>
+      <Name>Prediktor.Carbon.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Prediktor.Carbon.Style\Prediktor.Carbon.Style.csproj">
+      <Project>{e4821dee-9179-4e8e-a27d-f429ee7072c9}</Project>
+      <Name>Prediktor.Carbon.Style</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Xceed.Wpf.AvalonDock\Xceed.Wpf.AvalonDock.csproj">
+      <Project>{db81988f-e0f2-45a0-a1fd-8c37f3d35244}</Project>
+      <Name>Xceed.Wpf.AvalonDock</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Config\ioc.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

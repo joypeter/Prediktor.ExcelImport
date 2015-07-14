@@ -63,6 +63,7 @@
             this.btnConfigure.Label = "Configure";
             this.btnConfigure.Name = "btnConfigure";
             this.btnConfigure.ShowImage = true;
+            this.btnConfigure.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnConfigure_Click);
             // 
             // btnImport
             // 
