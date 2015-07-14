@@ -54,7 +54,7 @@
             this.group1.Items.Add(this.btnConfigure);
             this.group1.Items.Add(this.btnImport);
             this.group1.Items.Add(this.btnUpdate);
-            this.group1.Label = "group1";
+            this.group1.Label = "ApisExcelImport";
             this.group1.Name = "group1";
             // 
             // btnConfigure
