@@ -15,6 +15,7 @@ using Prediktor.Carbon.Infrastructure.Implementation;
 using Prediktor.Ioc;
 using Prediktor.Log;
 using Prediktor.Carbon.Infrastructure.Definitions;
+using Prediktor.Carbon.Configuration.Definitions.ModuleServices;
 
 namespace Prediktor.ExcelImport
 {
@@ -22,6 +23,7 @@ namespace Prediktor.ExcelImport
     {
         private string ioc_config = "Config//ioc.xml";
         private static ITraceLog _log = LogManager.GetLogger(typeof(DialogManager));
+        private readonly IApplicationProperties _applicationProperties;
 
         //private DialogViewModel dialogViewModel;
 
@@ -29,15 +31,30 @@ namespace Prediktor.ExcelImport
 
         protected DependencyObject ConnectionDialog { get; set; }
 
+        static DialogManager instance = null;
+        public static DialogManager Current
+        {
+            get
+            {
+                if (instance==null)
+                {
+                    instance = new DialogManager();
+                }
+                return instance;
+            }
+        }
+
         public DialogManager()
         {
-            Container = CreateContainer();
+            
         }
 
         private IThemeProvider _themeProvider;
         private void InitializeTheme()
         {
             _log.Debug("Entering InitializeTheme");
+            if (!UriParser.IsKnownScheme("pack"))
+                new System.Windows.Application();
 
             _themeProvider = Container.Resolve<IThemeProvider>();
 
@@ -65,9 +82,8 @@ namespace Prediktor.ExcelImport
 
         public void Initialize()
         {
+            Container = CreateContainer();
             InitializeContainer();
-            if (!UriParser.IsKnownScheme("pack"))
-                new System.Windows.Application();
             InitializeTheme();
             //dialogViewModel = new DialogViewModel();
         }
@@ -76,7 +92,11 @@ namespace Prediktor.ExcelImport
         {
             //dialogViewModel.ConnectCommand.Execute(null);
             ConnectionDialog = this.CreateConnectDialog();
-            ((ConnectionDialog)ConnectionDialog).ShowDialog();
+            var result = ((ConnectionDialog)ConnectionDialog).ShowDialog();
+            if (result.HasValue && result.Value)
+            {
+            }
+
             //w.Show();
 
             //Container["ConnectionDialog"].
