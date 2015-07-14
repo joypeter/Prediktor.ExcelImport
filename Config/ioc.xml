@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <components>
+    <component id="hive">
+      <parameters>
+        <defaultsFolder>defaults</defaultsFolder>
+      </parameters>
+    </component>
+    <component id="olga">
+      <parameters>
+        <defaultsFolder>defaults</defaultsFolder>
+      </parameters>
+    </component>
+    <component id ="applicationfeatures">
+      <parameters>
+        <selectableTheme>true</selectableTheme>
+        <minimizeListMemory>true</minimizeListMemory>
+      </parameters>
+    </component>
+    <component id="documentationService"
+      service="Prediktor.Carbon.Infrastructure.Definitions.IDocumentationService, Prediktor.Carbon.Infrastructure"
+      type="Prediktor.Carbon.Infrastructure.Implementation.MadCapDocumentationService, Prediktor.Carbon.Infrastructure">
+      <parameters>
+        <relativePath>../Documents/Foundation</relativePath>
+      </parameters>
+    </component>
+    <component id="exceptionHandler">
+      <parameters>
+        <logFileLocation>logs</logFileLocation>
+      </parameters>
+    </component>
+    <component id="themeprovider">
+      <parameters>
+        <themes>
+          <array>
+            <item>pack://application:,,,/Prediktor.Carbon.Style;component/DarkTheme.xaml</item>
+          </array>
+        </themes>
+      </parameters>
+    </component>
+    <component id="ShellViewModel">
+      <parameters>
+        <title>Apis History Explorer</title>
+      </parameters>
+    </component>
+    <component id="ua">
+      <parameters>
+        <configFile>config/uaclient.xml</configFile>
+      </parameters>
+    </component>
+    <component id="apis">
+      <parameters>
+        <forceRemote>false</forceRemote>
+      </parameters>
+    </component>
+    <component id="honeystore">
+      <parameters>
+        <forceRemote>false</forceRemote>
+      </parameters>
+    </component>
+    <component id ="remotefactory">
+      <parameters>
+        <endpoint>ApisHttp/</endpoint>
+      </parameters>
+    </component>
+  </components>
+</configuration>
