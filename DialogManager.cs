@@ -30,6 +30,7 @@ namespace Prediktor.ExcelImport
         public IWindsorContainer Container { get; protected set; }
 
         protected DependencyObject ConnectionDialog { get; set; }
+        protected DependencyObject ImportDialog { get; set; }
 
         static DialogManager instance = null;
         public static DialogManager Current
@@ -88,6 +89,12 @@ namespace Prediktor.ExcelImport
             //dialogViewModel = new DialogViewModel();
         }
 
+        public void Browse()
+        {
+            ImportDialog = this.CreateImportDialog();
+            ((ImportDialog)ImportDialog).Show();
+        }
+
         public void Connect()
         {
             //dialogViewModel.ConnectCommand.Execute(null);
@@ -106,6 +113,11 @@ namespace Prediktor.ExcelImport
         {
             return Container.Resolve<ConnectionDialog>();
             //return ServiceLocator.Current.GetInstance<ConnectionDialog>();
+        }
+
+        public DependencyObject CreateImportDialog()
+        {
+            return Container.Resolve<Prediktor.ExcelImport.ImportDialog>();
         }
 
         private void InitializeContainer()
@@ -139,6 +151,11 @@ namespace Prediktor.ExcelImport
                 .ImplementedBy<ConnectionDialog>()
                 .Named("ConnectionDialog")
                 .LifeStyle.Transient);
+
+            Container.Register(Component.For<ImportDialog>()
+                .ImplementedBy<ImportDialog>()
+                .Named("ImportDialog")
+                .LifeStyle.Singleton);
             
         }
     }

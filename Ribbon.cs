@@ -17,5 +17,11 @@ namespace Prediktor.ExcelImport
         {
             DialogManager.Current.Connect();
         }
+
+        private void btnImport_Click(object sender, RibbonControlEventArgs e)
+        {
+            DialogManager.Current.Browse();
+        }
+
     }
 }
