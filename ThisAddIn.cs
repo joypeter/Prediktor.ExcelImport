@@ -6,24 +6,50 @@ using System.Xml.Linq;
 using Excel = Microsoft.Office.Interop.Excel;
 using Office = Microsoft.Office.Core;
 using Microsoft.Office.Tools.Excel;
+using System.Windows;
 
 namespace Prediktor.ExcelImport
 {
     public partial class ThisAddIn
     {
+        ExcelImportBootstrapper Bootstrapper;
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
-            //Git test
-            DialogManager.Current.Initialize();
+           System.Windows.Forms.Application.Idle += OnIdle;
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
         {
+            
+        }
+
+        private void OnIdle(Object sender, EventArgs e)
+        {
+            System.Windows.Forms.Application.Idle -= OnIdle;
+            Bootstrapper = new ExcelImportBootstrapper();
+            Bootstrapper.Run();
+        }
+
+
+        public void Connnect()
+        {
+            Bootstrapper.Connect();
+        }
+
+        public void Browse()
+        {
+            Bootstrapper.Browse();
         }
 
         protected override Microsoft.Office.Core.IRibbonExtensibility CreateRibbonExtensibilityObject()
         {
-            return Globals.Factory.GetRibbonFactory().CreateRibbonManager(new Microsoft.Office.Tools.Ribbon.IRibbonExtension[] { new Ribbon() });
+            
+
+            Ribbon apisExcelImport = new Ribbon();
+            apisExcelImport.ConnectMethod = this.Connnect;
+            apisExcelImport.BrowseMethod = this.Browse;
+
+            return Globals.Factory.GetRibbonFactory().CreateRibbonManager(new Microsoft.Office.Tools.Ribbon.IRibbonExtension[] { apisExcelImport });
         }
 
         #region VSTO generated code

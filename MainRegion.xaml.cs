@@ -11,17 +11,21 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Prediktor.Ioc;
 
 namespace Prediktor.ExcelImport
 {
     /// <summary>
     /// Interaction logic for UserControl2.xaml
     /// </summary>
+    [AvoidAutoIocRegister]
     public partial class MainRegion : UserControl
     {
-        public MainRegion()
+        public MainRegion(MainRegionViewModel viewModel)
         {
             InitializeComponent();
+            DataContext = viewModel;
+            this.TabbedView.ResourceDictionaryProvider = viewModel.ResourceDictionaryProvider;
         }
     }
 }

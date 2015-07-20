@@ -12,17 +12,20 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Prediktor.Carbon.Infrastructure.Definitions;
+using Prediktor.Carbon.Infrastructure.Behaviors.Implementation;
 
 namespace Prediktor.ExcelImport
 {
     /// <summary>
     /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class ImportDialog : Prediktor.Carbon.Infrastructure.Behaviors.Implementation.ThemedWindow
+    public partial class Shell : ThemedWindow
     {
-        public ImportDialog()
+        public Shell(ShellViewModel viewModel)
         {
             InitializeComponent();
+
+            DataContext = viewModel;
         }
     }
 }

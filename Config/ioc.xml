@@ -40,7 +40,7 @@
     </component>
     <component id="ShellViewModel">
       <parameters>
-        <title>Apis History Explorer</title>
+        <title>Apis Excel Import</title>
       </parameters>
     </component>
     <component id="ua">
