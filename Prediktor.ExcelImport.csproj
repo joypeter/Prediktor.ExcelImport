@@ -122,15 +122,33 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Dependencies\Castle.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Dependencies\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.Prism">
       <HintPath>..\..\..\Dependencies\Prism\Desktop\Microsoft.Practices.Prism.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.UnityExtensions">
+      <HintPath>..\..\..\Dependencies\Prism\Desktop\Microsoft.Practices.Prism.UnityExtensions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Dependencies\Prism\Desktop\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
+    <Reference Include="Prediktor.Carbon.Configuration, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Prediktor.Carbon.Configuration\bin\Debug\Prediktor.Carbon.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Prediktor.LanguageConversion, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Data\Prediktor.LanguageConversion\bin\Debug\Prediktor.LanguageConversion.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="PrismContrib.WindsorExtensions">
+      <HintPath>..\..\..\Dependencies\Prism\Desktop\PrismContrib.WindsorExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -180,12 +198,10 @@
   -->
   <ItemGroup>
     <Compile Include="ApplicationProperties.cs" />
-    <Compile Include="DialogManager.cs" />
+    <Compile Include="ExcelImportBootstrapper.cs" />
+    <Compile Include="MainRegionViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ImportDialog.xaml.cs">
-      <DependentUpon>ImportDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainRegion.xaml.cs">
       <DependentUpon>MainRegion.xaml</DependentUpon>
@@ -220,6 +236,10 @@
     <Compile Include="Ribbon.Designer.cs">
       <DependentUpon>Ribbon.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shell.xaml.cs">
+      <DependentUpon>Shell.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ShellViewModel.cs" />
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -264,10 +284,6 @@
       <Project>{f5d2323e-1ec9-4f3c-b0e0-ee3752c0b8b7}</Project>
       <Name>Prediktor.Carbon.Configuration.Windsor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Prediktor.Carbon.Configuration\Prediktor.Carbon.Configuration.csproj">
-      <Project>{d23cb3bd-68bb-41df-a983-f807c327a36a}</Project>
-      <Name>Prediktor.Carbon.Configuration</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Prediktor.Carbon.Controls\Prediktor.Carbon.Controls.csproj">
       <Project>{534967ea-bd8f-4694-90d5-148cd28f76b4}</Project>
       <Name>Prediktor.Carbon.Controls</Name>
@@ -292,13 +308,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="ImportDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainRegion.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shell.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <PropertyGroup>

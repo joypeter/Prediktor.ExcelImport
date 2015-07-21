@@ -16,6 +16,13 @@ namespace Prediktor.ExcelImport
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
            System.Windows.Forms.Application.Idle += OnIdle;
+            
+            //
+            //Application.
+
+            //System.Windows.Forms.Application.re
+            //this.
+           //System.Windows.Forms.Application.Resources.Add("Telerik.Windows.Controls.Key", "Prediktor Telerik Application");
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)

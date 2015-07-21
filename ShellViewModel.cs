@@ -19,7 +19,6 @@ using Prediktor.Carbon.Infrastructure.Definitions.Events;
 using Prediktor.Configuration.Definitions;
 using Prediktor.Log;
 using Prediktor.Services.Definitions;
-using Microsoft.Practices.Prism.PubSubEvents;
 
 namespace Prediktor.ExcelImport
 {

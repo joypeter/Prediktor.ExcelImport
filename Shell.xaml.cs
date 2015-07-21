@@ -13,6 +13,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Prediktor.Carbon.Infrastructure.Definitions;
 using Prediktor.Carbon.Infrastructure.Behaviors.Implementation;
+using Prediktor.Carbon.Configuration.Views;
+using System.Collections.ObjectModel;
 
 namespace Prediktor.ExcelImport
 {
@@ -21,11 +23,18 @@ namespace Prediktor.ExcelImport
     /// </summary>
     public partial class Shell : ThemedWindow
     {
+        private ObservableCollection<SolutionExplorer2> SE;
         public Shell(ShellViewModel viewModel)
         {
             InitializeComponent();
 
             DataContext = viewModel;
+        }
+
+        public void AddSolutionExplorer2(SolutionExplorer2 se2)
+        {
+            SE = new ObservableCollection<SolutionExplorer2>();
+            SE.Add(se2);
         }
     }
 }

@@ -20,7 +20,7 @@ using Prediktor.Ioc;
 using Prediktor.Log;
 using PrismContrib.WindsorExtensions;
 using Prediktor.Carbon.Configuration.Definitions.ModuleServices;
-using Microsoft.Practices.Prism.PubSubEvents;
+using Prediktor.Carbon.Configuration.Views;
 
 namespace Prediktor.ExcelImport
 {
@@ -98,6 +98,10 @@ namespace Prediktor.ExcelImport
                 .ImplementedBy<Shell>()
                 .Named("TheShell"));
 
+            Container.Register(Component.For<SolutionExplorer2>()
+                .ImplementedBy<SolutionExplorer2>()
+                .Named("SolutionExplorer2"));
+
             Container.Register(Component.For<ConnectionDialogViewModel>()
                                    .ImplementedBy<ConnectionDialogViewModel>()
                                    .LifeStyle.Transient);
@@ -115,6 +119,12 @@ namespace Prediktor.ExcelImport
         protected override void InitializeModules()
         {
             base.InitializeModules();
+
+            Application.Current.Resources.Add("Telerik.Windows.Controls.Key", "Prediktor Telerik Application");
+            SolutionExplorer2 se2 = ServiceLocator.Current.GetInstance<SolutionExplorer2>();
+
+            Shell shell = (Shell)this.Shell;
+            shell.AddSolutionExplorer2(se2);
 
             _log.DebugFormat("Initializing main region");
             IRegionManager regionManager = this.Container.Resolve<IRegionManager>();
@@ -167,6 +177,7 @@ namespace Prediktor.ExcelImport
         {
             Application.Current.MainWindow = (Window)this.Shell;
             Application.Current.MainWindow.Show();
+            
             _log.DebugFormat("MainWindow displayed");
         }
     }
