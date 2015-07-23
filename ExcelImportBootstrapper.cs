@@ -102,6 +102,17 @@ namespace Prediktor.ExcelImport
                 .ImplementedBy<SolutionExplorer2>()
                 .Named("SolutionExplorer2"));
 
+            Container.Register(Component.For<MainRegion>()
+                .ImplementedBy<MainRegion>()
+                .Named("MainRegion"));
+            Container.Register(Component.For<MainRegionViewModel>()
+                .ImplementedBy<MainRegionViewModel>()
+                .Named("MainRegionViewModel"));
+
+            Container.Register(Component.For<PropertyEditor>()
+                .ImplementedBy<PropertyEditor>()
+                .Named("PropertyEditor"));
+
             Container.Register(Component.For<ConnectionDialogViewModel>()
                                    .ImplementedBy<ConnectionDialogViewModel>()
                                    .LifeStyle.Transient);
@@ -121,48 +132,21 @@ namespace Prediktor.ExcelImport
             base.InitializeModules();
 
             Application.Current.Resources.Add("Telerik.Windows.Controls.Key", "Prediktor Telerik Application");
-            SolutionExplorer2 se2 = ServiceLocator.Current.GetInstance<SolutionExplorer2>();
-
             Shell shell = (Shell)this.Shell;
-            shell.AddSolutionExplorer2(se2);
 
             _log.DebugFormat("Initializing main region");
-            IRegionManager regionManager = this.Container.Resolve<IRegionManager>();
-            //IRegionManager regionManager = ServiceLocator.Current.GetInstance<IRegionManager>();
-            regionManager.RegisterViewWithRegion("MainRegion", typeof(MainRegion));
-            if (regionManager.Regions.ContainsRegionWithName("MainRegion"))
-            {
-                IRegion region = this.Container.Resolve<IRegionManager>().Regions["MainRegion"];
-                var v = this.Container.Resolve<MainRegion>();
-                region.Add(v, "View");
-                region.Activate(v);
-            }
+            MainRegion mainRegion = this.Container.Resolve<MainRegion>();
+            shell.AddSolutionMainRegion(mainRegion);
             _log.DebugFormat("Main region initialized");
 
             _log.DebugFormat("Initializing TreeViewRegion");
-            if (regionManager.Regions.ContainsRegionWithName("TreeViewRegion"))
-            {
-                _log.DebugFormat("Getting TreeViewRegion");
-                IRegion region = this.Container.Resolve<IRegionManager>().Regions["TreeViewRegion"];
-                _log.DebugFormat("Resolving SolutionExplorer");
-                var r = this.Container.Resolve<Prediktor.Carbon.Configuration.Views.SolutionExplorer2>();
-                _log.DebugFormat("Addding SolutionExplorer");
-                region.Add(r, "SolutionExplorer");
-                _log.DebugFormat("Activating SolutionExplorer");
-                region.Activate(r);
-
-                r.BottomToolbarVisibile = false;
-            }
+            SolutionExplorer2 se2 = ServiceLocator.Current.GetInstance<SolutionExplorer2>();
+            shell.AddSolutionExplorer2(se2);
             _log.DebugFormat("TreeViewRegion Initialized");
 
             _log.DebugFormat("Initializing PropertyRegion");
-            if (regionManager.Regions.ContainsRegionWithName("PropertyRegion"))
-            {
-                IRegion region = this.Container.Resolve<IRegionManager>().Regions["PropertyRegion"];
-                var r = this.Container.Resolve<Prediktor.Carbon.Configuration.Views.PropertyEditor>();
-                region.Add(r, "PropertyEditor");
-                region.Activate(r);
-            }
+            PropertyEditor propertyEditor = this.Container.Resolve<Prediktor.Carbon.Configuration.Views.PropertyEditor>();
+            shell.AddSolutionPropertyEditor(propertyEditor);
             _log.DebugFormat("PropertyRegion initialized");
         }
 
