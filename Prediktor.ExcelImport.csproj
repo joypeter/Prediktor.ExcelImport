@@ -236,6 +236,7 @@
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Prediktor.ExcelImport_1_TemporaryKey.pfx" />
+    <None Include="Prediktor.ExcelImport_2_TemporaryKey.pfx" />
     <None Include="Prediktor.ExcelImport_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -255,6 +256,7 @@
     <Compile Include="Shell.xaml.cs">
       <DependentUpon>Shell.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ShellInstaller.cs" />
     <Compile Include="ShellViewModel.cs" />
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
@@ -333,10 +335,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>Prediktor.ExcelImport_1_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>Prediktor.ExcelImport_2_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>21F02A17504696C505255B2603D6702EA1A84F05</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>E928D27837A5FA2BB2878CA059FA34DFFBB2C1D8</ManifestCertificateThumbprint>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

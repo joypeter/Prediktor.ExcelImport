@@ -102,13 +102,6 @@ namespace Prediktor.ExcelImport
                 .ImplementedBy<SolutionExplorer2>()
                 .Named("SolutionExplorer2"));
 
-            Container.Register(Component.For<MainRegion>()
-                .ImplementedBy<MainRegion>()
-                .Named("MainRegion"));
-            Container.Register(Component.For<MainRegionViewModel>()
-                .ImplementedBy<MainRegionViewModel>()
-                .Named("MainRegionViewModel"));
-
             Container.Register(Component.For<PropertyEditor>()
                 .ImplementedBy<PropertyEditor>()
                 .Named("PropertyEditor"));
@@ -131,7 +124,12 @@ namespace Prediktor.ExcelImport
         {
             base.InitializeModules();
 
+            //To use Telerik library a resource item must be added
             Application.Current.Resources.Add("Telerik.Windows.Controls.Key", "Prediktor Telerik Application");
+            
+
+            //Due to a bug in Prism v4, regions can not be added either from xaml or programatically
+            //, so here we add the view directly to the ItemControl
             Shell shell = (Shell)this.Shell;
 
             _log.DebugFormat("Initializing main region");
@@ -148,6 +146,8 @@ namespace Prediktor.ExcelImport
             PropertyEditor propertyEditor = this.Container.Resolve<Prediktor.Carbon.Configuration.Views.PropertyEditor>();
             shell.AddSolutionPropertyEditor(propertyEditor);
             _log.DebugFormat("PropertyRegion initialized");
+
+            Application.Current.MainWindow = (Window)this.Shell;
         }
 
         public void Connect()
@@ -159,8 +159,10 @@ namespace Prediktor.ExcelImport
 
         public void Browse()
         {
-            Application.Current.MainWindow = (Window)this.Shell;
-            Application.Current.MainWindow.Show();
+            //Application.Current.MainWindow.Show();
+
+            Shell shell = (Shell)this.Shell;
+            shell.ShowDialog();
             
             _log.DebugFormat("MainWindow displayed");
         }

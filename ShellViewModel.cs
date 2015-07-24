@@ -34,10 +34,6 @@ namespace Prediktor.ExcelImport
         private readonly IServiceFactory _serviceFactory;
         private readonly INetworkBrowser _networkBrowser;
         private static ITraceLog _log = LogManager.GetLogger(typeof(ShellViewModel));
-        private ICommand _lightThemeCommand;
-        private ICommand _darkThemeCommand;
-        private ICommand _blueThemeCommand;
-        private ICommand _aboutCommand;
 
         private ICommand _windowClosing;
         private string _configFile;
@@ -59,120 +55,18 @@ namespace Prediktor.ExcelImport
             ConnectCommand = new DelegateCommand(Connect);
             _windowClosing = new DelegateCommand<System.ComponentModel.CancelEventArgs>(OnWindowClosing);
 
-            _aboutCommand = new DelegateCommand(OnAboutCommand);
-
-            _lightThemeCommand = new DelegateCommand(OnLightThemeCommand);
-            _darkThemeCommand = new DelegateCommand(OnDarkThemeCommand);
-            _blueThemeCommand = new DelegateCommand(OnBlueThemeCommand);
-
             _configFile = _applicationService.CurrentFile;
 
             _eventAggregator.GetEvent<AddedServiceEvent>().Subscribe(OnServiceAdded, ThreadOption.UIThread);
-            _eventAggregator.GetEvent<FileActiveEvent>().Subscribe(OnActiveFileChanged);
         }
 
-
-        private void OnActiveFileChanged(string file)
-        {
-            _configFile = file;
-            RaisePropertyChanged(() => Title);
-        }
-
-        private bool CanSave(FileCapabilites fileCap)
-        {
-            return (fileCap & FileCapabilites.Save) == FileCapabilites.Save;
-        }
-
-        private bool CanSaveAs(FileCapabilites fileCap)
-        {
-            return (fileCap & FileCapabilites.SaveAs) == FileCapabilites.SaveAs;
-        }
-
-        private bool CanOpen(FileCapabilites fileCap)
-        {
-            return (fileCap & FileCapabilites.Open) == FileCapabilites.Open;
-        }
-
-        private bool CanNew(FileCapabilites fileCap)
-        {
-            return (fileCap & FileCapabilites.New) == FileCapabilites.New;
-        }
-
-        private void OnSaveAsCommand()
-        {
-            if (CanSaveAs(_applicationFeatures.FileCapabilities))
-            {
-                string s = _interactionService.DialogService.GetFileDialog().SaveFileDialog("Apis Configuration Files|*.acf");
-                if (!string.IsNullOrEmpty(s))
-                {
-                    _eventAggregator.GetEvent<FileSaveAsEvent>().Publish(s);
-                }
-            }
-        }
-
-        private void OnSaveCommand()
-        {
-            if (CanSave(_applicationFeatures.FileCapabilities))
-            {
-                if (string.IsNullOrWhiteSpace(this._applicationService.CurrentFile))
-                {
-                    OnSaveAsCommand();
-                }
-                else
-                {
-                    _eventAggregator.GetEvent<FileSaveAsEvent>().Publish(this._applicationService.CurrentFile);
-                }
-            }
-        }
-
-        private void OnOpenCommand()
-        {
-            if (CanOpen(_applicationFeatures.FileCapabilities))
-            {
-                string s = _interactionService.DialogService.GetFileDialog().OpenFileDialog("Apis Configuration Files|*.acf");
-                if (s != null)
-                {
-                    _eventAggregator.GetEvent<ClearConfiguration>().Publish(string.Empty);
-                    _eventAggregator.GetEvent<FileOpenEvent>().Publish(new FileOpenInfo(s, false));
-                }
-            }
-        }
-
-
-        private void OnNewCommand()
-        {
-            if (CanNew(_applicationFeatures.FileCapabilities))
-            {
-                _eventAggregator.GetEvent<ClearConfiguration>().Publish(string.Empty);
-            }
-        }
-
-        private void OnAboutCommand()
-        {
-            var about = new StringBuilder();
-            var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            var tr = _interactionService.TranslatingService;
-            var dlg = _interactionService.DialogService;
-            about.Append(tr.GetSystemText(_title));
-            about.Append("\n");
-            about.Append(tr.GetSystemText("Copyright © Prediktor as"));
-            about.Append("\n\n");
-            about.Append(tr.GetSystemText("Version: "));
-            about.Append(version);
-            dlg.GetMessageDialog().ShowInfo(about.ToString(), tr.GetSystemText("About " + _title));
-        }
-
-        private void OnHelpCommand()
-        {
-            //_documentationService.ShowDocumentation();
-        }
 
         private void OnExitCommand()
         {
             //if (DoNew())
             //{
             _eventAggregator.GetEvent<ClosingEvent>().Publish(new Close());
-            Application.Current.Shutdown();
+            //Application.Current.Shutdown();
             //}
         }
 
@@ -212,36 +106,6 @@ namespace Prediktor.ExcelImport
             System.Windows.Application.Current.Resources.MergedDictionaries.Add(rd);
         }
 
-        private void OnLightThemeCommand()
-        {
-            ChangeTheme("pack://application:,,,/Prediktor.Carbon.Style;component/LightTheme.xaml");
-        }
-
-        private void OnDarkThemeCommand()
-        {
-            ChangeTheme("pack://application:,,,/Prediktor.Carbon.Style;component/DarkTheme.xaml");
-        }
-
-        private void OnBlueThemeCommand()
-        {
-            ChangeTheme("pack://application:,,,/Prediktor.Carbon.Style;component/BlueTheme.xaml");
-        }
-
-        private void ChangeTheme(string theme)
-        {
-            try
-            {
-                var rd = new ResourceDictionary();
-                rd.Source = new Uri(theme);
-                UpdateTheme(rd);
-            }
-            catch (Exception e)
-            {
-                _log.Error("Error when changing theme", e);
-                _interactionService.DialogService.GetMessageDialog().ShowError("Error when changing theme: " + e.Message, "Theme Error");
-            }
-
-        }
 
         private void OnWindowClosing(System.ComponentModel.CancelEventArgs ea)
         {
@@ -267,22 +131,6 @@ namespace Prediktor.ExcelImport
         public ICommand WindowClosing
         {
             get { return _windowClosing; }
-        }
-
-        
-        public ICommand LightThemeCommand
-        {
-            get { return _lightThemeCommand; }
-        }
-
-        public ICommand DarkThemeCommand
-        {
-            get { return _darkThemeCommand; }
-        }
-
-        public ICommand BlueThemeCommand
-        {
-            get { return _blueThemeCommand; }
         }
     }
 }
