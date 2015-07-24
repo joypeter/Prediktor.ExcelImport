@@ -39,6 +39,7 @@
             this.btnConfigure = this.Factory.CreateRibbonButton();
             this.btnImport = this.Factory.CreateRibbonButton();
             this.btnUpdate = this.Factory.CreateRibbonButton();
+            this.btnTest = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.apisExcelImport.SuspendLayout();
             // 
@@ -54,6 +55,7 @@
             this.apisExcelImport.Items.Add(this.btnConfigure);
             this.apisExcelImport.Items.Add(this.btnImport);
             this.apisExcelImport.Items.Add(this.btnUpdate);
+            this.apisExcelImport.Items.Add(this.btnTest);
             this.apisExcelImport.Label = "ApisExcelImport";
             this.apisExcelImport.Name = "apisExcelImport";
             // 
@@ -80,6 +82,14 @@
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.ShowImage = true;
             // 
+            // btnTest
+            // 
+            this.btnTest.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnTest.Label = "Test";
+            this.btnTest.Name = "btnTest";
+            this.btnTest.ShowImage = true;
+            this.btnTest.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnTest_Click);
+            // 
             // Ribbon
             // 
             this.Name = "Ribbon";
@@ -100,6 +110,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnConfigure;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnImport;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnUpdate;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnTest;
     }
 
     partial class ThisRibbonCollection

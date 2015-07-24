@@ -8,6 +8,8 @@ namespace Prediktor.ExcelImport
 {
     public partial class Ribbon
     {
+        public event EventHandler TestEvent;
+
         private void Ribbon_Load(object sender, RibbonUIEventArgs e)
         {
 
@@ -21,6 +23,11 @@ namespace Prediktor.ExcelImport
         private void btnImport_Click(object sender, RibbonControlEventArgs e)
         {
             DialogManager.Current.Browse();
+        }
+
+        private void btnTest_Click(object sender, RibbonControlEventArgs e)
+        {
+            TestEvent.Invoke(null, null);
         }
 
     }

@@ -181,6 +181,7 @@
   <ItemGroup>
     <Compile Include="ApplicationProperties.cs" />
     <Compile Include="DialogManager.cs" />
+    <Compile Include="ExcelExportService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -312,7 +313,7 @@
     <ManifestKeyFile>Prediktor.ExcelImport_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>BCAEC54BC9328B1E10D14929E8F25A255A4A3946</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>5E2A1668112463219EF3DC2BC305DCCF804AAD3C</ManifestCertificateThumbprint>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
