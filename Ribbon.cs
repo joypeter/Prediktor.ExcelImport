@@ -6,10 +6,12 @@ using Microsoft.Office.Tools.Ribbon;
 
 namespace Prediktor.ExcelImport
 {
-    public partial class Ribbon
+    public partial class Ribbon : IRibbonExtension
     {
-        public event EventHandler TestEvent;
-
+        public delegate void ConnectDelegate();
+        public delegate void BrowseDelegate();
+        public ConnectDelegate ConnectMethod { get; set; }
+        public BrowseDelegate BrowseMethod { get; set; } 
         private void Ribbon_Load(object sender, RibbonUIEventArgs e)
         {
 
@@ -17,12 +19,12 @@ namespace Prediktor.ExcelImport
 
         private void btnConfigure_Click(object sender, RibbonControlEventArgs e)
         {
-            DialogManager.Current.Connect();
+            ConnectMethod();
         }
 
         private void btnImport_Click(object sender, RibbonControlEventArgs e)
         {
-            DialogManager.Current.Browse();
+            BrowseMethod();
         }
 
         private void btnTest_Click(object sender, RibbonControlEventArgs e)

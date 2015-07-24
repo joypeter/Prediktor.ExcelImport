@@ -6,34 +6,55 @@ using System.Xml.Linq;
 using Excel = Microsoft.Office.Interop.Excel;
 using Office = Microsoft.Office.Core;
 using Microsoft.Office.Tools.Excel;
+using System.Windows;
 
 namespace Prediktor.ExcelImport
 {
     public partial class ThisAddIn
     {
-        private Ribbon Ribbon;
-
+        ExcelImportBootstrapper Bootstrapper;
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
-            //Git test
-            DialogManager.Current.Initialize();
+            System.Windows.Forms.Application.Idle += OnIdle;
 
-            //Excel.Workbook newWorkbook = this.Application.Workbooks.Add(missing);
+            //
+            //Application.
 
-            //Excel.Worksheet newWorksheet;
-            //newWorksheet = (Excel.Worksheet)this.Application.Worksheets.Add(
-            //    missing, missing, missing, missing);
+            //System.Windows.Forms.Application.re
+            //this.
+            //System.Windows.Forms.Application.Resources.Add("Telerik.Windows.Controls.Key", "Prediktor Telerik Application");
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
         {
+            
+        }
+
+        private void OnIdle(Object sender, EventArgs e)
+        {
+            System.Windows.Forms.Application.Idle -= OnIdle;
+            Bootstrapper = new ExcelImportBootstrapper();
+            Bootstrapper.Run();
+        }
+
+
+        public void Connnect()
+        {
+            Bootstrapper.Connect();
+        }
+
+        public void Browse()
+        {
+            Bootstrapper.Browse();
         }
 
         protected override Microsoft.Office.Core.IRibbonExtensibility CreateRibbonExtensibilityObject()
         {
-            Ribbon = new Ribbon();
-            Ribbon.TestEvent += new System.EventHandler(ThisAddIn_Test);
-            return Globals.Factory.GetRibbonFactory().CreateRibbonManager(new Microsoft.Office.Tools.Ribbon.IRibbonExtension[] { Ribbon });
+            Ribbon apisExcelImport = new Ribbon();
+            apisExcelImport.ConnectMethod = this.Connnect;
+            apisExcelImport.BrowseMethod = this.Browse;
+
+            return Globals.Factory.GetRibbonFactory().CreateRibbonManager(new Microsoft.Office.Tools.Ribbon.IRibbonExtension[] { apisExcelImport });
         }
 
         /* Test writing excel */
