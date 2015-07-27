@@ -12,12 +12,8 @@
                 <ColumnDefinition Width="300"/>
                 <ColumnDefinition Width="2"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="2"/>
-                <ColumnDefinition Width="330"/>
             </Grid.ColumnDefinitions>
             <ItemsControl x:Name="TreeViewUC" Grid.Row="0" Grid.Column="0" 
-                          cal:RegionManager.RegionName="TreeViewRegion" 
-                          ItemsSource="{Binding SE}"
                           HorizontalAlignment="Stretch" 
                           VerticalAlignment="Stretch" 
                           Margin="0,0,0,0" 
@@ -45,7 +41,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
-                <ItemsControl x:Name="MainToolbar"  cal:RegionManager.RegionName="MainRegion" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
+                <ItemsControl x:Name="MainToolbar"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
                     <ItemsControl.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -57,31 +53,6 @@
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Grid Margin="10,10,10,10"></Grid>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
-            </Grid>
-            <GridSplitter Background="{DynamicResource BorderBrushNormal}" Grid.Row="0" Grid.Column="3" Height="Auto" Width="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-            <Grid Grid.Row="0" Grid.Column="4" >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"></RowDefinition>
-                </Grid.RowDefinitions>
-                <ItemsControl x:Name="Property" Grid.Row="0" cal:RegionManager.RegionName="PropertyRegion" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,0,0,0" RenderTransformOrigin="0.5,0.5">
-                    <ItemsControl.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform/>
-                            <RotateTransform/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </ItemsControl.RenderTransform>
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Grid Margin="10,10,10,10">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"></RowDefinition>
-                                </Grid.RowDefinitions>
-                            </Grid>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>

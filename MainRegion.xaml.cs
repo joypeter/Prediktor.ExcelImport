@@ -12,6 +12,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Prediktor.Ioc;
+using Prediktor.Carbon.Configuration.Definitions.Views;
+using Prediktor.Carbon.Configuration.ViewModels;
+using Telerik.Windows.Controls.ChartView;
 
 namespace Prediktor.ExcelImport
 {
@@ -25,7 +28,58 @@ namespace Prediktor.ExcelImport
         {
             InitializeComponent();
             DataContext = viewModel;
-            this.TabbedView.ResourceDictionaryProvider = viewModel.ResourceDictionaryProvider;
+
+            //this.TabbedView.ResourceDictionaryProvider = viewModel.ResourceDictionaryProvider;
+
+            SelectView(0);
+        }
+
+        private void SelectView(int i)
+        {
+            viewTab.SelectedIndex = i;
+            if (i == 0)
+            {
+                tableViewButton.IsEnabled = false;
+                eventListViewButton.IsEnabled = true;
+                graphViewButton.IsEnabled = true;
+            }
+            if (i == 1)
+            {
+                tableViewButton.IsEnabled = true;
+                eventListViewButton.IsEnabled = false;
+                graphViewButton.IsEnabled = true;
+            }
+            else if (i == 2)
+            {
+                tableViewButton.IsEnabled = true;
+                eventListViewButton.IsEnabled = true;
+                graphViewButton.IsEnabled = false;
+            }
+        }
+
+        private void tableViewButton_Click(object sender, RoutedEventArgs e)
+        {
+            SelectView(0);
+        }
+
+        private void eventListViewButton_Click(object sender, RoutedEventArgs e)
+        {
+            SelectView(1);
+        }
+
+        private void graphViewButton_Click(object sender, RoutedEventArgs e)
+        {
+            SelectView(2);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO: reset zoom
+            /*
+            HistoryTrendTab.
+            this.HistoryTrend.Zoom = new Size(1, 1);
+            this.HistoryTrend.PanOffset = new Point(0, 0);
+             * */
         }
     }
 }

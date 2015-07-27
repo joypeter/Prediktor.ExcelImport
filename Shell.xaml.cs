@@ -25,7 +25,6 @@ namespace Prediktor.ExcelImport
     {
         private ObservableCollection<SolutionExplorer2> SE;
         private ObservableCollection<MainRegion> MainRegion;
-        private ObservableCollection<PropertyEditor> PropertyEditor;
         public Shell(ShellViewModel viewModel)
         {
             InitializeComponent();
@@ -45,13 +44,6 @@ namespace Prediktor.ExcelImport
             MainRegion = new ObservableCollection<MainRegion>();
             MainRegion.Add(mainRegion);
             this.MainToolbar.ItemsSource = MainRegion;
-        }
-
-        public void AddSolutionPropertyEditor(PropertyEditor propertyEditor)
-        {
-            PropertyEditor = new ObservableCollection<PropertyEditor>();
-            PropertyEditor.Add(propertyEditor);
-            this.Property.ItemsSource = PropertyEditor;
         }
     }
 }
