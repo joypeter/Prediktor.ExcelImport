@@ -102,9 +102,6 @@ namespace Prediktor.ExcelImport
                 .ImplementedBy<SolutionExplorer2>()
                 .Named("SolutionExplorer2"));
 
-            Container.Register(Component.For<PropertyEditor>()
-                .ImplementedBy<PropertyEditor>()
-                .Named("PropertyEditor"));
 
             Container.Register(Component.For<ConnectionDialogViewModel>()
                                    .ImplementedBy<ConnectionDialogViewModel>()
@@ -141,11 +138,6 @@ namespace Prediktor.ExcelImport
             SolutionExplorer2 se2 = ServiceLocator.Current.GetInstance<SolutionExplorer2>();
             shell.AddSolutionExplorer2(se2);
             _log.DebugFormat("TreeViewRegion Initialized");
-
-            _log.DebugFormat("Initializing PropertyRegion");
-            PropertyEditor propertyEditor = this.Container.Resolve<Prediktor.Carbon.Configuration.Views.PropertyEditor>();
-            shell.AddSolutionPropertyEditor(propertyEditor);
-            _log.DebugFormat("PropertyRegion initialized");
 
             Application.Current.MainWindow = (Window)this.Shell;
         }
