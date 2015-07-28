@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="Prediktor.ExcelImport.HistoryTrend"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             xmlns:vm="clr-namespace:Prediktor.Carbon.Configuration.ViewModels;assembly=Prediktor.Carbon.Configuration"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:trn="clr-namespace:Prediktor.Carbon.Infrastructure.Implementation;assembly=Prediktor.Carbon.Infrastructure"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             AllowDrop="True">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="{trn:Translation NativeText='Reset zoom'}" Click="Button_Click" />
+        </StackPanel>
+        <telerik:RadCartesianChart Grid.Row="1" x:Name="Chart" Margin="20">
+            <telerik:RadCartesianChart.TrackBallInfoStyle>
+                <Style TargetType="telerik:TrackBallInfoControl">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="DataPointInfoTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Time: " Foreground="{Binding Series.Stroke}"/>
+                                    <TextBlock Text="{Binding DataPoint.Category}" Foreground="{Binding Series.Stroke}"/>
+                                    <TextBlock Text=", " Foreground="{Binding Series.Stroke}"/>
+                                    <TextBlock Text="Value: " Foreground="{Binding Series.Stroke}"/>
+                                    <TextBlock Text="{Binding DataPoint.Value}" Foreground="{Binding Series.Stroke}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </telerik:RadCartesianChart.TrackBallInfoStyle>
+            <telerik:RadCartesianChart.PlotAreaStyle>
+                <Style TargetType="Border">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+            </telerik:RadCartesianChart.PlotAreaStyle>
+            <telerik:RadCartesianChart.Behaviors>
+                <telerik:ChartTrackBallBehavior ShowIntersectionPoints="True" ShowTrackInfo="True"/>
+                <telerik:ChartPanAndZoomBehavior ZoomMode="Both"/>
+            </telerik:RadCartesianChart.Behaviors>
+            <telerik:RadCartesianChart.HorizontalAxis>
+                <telerik:DateTimeContinuousAxis MajorStepUnit="Second"
+                                                LabelInterval="5"
+                                                LabelFormat="HH:mm:ss.f"
+                                                PlotMode="OnTicks"/>
+            </telerik:RadCartesianChart.HorizontalAxis>
+            <telerik:RadCartesianChart.VerticalAxis>
+                <telerik:LinearAxis />
+            </telerik:RadCartesianChart.VerticalAxis>
+            <telerik:RadCartesianChart.Grid>
+                <telerik:CartesianChartGrid MajorLinesVisibility="Y" MajorYLineDashArray="3,4" />
+            </telerik:RadCartesianChart.Grid>
+        </telerik:RadCartesianChart>
+    </Grid>
+</UserControl>

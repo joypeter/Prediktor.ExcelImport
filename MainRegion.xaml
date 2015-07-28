@@ -1,20 +1,96 @@
-﻿<UserControl
+﻿<UserControl x:Class="Prediktor.ExcelImport.MainRegion"
+             xmlns:local="clr-namespace:Prediktor.ExcelImport"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-            xmlns:Views="clr-namespace:Prediktor.Carbon.Configuration.Views;assembly=Prediktor.Carbon.Configuration" 
-              x:Class="Prediktor.ExcelImport.MainRegion" 
-           xmlns:local="clr-namespace:Prediktor.ExcelImport" 
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             xmlns:vm="clr-namespace:Prediktor.Carbon.Configuration.ViewModels;assembly=Prediktor.Carbon.Configuration"
+             xmlns:Views="clr-namespace:Prediktor.Carbon.Configuration.Views;assembly=Prediktor.Carbon.Configuration"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:trn="clr-namespace:Prediktor.Carbon.Infrastructure.Implementation;assembly=Prediktor.Carbon.Infrastructure"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"
+             AllowDrop="True">
+
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type vm:LegendViewModel}" >
+            <StackPanel Orientation="Horizontal">
+                <xctk:ColorPicker SelectedColor="{Binding Color}" Width="80"></xctk:ColorPicker>
+                <Button Command="{Binding Delete}">Delete</Button>
+                <TextBlock Text="{Binding Name}" Margin="3,5,0,0">
+                </TextBlock>
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
     
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <Views:TabbedView x:Name="TabbedView"  Grid.Row="0" DataContext="{Binding TabbedViewModel}"/>
+        <!--Row 0: select start time,end time, aggregate type etc-->
+        <Views:HistoricalTimePeriodView VerticalAlignment="Stretch" 
+                                        Grid.Row="0" 
+                                        DataContext="{Binding TimePeriodViewModel}" 
+                                        Margin="10,10,10,10">
+        </Views:HistoricalTimePeriodView>
+
+        <!--Row 1: show selected items-->
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                 <RowDefinition Height="auto"/>
+                 <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Selected Item(s):" Grid.Row="0"></TextBlock>
+            <ListView Grid.Row="1" ItemsSource="{Binding Legend}">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical"></StackPanel>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+            </ListView>
+        </Grid>
+        
+
+        <!--Row 2: 3 buttons to switch view type-->
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <Button Name="tableViewButton" Content="{trn:Translation NativeText='Table view'}" IsEnabled="False" Click="tableViewButton_Click" />
+            <Button Name="eventListViewButton" Content="{trn:Translation NativeText='Event list view'}" Click="eventListViewButton_Click" />
+            <Button Name="graphViewButton" Content="{trn:Translation NativeText='Graph view'}" Click="graphViewButton_Click" />
+        </StackPanel>
+
+        <!--Row 3: different types of view: list view, eventlist view, chart view-->
+        <TabControl Name="viewTab" Grid.Row="3">
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="{x:Type TabItem}">
+                    <Style.Setters>
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                    </Style.Setters>
+                </Style>
+            </TabControl.ItemContainerStyle>
+            <TabItem Header="{trn:Translation NativeText='Table view'}">
+                <Views:HistoricalPropertyListView VerticalAlignment="Stretch" DataContext="{Binding ListViewModel}" Margin="10,10,10,10">
+                </Views:HistoricalPropertyListView>
+            </TabItem>
+            <TabItem Header="{trn:Translation NativeText='Event list view'}">
+                <Views:HistoricalEventListView VerticalAlignment="Stretch" DataContext="{Binding EventListViewModel}" Margin="10,10,10,10">
+                </Views:HistoricalEventListView>
+            </TabItem>
+            <TabItem Name="HistoryTrendTab" Header="{trn:Translation NativeText='Graph view'}">
+                <local:HistoryTrend  VerticalAlignment="Stretch" DataContext="{Binding ChartModel}" Margin="10,10,10,10">
+                </local:HistoryTrend>
+            </TabItem>
+        </TabControl>
+        
+        <!--Row 4: export button-->
+        <StackPanel Grid.Row="4" Orientation="Horizontal">
+            <Button Content="{trn:Translation NativeText='Export'}" Command="{Binding ExportCommand}"/>
+        </StackPanel>
     </Grid>
 </UserControl>

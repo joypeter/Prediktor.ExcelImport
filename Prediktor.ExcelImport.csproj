@@ -114,6 +114,9 @@
   -->
   <ItemGroup>
     <Reference Include="Accessibility" />
+    <Reference Include="APIS NET Utilities">
+      <HintPath>..\..\..\APIS NET Utilities\bin\Debug\APIS NET Utilities.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.Core, Version=2.5.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Dependencies\Castle.Core.dll</HintPath>
@@ -144,20 +147,50 @@
     <Reference Include="Microsoft.Practices.Unity">
       <HintPath>..\..\..\Dependencies\Prism\Desktop\Microsoft.Practices.Unity.dll</HintPath>
     </Reference>
-    <Reference Include="Prediktor.Carbon.Configuration, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Prediktor.Carbon.Configuration">
       <HintPath>..\Prediktor.Carbon.Configuration\bin\Debug\Prediktor.Carbon.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Prediktor.Carbon.Configuration.Hive, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Prediktor.Carbon.Configuration.Hive\bin\Debug\Prediktor.Carbon.Configuration.Hive.dll</HintPath>
     </Reference>
     <Reference Include="Prediktor.Carbon.Configuration.Windsor">
       <HintPath>..\Prediktor.Carbon.Configuration.Windsor\bin\Debug\Prediktor.Carbon.Configuration.Windsor.dll</HintPath>
+    </Reference>
+    <Reference Include="Prediktor.Carbon.Infrastructure, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Prediktor.Carbon.Infrastructure\bin\Debug\Prediktor.Carbon.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Prediktor.Carbon.Style, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Prediktor.Carbon.Style\bin\Debug\Prediktor.Carbon.Style.dll</HintPath>
+    </Reference>
+    <Reference Include="Prediktor.Configuration">
+      <HintPath>..\..\Application Services\Prediktor.Configuration\bin\Debug\Prediktor.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Prediktor.Configuration.Windsor, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Application Services\Prediktor.Configuration.Windsor\bin\Debug\Prediktor.Configuration.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="Prediktor.Ioc, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Framework\Application Services\Prediktor.Ioc\bin\Debug\Prediktor.Ioc.dll</HintPath>
+    </Reference>
     <Reference Include="Prediktor.LanguageConversion, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Data\Prediktor.LanguageConversion\bin\Debug\Prediktor.LanguageConversion.dll</HintPath>
+    </Reference>
+    <Reference Include="Prediktor.Log, Version=7.3.0.0, Culture=neutral, PublicKeyToken=a35f8456f96ab3d6, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Framework\Application Services\Prediktor.Ioc\bin\Debug\Prediktor.Log.dll</HintPath>
+    </Reference>
+    <Reference Include="Prediktor.Log4Net, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Framework\Application Services\Prediktor.Log4Net\bin\Debug\Prediktor.Log4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Prediktor.Services, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Framework\Application Services\Prediktor.Services\bin\Debug\Prediktor.Services.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -174,7 +207,30 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Telerik.Windows.Controls, Version=2012.2.2328.40, Culture=neutral, PublicKeyToken=d3625f8bf04286d7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Dependencies\Telerik\Telerik.Windows.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.Chart, Version=2012.2.1503.40, Culture=neutral, PublicKeyToken=d3625f8bf04286d7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Dependencies\Telerik\Telerik.Windows.Controls.Chart.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.Navigation, Version=2012.2.2328.40, Culture=neutral, PublicKeyToken=d3625f8bf04286d7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Dependencies\Telerik\Telerik.Windows.Controls.Navigation.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Data, Version=2012.2.2328.40, Culture=neutral, PublicKeyToken=d3625f8bf04286d7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Dependencies\Telerik\Telerik.Windows.Data.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
+    <Reference Include="WPFToolkit.Extended">
+      <HintPath>..\Prediktor.WPFToolkit.Extended\bin\Debug\WPFToolkit.Extended.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Xceed.Wpf.AvalonDock\bin\Debug\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Office.Tools.v4.0.Framework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
@@ -221,6 +277,9 @@
     </Compile>
     <Compile Include="MainRegion.xaml.cs">
       <DependentUpon>MainRegion.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HistoryTrend.xaml.cs">
+      <DependentUpon>HistoryTrend.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -271,48 +330,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Framework\Application Services\Prediktor.Ioc\Prediktor.Ioc.csproj">
-      <Project>{6a504db5-d6c0-4d7f-8ce3-18d5e65843e6}</Project>
-      <Name>Prediktor.Ioc</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Framework\Application Services\Prediktor.Log4Net\Prediktor.Log4Net.csproj">
-      <Project>{73cbb5a6-9342-448b-a37a-39dd3737bb93}</Project>
-      <Name>Prediktor.Log4Net</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Framework\Application Services\Prediktor.Log\Prediktor.Log.csproj">
-      <Project>{f8668e99-0a51-4e5c-bea2-2425096811b3}</Project>
-      <Name>Prediktor.Log</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Framework\Application Services\Prediktor.Services\Prediktor.Services.csproj">
-      <Project>{4976f972-c1b0-4196-9a96-dd3b64b9749b}</Project>
-      <Name>Prediktor.Services</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Application Services\Prediktor.Configuration\Prediktor.Configuration.csproj">
-      <Project>{2ff539ce-c67c-4dee-be51-3d65c782766e}</Project>
-      <Name>Prediktor.Configuration</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Prediktor.Carbon.Configuration.Hive\Prediktor.Carbon.Configuration.Hive.csproj">
-      <Project>{bb5697ef-936a-48e9-84b1-681b3aa2e7a3}</Project>
-      <Name>Prediktor.Carbon.Configuration.Hive</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Prediktor.Carbon.Controls\Prediktor.Carbon.Controls.csproj">
-      <Project>{534967ea-bd8f-4694-90d5-148cd28f76b4}</Project>
-      <Name>Prediktor.Carbon.Controls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Prediktor.Carbon.Infrastructure\Prediktor.Carbon.Infrastructure.csproj">
-      <Project>{bda71c62-0e50-42d9-824b-7e91ca2358aa}</Project>
-      <Name>Prediktor.Carbon.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Prediktor.Carbon.Style\Prediktor.Carbon.Style.csproj">
-      <Project>{e4821dee-9179-4e8e-a27d-f429ee7072c9}</Project>
-      <Name>Prediktor.Carbon.Style</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Xceed.Wpf.AvalonDock\Xceed.Wpf.AvalonDock.csproj">
-      <Project>{db81988f-e0f2-45a0-a1fd-8c37f3d35244}</Project>
-      <Name>Xceed.Wpf.AvalonDock</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Config\ioc.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -326,6 +343,10 @@
     <Page Include="Shell.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="HistoryTrend.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <PropertyGroup>
