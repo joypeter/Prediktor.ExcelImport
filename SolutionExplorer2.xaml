@@ -84,7 +84,6 @@
                              ExpanderStyle="{DynamicResource ExpandCollapseToggleStyle}"
                              LoadOnDemand="RadTreeView_LoadOnDemand" 
                              ItemPrepared="RadTreeView_ItemPrepared"
-                             SelectionChanged="RadTreeView_SelectionChanged"
                              MouseRightButtonDown="OnPreviewMouseRightButtonDown" 
                              BorderThickness="0,5,0,0" 
                              BorderBrush="{DynamicResource BackgroundNormal}">
