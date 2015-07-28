@@ -207,6 +207,7 @@ namespace Prediktor.ExcelImport
                     //Write time zone
                     row++;
                     sheet.Cells[row, col] = "Local time";
+                    sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("End Time");
 
                     //Write space
                     row++;
