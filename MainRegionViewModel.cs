@@ -21,7 +21,7 @@ using Prediktor.Utilities;
 
 namespace Prediktor.ExcelImport
 {
-    public class MainRegionViewModel : BaseHistoricalViewModel, IContentViewModel, IState
+    public class MainRegionViewModel : BaseHistoricalViewModel, IContentViewModel
     {
         private readonly IEventContext _eventContext;
         private readonly IInteractionService _interactionService;
@@ -220,21 +220,6 @@ namespace Prediktor.ExcelImport
             ListViewModel.Clear();
             ChartModel.Clear();
         }
-
-        public void Write(IApplicationStateWriter writer)
-        {
-            writer.Write("TimePeriod", TimePeriodViewModel);
-            writer.Write("ListView", ListViewModel);
-            writer.Write("Chart", ChartModel);
-        }
-
-        public void Read(IApplicationStateReader reader)
-        {
-            reader.Read("TimePeriod", TimePeriodViewModel);
-            reader.Read("ListView", ListViewModel);
-            reader.Read("Chart", ChartModel);
-        }
-
 
         public void Restored()
         {
