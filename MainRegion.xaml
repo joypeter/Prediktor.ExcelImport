@@ -48,7 +48,7 @@
                  <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <TextBlock Text="Selected Item(s):" Grid.Row="0"></TextBlock>
-            <ListView Grid.Row="1" ItemsSource="{Binding Legend}">
+            <ListView Grid.Row="1" ItemsSource="{Binding ChartModel.Legend}">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical"></StackPanel>

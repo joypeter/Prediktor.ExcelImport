@@ -147,7 +147,18 @@ namespace Prediktor.ExcelImport
 
         private void SelectBtn_Click(object sender, RoutedEventArgs e)
         {
-            //TODO: add selected items to mainregion
+            var vm = DataContext as SolutionExplorerViewModel;
+            if (vm != null && !vm.HoldSelectionChangedNotification)
+            {
+                var selectedItem = new List<ITreeNode>(this.treeView.CheckedItems.OfType<ITreeNode>());
+                vm.SelectedItems = selectedItem;
+                bool holdNotification = false;
+                if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+                    holdNotification = Keyboard.IsKeyDown(Key.H);
+
+                if (!holdNotification)
+                    vm.SelectedItemsChangedCommand.Execute(null);
+            }
         }
     }
 }

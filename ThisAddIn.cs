@@ -45,7 +45,7 @@ namespace Prediktor.ExcelImport
         {
             Ribbon apisExcelImport = new Ribbon();
             apisExcelImport.TestEvent += ThisAddIn_Test;
-            apisExcelImport.ConnectMethod = this.Connnect;
+            apisExcelImport.ConnectMethod = this.Connect;
             apisExcelImport.BrowseMethod = this.Browse;
 
             return Globals.Factory.GetRibbonFactory().CreateRibbonManager(new Microsoft.Office.Tools.Ribbon.IRibbonExtension[] { apisExcelImport });
@@ -59,8 +59,8 @@ namespace Prediktor.ExcelImport
             //    missing, missing, missing, missing);
             Excel.Worksheet sheet = ((Excel.Worksheet)this.Application.ActiveWorkbook.Sheets[1]);
 
-            //ExcelExportService excelService = new ExcelExportService();
-            //excelService.WriteExcelTest(sheet);
+            ExcelExportService excelService = new ExcelExportService();
+            excelService.WriteExcelTest(sheet);
         }
 
         #region VSTO generated code

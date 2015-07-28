@@ -29,8 +29,6 @@ namespace Prediktor.ExcelImport
             InitializeComponent();
             DataContext = viewModel;
 
-            //this.TabbedView.ResourceDictionaryProvider = viewModel.ResourceDictionaryProvider;
-
             SelectView(0);
         }
 
@@ -70,16 +68,6 @@ namespace Prediktor.ExcelImport
         private void graphViewButton_Click(object sender, RoutedEventArgs e)
         {
             SelectView(2);
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            //TODO: reset zoom
-            /*
-            HistoryTrendTab.
-            this.HistoryTrend.Zoom = new Size(1, 1);
-            this.HistoryTrend.PanOffset = new Point(0, 0);
-             * */
         }
     }
 }

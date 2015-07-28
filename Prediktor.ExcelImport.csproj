@@ -168,6 +168,10 @@
     <Reference Include="Prediktor.Configuration">
       <HintPath>..\..\Application Services\Prediktor.Configuration\bin\Debug\Prediktor.Configuration.dll</HintPath>
     </Reference>
+    <Reference Include="Prediktor.Configuration.OpcHda, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Application Services\Prediktor.Configuration.OpcHda\bin\Debug\Prediktor.Configuration.OpcHda.dll</HintPath>
+    </Reference>
     <Reference Include="Prediktor.Configuration.Windsor, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Application Services\Prediktor.Configuration.Windsor\bin\Debug\Prediktor.Configuration.Windsor.dll</HintPath>
@@ -272,7 +276,8 @@
   -->
   <ItemGroup>
     <Compile Include="ApplicationProperties.cs" />
-	<Compile Include="ExcelImportBootstrapper.cs" />
+    <Compile Include="ExcelExportService.cs" />
+    <Compile Include="ExcelImportBootstrapper.cs" />
     <Compile Include="MainRegionViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

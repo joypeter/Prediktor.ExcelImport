@@ -74,9 +74,9 @@
             <Button Grid.Column="1" VerticalAlignment="Bottom" Command="{Binding Search}" Content="{trn:Translation NativeText=Search}" Margin="3,3,0,3"></Button>
         </Grid>
         <Border Grid.Row="1" BorderThickness="1" BorderBrush="{DynamicResource BorderBrushNormal}" Margin="3 3 0 3" Padding="0">
-            <telerik:RadTreeView x:Name="tree" IsVirtualizing="True" IsLoadOnDemandEnabled="True" 
+            <telerik:RadTreeView x:Name="treeView" IsVirtualizing="True" IsLoadOnDemandEnabled="True" 
                              IsOptionElementsEnabled="True"
-							 IsTriStateMode="True"
+							 
 							 SelectionMode="Multiple"
                              telerik:AnimationManager.IsAnimationEnabled="False"
                              ItemsSource="{Binding Children}"  
