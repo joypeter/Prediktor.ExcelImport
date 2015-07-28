@@ -20,7 +20,7 @@ using Prediktor.Ioc;
 using Prediktor.Log;
 using PrismContrib.WindsorExtensions;
 using Prediktor.Carbon.Configuration.Definitions.ModuleServices;
-using Prediktor.Carbon.Configuration.Views;
+//using Prediktor.Carbon.Configuration.Views;
 
 namespace Prediktor.ExcelImport
 {
