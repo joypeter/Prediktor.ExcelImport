@@ -7,6 +7,8 @@ using Prediktor.Carbon.Infrastructure.Definitions;
 using Prediktor.Carbon.Configuration.Resources;
 using Prediktor.Carbon.Configuration.Definitions.ModuleServices;
 using Prediktor.Log;
+using Prediktor.Configuration.BaseTypes.Definitions;
+using Prediktor.Configuration.Honeystore.Implementation;
 
 namespace Prediktor.ExcelImport
 {
@@ -26,6 +28,8 @@ namespace Prediktor.ExcelImport
             container.Register(Component.For<MainRegion>()
                 .ImplementedBy<MainRegion>());
 
+            container.Register(Component.For<IHistoricalTimeUtility>()
+                .ImplementedBy<HistoricalTimeUtility>());
 
             _log.Debug("Exiting Install");
         }

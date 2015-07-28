@@ -6,15 +6,23 @@ using System.Text;
 using Excel = Microsoft.Office.Interop.Excel;
 using Office = Microsoft.Office.Core;
 using Microsoft.Office.Tools.Excel;
+using Prediktor.Configuration.BaseTypes.Implementation;
 
 namespace Prediktor.ExcelImport
 {
     class ExcelExportService
     {
+        private readonly IHistoricalTimeUtility _historicalTimeUtility;
+        private readonly IHistoricalArguments _historicalArguments;
+        private readonly IObjectServiceOperations _objectServiceOperations;
+
         public void WriteExcelTest(Excel.Worksheet sheet)
         {
             sheet.Select();
-            int cols = 10;
+            sheet.Cells.Clear();
+            int signals = 10;
+            int timerows = 30;
+            int startcol = 2;
 
             sheet.Cells.ColumnWidth = 30;
             sheet.Range["A1"].ColumnWidth = 14;
@@ -22,7 +30,7 @@ namespace Prediktor.ExcelImport
             sheet.Range["A13"].Value2 = "Timestamps";
             sheet.Range["A14"].Value2 = "(Local time)";
 
-            sheet.Range["A13"].AddComment("ssss");
+            //sheet.Range["A13"].AddComment("ssss");
 
             //sheet.Rows[1] = "ddd";
             //sheet.Cells.get_Offset(1, 1).Value2 = "test";
@@ -39,22 +47,30 @@ namespace Prediktor.ExcelImport
             //rg.Value = 3;
             //sheet.Columns[Type.Missing, "1:2"].
 
-            for (int row = 15; row < 30; row++)
+            for (int row = 15; row < timerows + 15; row++)
             {
                 sheet.Cells[row, 1] = DateTime.Now.ToString("M/d/yyyy h:mm");
-                for (int col = 2; col < cols; col++)
+            }
+
+            for (int col = startcol; col < startcol + signals; col++ )
+            {
+                sheet.Cells[1, col] = "ApisLogger1.ApisWorker1.Signal" + (col - startcol + 1).ToString();
+                sheet.Range[sheet.Cells[1, col], sheet.Cells[1, col]].AddComment("Item ID");
+                sheet.Cells[4, col] = "Prediktor.ApisOPCHDAServer.1";
+                sheet.Cells[13, col] = "Local time";
+                sheet.Cells[13, col] = "Values";
+
+                for (int row = 15; row < timerows + 15; row++)
                 {
                     //sheet.Cells.get_Offset(row, col).Value2 = "row" + row.ToString() + ":" + "col" + col.ToString();
                     //sheet.Cells[row, col] = "row" + row.ToString() + ":" + "col" + col.ToString() + "many other";
-                    sheet.Cells[1, col] = "ApisLogger1.ApisWorker1.Signal" + ((col-1)*100/71).ToString();
-                    Excel.Range rg = sheet.Range[sheet.Cells[1, col], sheet.Cells[1, col]];
-                    rg.Value = "dss0";
-                        //.AddComment("Item ID");
-                    sheet.Cells[4, col] = "Prediktor.ApisOPCHDAServer.1";
-                    sheet.Cells[13, col] = "Local time";
-                    sheet.Cells[13, col] = "Values";
-                    sheet.Cells[row, col] = row / col;
+                    
+                    //Excel.Range rg = 
+                    //rg.Value = "dss0";
+                    //.AddComment("Item ID");
+                    sheet.Cells[row, col] = ((col - 1) * 100 / 71).ToString();
                 }
+                
             }
 
             //Excel.Range rg = sheet.Range[sheet.Cells[3, 2], sheet.Cells[3, 3]];
@@ -64,28 +80,149 @@ namespace Prediktor.ExcelImport
             rg2.AddComment("sss");
         }
 
-        public void WriteExcelOrganizeAsTable(Excel.Worksheet sheet, bool displayOnlyFirstTime, bool displayQuality, 
+        private void Export()
+        {
+            var endTime = _historicalTimeUtility.Parse("");
+            var startTime = _historicalTimeUtility.Parse("");
+            var historicalArguments = new HistoricalArguments(startTime.Value, endTime.Value, 1, 1);
+            //var viewModel = new ExportDialogViewModel(_interactionService);
+            //var exportDialog = new ExportDialog(viewModel);
+            //var r = exportDialog.ShowDialog();
+            //if (r.HasValue && r.Value)
+            //{
+            //    try
+            //    {
+            //        string columnSeparator = "\t";
+            //        if (viewModel.IsOtherColumnSeparator && !string.IsNullOrEmpty(viewModel.ColumnSeparator))
+            //        {
+            //            columnSeparator = viewModel.ColumnSeparator;
+            //        }
+
+            //        string fileName = GetFileName(viewModel);
+
+            //        var endTime = _historicalTimeUtility.Parse(TimePeriodViewModel.EndTime);
+            //        var startTime = _historicalTimeUtility.Parse(TimePeriodViewModel.StartTime);
+            //        if (endTime.Success && startTime.Success && TimePeriodViewModel.SelectedAggregate != null)
+            //        {
+            //            var historicalArguments = new HistoricalArguments(startTime.Value, endTime.Value, TimePeriodViewModel.Resample, TimePeriodViewModel.MaxValues);
+
+            //            if (viewModel.IsRowEventList)
+            //            {
+            //                _hdaFileExportService.WriteAsciiFileOrganizeAsEventList(fileName, columnSeparator, EventListViewModel.DisplayQuality, ListViewModel.GetHistoricalProperties(), historicalArguments, TimePeriodViewModel.SelectedAggregate);
+            //            }
+            //            else
+            //            {
+            //                if (!viewModel.IsOrganizeDataRowByRow)
+            //                {
+            //                    _hdaFileExportService.WriteAsciiFileOrganizeAsTable(fileName, columnSeparator, ListViewModel.DisplayOnlyFirstTime, ListViewModel.DisplayQuality, ListViewModel.GetHistoricalProperties(), historicalArguments, TimePeriodViewModel.SelectedAggregate);
+            //                }
+            //                else
+            //                {
+            //                    _hdaFileExportService.WriteAsciiFileOrganizeRowByRow(fileName, columnSeparator, ListViewModel.DisplayOnlyFirstTime, ListViewModel.DisplayQuality, ListViewModel.GetHistoricalProperties(), historicalArguments, TimePeriodViewModel.SelectedAggregate);
+            //                }
+            //            }
+            //        }
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        _interactionService.ResultService.ReportResult(new Result("Export hda file failed!", e.Message));
+            //    }
+            //}
+        }
+
+        public void WriteExcelOrganizeAsTable(Excel.Worksheet sheet, string computer, string dataSource,
                                               IPropertyId[] propertIds, IHistoricalArguments historicalArguments, 
                                               IHistoricalAggregate historicalAggregate)
         {
-            /*//using (var file = new System.IO.StreamWriter(fileName))
-            //{
-
             var objectInfoResutls = _objectServiceOperations.GetObjectInfos(propertIds.Select(a => a.GetContext()).ToArray());
             var objectInfos = objectInfoResutls.Where(a => a.Success).Select(a => a.Value).ToArray();
 
-                file.Write(string.Format("% Start time (local timezone):{0}; End time (local timezone): {1}",
-                    historicalArguments.StartTime.IsRelativeTime ? historicalArguments.StartTime.RelativeTime : historicalArguments.StartTime.AbsoluteTime.ToLocalTime().ToString(),
-                    historicalArguments.EndTime.IsRelativeTime ? historicalArguments.EndTime.RelativeTime : historicalArguments.EndTime.AbsoluteTime.ToLocalTime().ToString()));
+                //file.Write(string.Format("% Start time (local timezone):{0}; End time (local timezone): {1}",
+                //    historicalArguments.StartTime.IsRelativeTime ? historicalArguments.StartTime.RelativeTime : historicalArguments.StartTime.AbsoluteTime.ToLocalTime().ToString(),
+                //    historicalArguments.EndTime.IsRelativeTime ? historicalArguments.EndTime.RelativeTime : historicalArguments.EndTime.AbsoluteTime.ToLocalTime().ToString()));
 
             //sheet.Cells[]
 
             //    file.WriteLine();
 
-                if (objectInfos.Any())
+            int startrow = 1;
+            int startcol = 1;
+            int col, row;
+
+            if (objectInfos.Any())
+            {
+                for (int i = 0; i < objectInfos.Length; ++i)
                 {
-                    file.Write("% ");
-                    for (int i = 0; i < objectInfos.Length; ++i)
+                    //write Item ID
+                    col = i + startcol + 1;
+                    row = startrow;
+                    sheet.Cells[row, col] = objectInfos[i].FullName;
+                    sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("Item ID");
+
+                    //write Item Description
+                    row++;
+                    sheet.Cells[row, col] = objectInfos[i].Description;
+                    sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("Item Description");
+
+                    //write Engineering Unit
+                    row++;
+                    sheet.Cells[row, col] = "";
+                    sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("Engineering Unit");
+
+                    //write Data Source
+                    row++;
+                    sheet.Cells[row, col] = dataSource;
+                    sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("Data Source");
+
+                    //write Location
+                    row++;
+                    sheet.Cells[row, col] = computer;
+                    sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("Location");
+                    
+                    //write aggregation ID
+                    row++;
+                    sheet.Cells[row, col] = historicalAggregate.Id.ToString();
+                    sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("Aggregation ID");
+
+                    //Write aggretation name
+                    row++;
+                    sheet.Cells[row, col] = historicalAggregate.Name;
+                    sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("Aggregation Name");
+
+                    //Write start time
+                    row++;
+                    sheet.Cells[row, col] = historicalArguments.StartTime.AbsoluteTime;
+                    sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("Start Time");
+
+                    //Write end time
+                    row++;
+                    sheet.Cells[row, col] = historicalArguments.EndTime.AbsoluteTime;
+                    sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("End Time");
+
+                    //Write resample intervals
+                    row++;
+                    sheet.Cells[row, col] = historicalArguments.EndTime.AbsoluteTime;
+                    sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("End Time");
+
+                    //Write time zone
+                    row++;
+                    sheet.Cells[row, col] = "Local time";
+
+                    //Write space
+                    row++;
+
+                    //Write labels
+                    row++;
+                    sheet.Cells[row, col] = "Values";
+
+                    //Write space
+                    row++;
+
+
+                }
+            }
+
+            /*        for (int i = 0; i < objectInfos.Length; ++i)
                     {
                         //Service
 
@@ -95,16 +232,16 @@ namespace Prediktor.ExcelImport
                         //Time
 
 
-                        if (!displayOnlyFirstTime || i == 0)
-                        {
-                            file.Write(columnSeparator);
-                        }
+                        //if (!displayOnlyFirstTime || i == 0)
+                        //{
+                        //    file.Write(columnSeparator);
+                        //}
 
-                        if (displayQuality)
-                        {
-                            file.Write(columnSeparator);
-                        }
-                        file.Write(columnSeparator);
+                        //if (displayQuality)
+                        //{
+                        //    file.Write(columnSeparator);
+                        //}
+                        //file.Write(columnSeparator);
                     }
 
                     file.WriteLine();
