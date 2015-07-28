@@ -28,9 +28,6 @@ namespace Prediktor.ExcelImport
             container.Register(Component.For<MainRegion>()
                 .ImplementedBy<MainRegion>());
 
-            container.Register(Component.For<IHistoricalTimeUtility>()
-                .ImplementedBy<HistoricalTimeUtility>());
-
             _log.Debug("Exiting Install");
         }
 
