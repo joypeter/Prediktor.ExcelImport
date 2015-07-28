@@ -224,6 +224,9 @@
       <HintPath>..\..\..\Dependencies\Telerik\Telerik.Windows.Data.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
+    <Reference Include="WpfAnimatedGif">
+      <HintPath>..\..\..\Dependencies\UI\WpfAnimatedGif.dll</HintPath>
+    </Reference>
     <Reference Include="WPFToolkit.Extended">
       <HintPath>..\Prediktor.WPFToolkit.Extended\bin\Debug\WPFToolkit.Extended.dll</HintPath>
     </Reference>
@@ -269,8 +272,7 @@
   -->
   <ItemGroup>
     <Compile Include="ApplicationProperties.cs" />
-	<Compile Include="ExcelExportService.cs" />
-	<Compile Include="ExcelImportBootstrapper.cs" />
+    <Compile Include="ExcelImportBootstrapper.cs" />
     <Compile Include="MainRegionViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -318,6 +320,9 @@
     </Compile>
     <Compile Include="ShellInstaller.cs" />
     <Compile Include="ShellViewModel.cs" />
+    <Compile Include="SolutionExplorer2.xaml.cs">
+      <DependentUpon>SolutionExplorer2.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -345,6 +350,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="HistoryTrend.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SolutionExplorer2.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

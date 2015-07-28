@@ -29,7 +29,7 @@ namespace Prediktor.ExcelImport
 
         private void btnTest_Click(object sender, RibbonControlEventArgs e)
         {
-            TestEvent.Invoke(null, null);
+            //TestEvent.Invoke(null, null);
         }
 
     }

@@ -16,13 +16,6 @@ namespace Prediktor.ExcelImport
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
             System.Windows.Forms.Application.Idle += OnIdle;
-
-            //
-            //Application.
-
-            //System.Windows.Forms.Application.re
-            //this.
-            //System.Windows.Forms.Application.Resources.Add("Telerik.Windows.Controls.Key", "Prediktor Telerik Application");
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
@@ -38,7 +31,7 @@ namespace Prediktor.ExcelImport
         }
 
 
-        public void Connnect()
+        public void Connect()
         {
             Bootstrapper.Connect();
         }
@@ -51,7 +44,7 @@ namespace Prediktor.ExcelImport
         protected override Microsoft.Office.Core.IRibbonExtensibility CreateRibbonExtensibilityObject()
         {
             Ribbon apisExcelImport = new Ribbon();
-            apisExcelImport.ConnectMethod = this.Connnect;
+            apisExcelImport.ConnectMethod = this.Connect;
             apisExcelImport.BrowseMethod = this.Browse;
 
             return Globals.Factory.GetRibbonFactory().CreateRibbonManager(new Microsoft.Office.Tools.Ribbon.IRibbonExtension[] { apisExcelImport });
@@ -65,8 +58,8 @@ namespace Prediktor.ExcelImport
             //    missing, missing, missing, missing);
             Excel.Worksheet sheet = ((Excel.Worksheet)this.Application.ActiveWorkbook.Sheets[1]);
 
-            ExcelExportService excelService = new ExcelExportService();
-            excelService.WriteExcelTest(sheet);
+            //ExcelExportService excelService = new ExcelExportService();
+            //excelService.WriteExcelTest(sheet);
         }
 
         #region VSTO generated code
