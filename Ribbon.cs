@@ -12,9 +12,12 @@ namespace Prediktor.ExcelImport
         public delegate void BrowseDelegate();
         public ConnectDelegate ConnectMethod { get; set; }
         public BrowseDelegate BrowseMethod { get; set; } 
+
+        public event EventHandler TestEvent;
+
         private void Ribbon_Load(object sender, RibbonUIEventArgs e)
         {
-
+            
         }
 
         private void btnConfigure_Click(object sender, RibbonControlEventArgs e)

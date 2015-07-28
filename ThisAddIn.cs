@@ -51,6 +51,7 @@ namespace Prediktor.ExcelImport
         protected override Microsoft.Office.Core.IRibbonExtensibility CreateRibbonExtensibilityObject()
         {
             Ribbon apisExcelImport = new Ribbon();
+            apisExcelImport.TestEvent += ThisAddIn_Test;
             apisExcelImport.ConnectMethod = this.Connnect;
             apisExcelImport.BrowseMethod = this.Browse;
 

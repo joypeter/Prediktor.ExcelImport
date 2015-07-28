@@ -213,8 +213,8 @@
   -->
   <ItemGroup>
     <Compile Include="ApplicationProperties.cs" />
-	<Compile Include="ExcelExportService.cs" />
-	<Compile Include="ExcelImportBootstrapper.cs" />
+    <Compile Include="ExcelExportService.cs" />
+    <Compile Include="ExcelImportBootstrapper.cs" />
     <Compile Include="MainRegionViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -339,7 +339,7 @@
     <ManifestKeyFile>Prediktor.ExcelImport_2_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>BCAEC54BC9328B1E10D14929E8F25A255A4A3946</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>E928D27837A5FA2BB2878CA059FA34DFFBB2C1D8</ManifestCertificateThumbprint>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
