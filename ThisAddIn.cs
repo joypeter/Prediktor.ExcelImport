@@ -57,8 +57,8 @@ namespace Prediktor.ExcelImport
             //Excel.Worksheet newWorksheet;
             //newWorksheet = (Excel.Worksheet)this.Application.Worksheets.Add(
             //    missing, missing, missing, missing);
-            TestExcelForm excelform = new TestExcelForm();
-            if (excelform.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            //TestExcelForm excelform = new TestExcelForm();
+            //if (excelform.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             { 
                 Excel.Worksheet sheet = ((Excel.Worksheet)this.Application.ActiveWorkbook.Sheets[1]);
 
