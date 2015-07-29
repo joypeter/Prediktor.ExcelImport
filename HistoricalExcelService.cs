@@ -60,9 +60,10 @@ namespace Prediktor.ExcelImport
 
             if (r.HasValue && r.Value)
             {
-                WriteTest();
+                //WriteTest();
                 //WriteExcel("", "", _mainViewModel.ListViewModel.GetHistoricalProperties(),
                 //    _mainViewModel.TimePeriodViewModel)
+                WriteExcel("", "", excelViewModel, _mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
                 return true;
             }
 
@@ -149,56 +150,6 @@ namespace Prediktor.ExcelImport
             rg2.AddComment("sss");
         }
 
-        private void Export()
-        {
-            //var endTime = _historicalTimeUtility.Parse("");
-            //var startTime = _historicalTimeUtility.Parse("");
-            //var historicalArguments = new HistoricalArguments(startTime.Value, endTime.Value, 1, 1);
-            //var viewModel = new ExportDialogViewModel(_interactionService);
-            //var exportDialog = new ExportDialog(viewModel);
-            //var r = exportDialog.ShowDialog();
-            //if (r.HasValue && r.Value)
-            //{
-            //    try
-            //    {
-            //        string columnSeparator = "\t";
-            //        if (viewModel.IsOtherColumnSeparator && !string.IsNullOrEmpty(viewModel.ColumnSeparator))
-            //        {
-            //            columnSeparator = viewModel.ColumnSeparator;
-            //        }
-
-            //        string fileName = GetFileName(viewModel);
-
-            //        var endTime = _historicalTimeUtility.Parse(TimePeriodViewModel.EndTime);
-            //        var startTime = _historicalTimeUtility.Parse(TimePeriodViewModel.StartTime);
-            //        if (endTime.Success && startTime.Success && TimePeriodViewModel.SelectedAggregate != null)
-            //        {
-                        //var historicalArguments = new HistoricalArguments(startTime.Value, endTime.Value, TimePeriodViewModel.Resample, TimePeriodViewModel.MaxValues);
-
-            //            if (viewModel.IsRowEventList)
-            //            {
-            //                _hdaFileExportService.WriteAsciiFileOrganizeAsEventList(fileName, columnSeparator, EventListViewModel.DisplayQuality, ListViewModel.GetHistoricalProperties(), historicalArguments, TimePeriodViewModel.SelectedAggregate);
-            //            }
-            //            else
-            //            {
-            //                if (!viewModel.IsOrganizeDataRowByRow)
-            //                {
-            //                    _hdaFileExportService.WriteAsciiFileOrganizeAsTable(fileName, columnSeparator, ListViewModel.DisplayOnlyFirstTime, ListViewModel.DisplayQuality, ListViewModel.GetHistoricalProperties(), historicalArguments, TimePeriodViewModel.SelectedAggregate);
-            //                }
-            //                else
-            //                {
-            //                    _hdaFileExportService.WriteAsciiFileOrganizeRowByRow(fileName, columnSeparator, ListViewModel.DisplayOnlyFirstTime, ListViewModel.DisplayQuality, ListViewModel.GetHistoricalProperties(), historicalArguments, TimePeriodViewModel.SelectedAggregate);
-            //                }
-            //            }
-            //        }
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        _interactionService.ResultService.ReportResult(new Result("Export hda file failed!", e.Message));
-            //    }
-            //}
-        }
-
         public void WriteExcel(string computer, string dataSource,
                                ExportExcelDialogViewModel excelViewModel,
                                HistoricalPropertyListViewModel listViewModel, 
@@ -220,14 +171,6 @@ namespace Prediktor.ExcelImport
 
                 var properties = propertIds.Select(a => new HistoricalPropertyRead(a, historicalAggregate.Id)).ToArray();
                 var result = _objectServiceOperations.GetHistoricalPropertyValues(historicalArguments, properties);
-
-                //file.Write(string.Format("% Start time (local timezone):{0}; End time (local timezone): {1}",
-                //    historicalArguments.StartTime.IsRelativeTime ? historicalArguments.StartTime.RelativeTime : historicalArguments.StartTime.AbsoluteTime.ToLocalTime().ToString(),
-                //    historicalArguments.EndTime.IsRelativeTime ? historicalArguments.EndTime.RelativeTime : historicalArguments.EndTime.AbsoluteTime.ToLocalTime().ToString()));
-
-                //sheet.Cells[]
-
-                //    file.WriteLine();
 
                 int startrow = 1;
                 int startcol = 1;
@@ -275,23 +218,23 @@ namespace Prediktor.ExcelImport
 
                         //Write start time
                         row++;
-                        sheet.Cells[row, col] = historicalArguments.StartTime.AbsoluteTime;
+                        sheet.Cells[row, col] = startTime.Value.AbsoluteTime;
                         sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("Start Time");
 
                         //Write end time
                         row++;
-                        sheet.Cells[row, col] = historicalArguments.EndTime.AbsoluteTime;
+                        sheet.Cells[row, col] = endTime.Value.AbsoluteTime;
                         sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("End Time");
 
                         //Write resample intervals
                         row++;
-                        sheet.Cells[row, col] = historicalArguments.EndTime.AbsoluteTime;
-                        sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("End Time");
+                        sheet.Cells[row, col] = timePeriodViewModel.ReadInterval;
+                        sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("Resample interval(in seconds)");
 
                         //Write time zone
                         row++;
                         sheet.Cells[row, col] = "Local time";
-                        sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("End Time");
+                        sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("Timestamps time zone");
 
                         //Write space
                         row++;
@@ -339,8 +282,9 @@ namespace Prediktor.ExcelImport
                     }
                 }
             }
+        }
 
-            /*        for (int i = 0; i < objectInfos.Length; ++i)
+        /*        for (int i = 0; i < objectInfos.Length; ++i)
                     {
                         //Service
 
@@ -450,6 +394,55 @@ namespace Prediktor.ExcelImport
                     file.WriteLine();
                 }
             }*/
+
+        private void Export()
+        {
+            //var endTime = _historicalTimeUtility.Parse("");
+            //var startTime = _historicalTimeUtility.Parse("");
+            //var historicalArguments = new HistoricalArguments(startTime.Value, endTime.Value, 1, 1);
+            //var viewModel = new ExportDialogViewModel(_interactionService);
+            //var exportDialog = new ExportDialog(viewModel);
+            //var r = exportDialog.ShowDialog();
+            //if (r.HasValue && r.Value)
+            //{
+            //    try
+            //    {
+            //        string columnSeparator = "\t";
+            //        if (viewModel.IsOtherColumnSeparator && !string.IsNullOrEmpty(viewModel.ColumnSeparator))
+            //        {
+            //            columnSeparator = viewModel.ColumnSeparator;
+            //        }
+
+            //        string fileName = GetFileName(viewModel);
+
+            //        var endTime = _historicalTimeUtility.Parse(TimePeriodViewModel.EndTime);
+            //        var startTime = _historicalTimeUtility.Parse(TimePeriodViewModel.StartTime);
+            //        if (endTime.Success && startTime.Success && TimePeriodViewModel.SelectedAggregate != null)
+            //        {
+            //var historicalArguments = new HistoricalArguments(startTime.Value, endTime.Value, TimePeriodViewModel.Resample, TimePeriodViewModel.MaxValues);
+
+            //            if (viewModel.IsRowEventList)
+            //            {
+            //                _hdaFileExportService.WriteAsciiFileOrganizeAsEventList(fileName, columnSeparator, EventListViewModel.DisplayQuality, ListViewModel.GetHistoricalProperties(), historicalArguments, TimePeriodViewModel.SelectedAggregate);
+            //            }
+            //            else
+            //            {
+            //                if (!viewModel.IsOrganizeDataRowByRow)
+            //                {
+            //                    _hdaFileExportService.WriteAsciiFileOrganizeAsTable(fileName, columnSeparator, ListViewModel.DisplayOnlyFirstTime, ListViewModel.DisplayQuality, ListViewModel.GetHistoricalProperties(), historicalArguments, TimePeriodViewModel.SelectedAggregate);
+            //                }
+            //                else
+            //                {
+            //                    _hdaFileExportService.WriteAsciiFileOrganizeRowByRow(fileName, columnSeparator, ListViewModel.DisplayOnlyFirstTime, ListViewModel.DisplayQuality, ListViewModel.GetHistoricalProperties(), historicalArguments, TimePeriodViewModel.SelectedAggregate);
+            //                }
+            //            }
+            //        }
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        _interactionService.ResultService.ReportResult(new Result("Export hda file failed!", e.Message));
+            //    }
+            //}
         }
     }
 }
