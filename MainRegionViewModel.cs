@@ -68,6 +68,7 @@ namespace Prediktor.ExcelImport
             EventListViewModel = new HistoricalEventListViewModel(eventContext, objectServiceOperations, columnNameService,
                 historicalColumnService, interactionService, serializationService, valueFormatter);
             ChartModel = new HistoricalChartViewModel(eventContext, objectServiceOperations, interactionService, columnNameService, valueFormatter, serializationService);
+            ExcelService = new HistoricalExcelService(this, eventContext, objectServiceOperations, interactionService, historicalTimeUtility, valueFormatter);
 
             ExportCommand = new DelegateCommand(Export);
             SubscribeEvents();
@@ -102,6 +103,13 @@ namespace Prediktor.ExcelImport
             get;
             private set;
         }
+
+        public HistoricalExcelService ExcelService
+        {
+            get;
+            private set;
+        }
+
         public ICommand ExportCommand { get; private set; }
 
         private void SubscribeEvents()
@@ -115,8 +123,7 @@ namespace Prediktor.ExcelImport
 
         private void Export()
         {
-            ExcelExportService excelService = new ExcelExportService(this);
-            excelService.ExportDataToExcel();
+            ExcelService.ExportDataToExcel();
 
             //Close Shell Command
         }

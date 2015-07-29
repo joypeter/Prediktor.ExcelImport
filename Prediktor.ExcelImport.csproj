@@ -277,7 +277,7 @@
   -->
   <ItemGroup>
     <Compile Include="ApplicationProperties.cs" />
-    <Compile Include="ExcelExportService.cs" />
+    <Compile Include="HistoricalExcelService.cs" />
     <Compile Include="ExcelImportBootstrapper.cs" />
     <Compile Include="MainRegionViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

@@ -56,10 +56,8 @@ namespace Prediktor.ExcelImport
         /* Test writing excel */
         public void ThisAddIn_Test(object sender, System.EventArgs e)
         {
-            Excel.Worksheet sheet = ((Excel.Worksheet)this.Application.ActiveWorkbook.Sheets[1]);
-
-            ExcelExportService excelService = new ExcelExportService();
-            excelService.WriteExcelTest(sheet);
+            HistoricalExcelService excelService = new HistoricalExcelService();
+            excelService.WriteExcelTest();
         }
 
         #region VSTO generated code
