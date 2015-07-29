@@ -12,6 +12,8 @@ namespace Prediktor.ExcelImport
 {
     public partial class ThisAddIn
     {
+        public static ThisAddIn G_ThisAddIn;
+
         ExcelImportBootstrapper Bootstrapper;
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
@@ -54,17 +56,10 @@ namespace Prediktor.ExcelImport
         /* Test writing excel */
         public void ThisAddIn_Test(object sender, System.EventArgs e)
         {
-            //Excel.Worksheet newWorksheet;
-            //newWorksheet = (Excel.Worksheet)this.Application.Worksheets.Add(
-            //    missing, missing, missing, missing);
-            //TestExcelForm excelform = new TestExcelForm();
-            //if (excelform.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            { 
-                Excel.Worksheet sheet = ((Excel.Worksheet)this.Application.ActiveWorkbook.Sheets[1]);
+            Excel.Worksheet sheet = ((Excel.Worksheet)this.Application.ActiveWorkbook.Sheets[1]);
 
-                ExcelExportService excelService = new ExcelExportService();
-                excelService.WriteExcelTest(sheet);
-            }
+            ExcelExportService excelService = new ExcelExportService();
+            excelService.WriteExcelTest(sheet);
         }
 
         #region VSTO generated code
@@ -77,6 +72,8 @@ namespace Prediktor.ExcelImport
         {
             this.Startup += new System.EventHandler(ThisAddIn_Startup);
             this.Shutdown += new System.EventHandler(ThisAddIn_Shutdown);
+
+            G_ThisAddIn = this;
         }
         
         #endregion
