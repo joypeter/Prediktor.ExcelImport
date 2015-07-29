@@ -1,0 +1,51 @@
+﻿<Window x:Class="Prediktor.ExcelImport.Views.ExportExcelDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:trn="clr-namespace:Prediktor.Carbon.Infrastructure.Implementation;assembly=Prediktor.Carbon.Infrastructure"
+        Title="{trn:Translation NativeText='Export to Excel'}" Height="219" Width="314"
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        Style="{StaticResource ApisWindow}">
+    <Grid Margin="0,0,16,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="53*"/>
+            <ColumnDefinition Width="193*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.ColumnSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <GroupBox Grid.Row="1" Header="Data ordering and appearance" Margin="20,10,0,-59" HorizontalAlignment="Left" Width="268">
+                <Grid Margin="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </Grid>
+            </GroupBox>
+
+            <CheckBox IsChecked="{Binding IsIncludeTimestamps, Mode=TwoWay}" Content="Include timestamps" Margin="40,67,0,22" Grid.Row="1"/>
+            <CheckBox IsChecked="{Binding IsTimestampsInFirstCol, Mode=TwoWay}" Content="Only in first column" Margin="68,89,0,0" Grid.Row="1"/>
+            <CheckBox IsChecked="{Binding IsTimestampsInLocalZone, Mode=TwoWay}" Content="Timestamps in local time zone" Margin="39,116,0,-27" Grid.Row="1"/>
+            <CheckBox IsChecked="{Binding IsQuelityInSeperateCol, Mode=TwoWay}" Content="Quality as text in separate column" Margin="40,138,0,-49" Grid.Row="1"/>
+            <ComboBox ItemsSource="{Binding StartInColumn}" SelectedItem="{Binding SelectedAggregate}" DisplayMemberPath="Name" Margin="138,39,21,44" Grid.Row="1" />
+            <TextBlock Text="Start in cololumn" Visibility="{Binding ResampleVisibility}" Margin="39,39,142,49" Grid.Row="1" Grid.Column="0" />
+        </Grid>
+        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Import" IsDefault="True" Command="{Binding SaveCommand}" Click="Button_Click" />
+                <Button Content="{trn:Translation NativeText='Cancel'}" IsCancel="True" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

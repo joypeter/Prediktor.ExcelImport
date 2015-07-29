@@ -7,6 +7,8 @@ using Excel = Microsoft.Office.Interop.Excel;
 using Office = Microsoft.Office.Core;
 using Microsoft.Office.Tools.Excel;
 using Prediktor.Configuration.BaseTypes.Implementation;
+using Prediktor.ExcelImport.ViewModels;
+using System.Windows.Forms;
 
 namespace Prediktor.ExcelImport
 {
@@ -18,6 +20,10 @@ namespace Prediktor.ExcelImport
 
         public void WriteExcelTest(Excel.Worksheet sheet)
         {
+            var exportExcelDialogViewModel = new ExportExcelDialogViewModel();
+            var exportExcelDialog = new Views.ExportExcelDialog(exportExcelDialogViewModel);
+            var r = exportExcelDialog.ShowDialog();
+
             sheet.Select();
             sheet.Cells.Clear();
             int signals = 10;
