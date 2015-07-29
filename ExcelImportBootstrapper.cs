@@ -87,27 +87,16 @@ namespace Prediktor.ExcelImport
 
             FluentConfiguration();
 
-            Container.Register(Component.For<ShellViewModel>()
-                .ImplementedBy<ShellViewModel>().Named("ShellViewModel"));
-
             Container.Register(Component.For<IApplicationProperties>()
                 .ImplementedBy<ApplicationProperties>()
                 .Named("ApplicationProperties"));
 
-            Container.Register(Component.For<Shell>()
-                .ImplementedBy<Shell>()
-                .Named("TheShell"));
-
-            Container.Register(Component.For<SolutionExplorer2>()
-                .ImplementedBy<SolutionExplorer2>()
-                .Named("SolutionExplorer2"));
-
-
             Container.Register(Component.For<ConnectionDialogViewModel>()
-                                   .ImplementedBy<ConnectionDialogViewModel>()
-                                   .LifeStyle.Transient);
+                .ImplementedBy<ConnectionDialogViewModel>()
+                .LifeStyle.Transient);
 
-            RegisterTypeIfMissing(typeof(IRegionManager), typeof(RegionManager), true);
+            RegisterTypeIfMissing(typeof(IRegionManager), 
+                typeof(RegionManager), true);
         }
 
         protected override void InitializeShell()
