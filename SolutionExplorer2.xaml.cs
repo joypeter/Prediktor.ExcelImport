@@ -98,23 +98,6 @@ namespace Prediktor.ExcelImport
             return source as Telerik.Windows.Controls.RadTreeViewItem;
         }
 
-        private void RadTreeView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var vm = DataContext as SolutionExplorerViewModel;
-            var treeView = sender as Telerik.Windows.Controls.RadTreeView;
-            if (vm != null && treeView != null && !vm.HoldSelectionChangedNotification)
-            {
-                var selectedItem = new List<ITreeNode>(treeView.SelectedItems.OfType<ITreeNode>());
-                vm.SelectedItems = selectedItem;
-                bool holdNotification = false;
-                if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
-                    holdNotification = Keyboard.IsKeyDown(Key.H);
-
-                if (!holdNotification)
-                    vm.SelectedItemsChangedCommand.Execute(null);
-            }
-        }
-
         private void RadTreeView_LoadOnDemand(object sender, Telerik.Windows.RadRoutedEventArgs e)
         {
             if (e.OriginalSource is FrameworkElement)
