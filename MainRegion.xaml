@@ -89,8 +89,9 @@
         </TabControl>
         
         <!--Row 4: export button-->
-        <StackPanel Grid.Row="4" Orientation="Horizontal">
-            <Button Content="{trn:Translation NativeText='Export'}" Command="{Binding ExportCommand}"/>
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="{trn:Translation NativeText='Export'}" 
+                    Command="{Binding ExportCommand}"/>
         </StackPanel>
     </Grid>
 </UserControl>
