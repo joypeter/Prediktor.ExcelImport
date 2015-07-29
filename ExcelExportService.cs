@@ -7,16 +7,53 @@ using Excel = Microsoft.Office.Interop.Excel;
 using Office = Microsoft.Office.Core;
 using Microsoft.Office.Tools.Excel;
 using Prediktor.Configuration.BaseTypes.Implementation;
+using Prediktor.ExcelImport.ViewModels;
+using System.Windows.Forms;
+using Prediktor.ExcelImport.Views;
+using Prediktor.Carbon.Configuration.ViewModels;
 
 namespace Prediktor.ExcelImport
 {
     class ExcelExportService
     {
-        private readonly IHistoricalTimeUtility _historicalTimeUtility;
-        private readonly IHistoricalArguments _historicalArguments;
+        //private readonly IHistoricalTimeUtility _historicalTimeUtility;
+        //private readonly IHistoricalArguments _historicalArguments;
         private readonly IObjectServiceOperations _objectServiceOperations;
 
-        public void WriteExcelTest(Excel.Worksheet sheet)
+        private ThisAddIn _thisAddIn = ThisAddIn.G_ThisAddIn;
+        private MainRegionViewModel _mainViewModel;
+
+        public ExcelExportService()
+        {
+        }
+
+        public ExcelExportService(MainRegionViewModel main)
+        {
+            _mainViewModel = main;
+        }
+
+        public void WriteExcelTest(Excel.Worksheet psheet)
+        {
+            Excel.Worksheet sheet = ((Excel.Worksheet)_thisAddIn.Application.ActiveWorkbook.Sheets[1]);
+            WriteTest(sheet);
+        }
+
+        public void ExportDataToExcel()
+        {
+            Excel.Worksheet sheet = ((Excel.Worksheet)_thisAddIn.Application.ActiveWorkbook.Sheets[1]);
+
+            var excelViewModel = new ExportExcelDialogViewModel();
+            var excelDialog = new ExportExcelDialog(excelViewModel);
+            var r = excelDialog.ShowDialog();
+
+            if (r.HasValue && r.Value)
+            {
+            }
+
+            WriteTest(sheet);
+        }
+
+        private void WriteTest(Excel.Worksheet sheet)
         {
             sheet.Select();
             sheet.Cells.Clear();
@@ -39,7 +76,7 @@ namespace Prediktor.ExcelImport
 
             //sheet.Rows.Width = 40;
             //sheet.Cells.NumberFormat = @"m/d/yyyy h:mm";
-            
+
             //sheet.get_Range("B1", "B5").Value2 = 2312;
             //sheet.get_Range("1:1").AddComment("ddd");
             //sheet.Range["B2"].AddComment("Item ID");
@@ -52,7 +89,7 @@ namespace Prediktor.ExcelImport
                 sheet.Cells[row, 1] = DateTime.Now.ToString("M/d/yyyy h:mm");
             }
 
-            for (int col = startcol; col < startcol + signals; col++ )
+            for (int col = startcol; col < startcol + signals; col++)
             {
                 sheet.Cells[1, col] = "ApisLogger1.ApisWorker1.Signal" + (col - startcol + 1).ToString();
                 sheet.Range[sheet.Cells[1, col], sheet.Cells[1, col]].AddComment("Item ID");
@@ -64,13 +101,13 @@ namespace Prediktor.ExcelImport
                 {
                     //sheet.Cells.get_Offset(row, col).Value2 = "row" + row.ToString() + ":" + "col" + col.ToString();
                     //sheet.Cells[row, col] = "row" + row.ToString() + ":" + "col" + col.ToString() + "many other";
-                    
+
                     //Excel.Range rg = 
                     //rg.Value = "dss0";
                     //.AddComment("Item ID");
                     sheet.Cells[row, col] = ((col - 1) * 100 / 71).ToString();
                 }
-                
+
             }
 
             //Excel.Range rg = sheet.Range[sheet.Cells[3, 2], sheet.Cells[3, 3]];
@@ -82,9 +119,9 @@ namespace Prediktor.ExcelImport
 
         private void Export()
         {
-            var endTime = _historicalTimeUtility.Parse("");
-            var startTime = _historicalTimeUtility.Parse("");
-            var historicalArguments = new HistoricalArguments(startTime.Value, endTime.Value, 1, 1);
+            //var endTime = _historicalTimeUtility.Parse("");
+            //var startTime = _historicalTimeUtility.Parse("");
+            //var historicalArguments = new HistoricalArguments(startTime.Value, endTime.Value, 1, 1);
             //var viewModel = new ExportDialogViewModel(_interactionService);
             //var exportDialog = new ExportDialog(viewModel);
             //var r = exportDialog.ShowDialog();
