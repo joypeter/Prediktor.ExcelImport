@@ -19,6 +19,7 @@ using Prediktor.Ioc;
 using Prediktor.Log;
 using Microsoft.Practices.Prism.Events;
 using Prediktor.Carbon.Configuration.Definitions.Events;
+using Telerik.Windows.Controls;
 
 namespace Prediktor.ExcelImport
 {
@@ -29,7 +30,7 @@ namespace Prediktor.ExcelImport
     public partial class SolutionExplorer2 : UserControl
     {
         private static ITraceLog _log = LogManager.GetLogger(typeof(SolutionExplorer2));
-        public SolutionExplorer2(SolutionExplorerViewModel viewModel)
+        public SolutionExplorer2(SolutionExplorer2ViewModel viewModel)
         {
             _log.Debug("Create");
             InitializeComponent();
@@ -42,7 +43,7 @@ namespace Prediktor.ExcelImport
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                var vm = DataContext as SolutionExplorerViewModel;
+                var vm = DataContext as SolutionExplorer2ViewModel;
                 if (vm != null)
                 {
                     List<IObjectId> objectIds = new List<IObjectId>();
@@ -120,7 +121,7 @@ namespace Prediktor.ExcelImport
 
         private void RadTreeView_ItemPrepared(object sender, Telerik.Windows.Controls.RadTreeViewItemPreparedEventArgs e)
         {
-            var vm = DataContext as SolutionExplorerViewModel;
+            var vm = DataContext as SolutionExplorer2ViewModel;
             var t = e.PreparedItem.DataContext as ITreeNode;
             if (vm != null && t != null)
             {
@@ -130,18 +131,88 @@ namespace Prediktor.ExcelImport
 
         private void SelectBtn_Click(object sender, RoutedEventArgs e)
         {
-            var vm = DataContext as SolutionExplorerViewModel;
-            if (vm != null && !vm.HoldSelectionChangedNotification)
+            var vm = DataContext as SolutionExplorer2ViewModel;
+            if (vm != null)
             {
-                var selectedItem = new List<ITreeNode>(this.treeView.CheckedItems.OfType<ITreeNode>());
-                vm.SelectedItems = selectedItem;
-                bool holdNotification = false;
-                if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
-                    holdNotification = Keyboard.IsKeyDown(Key.H);
-
-                if (!holdNotification)
-                    vm.SelectedItemsChangedCommand.Execute(null);
+                vm.SelectedItemsChangedCommand.Execute(null);
             }
+        }
+
+        private void AddToViewModel(ITreeNode item)
+        {
+            var vm = DataContext as SolutionExplorer2ViewModel;
+            if (vm != null && !vm.SelectedItems.Contains(item))
+            {
+                vm.SelectedItems.Add(item);
+                vm.HasSelection = true;
+            }
+        }
+
+        private void RemoveFromViewModel(ITreeNode item)
+        {
+            var vm = DataContext as SolutionExplorer2ViewModel;
+            if (vm != null && vm.SelectedItems.Contains(item))
+            {
+                vm.SelectedItems.Remove(item);
+                if (vm.SelectedItems.Count == 0)
+                {
+                    vm.HasSelection = false;
+                }
+            }
+        }
+
+        private void treeView_Checked(object sender, RoutedEventArgs e)
+        {
+            RadTreeViewItem currentChecked = e.OriginalSource as RadTreeViewItem;
+            var item = currentChecked.DataContext as ITreeNode;
+
+            bool isInitiallyChecked = (e as RadTreeViewCheckEventArgs).IsUserInitiated;
+            if (!isInitiallyChecked)
+            {
+                e.Handled = true;
+                return;
+            }
+
+            if (item.CanHaveChildren)
+            {
+                foreach (var child in item.Children)
+                {
+                    AddToViewModel(child);
+                }
+            }
+            else
+            {
+                AddToViewModel(item);
+            }
+
+            e.Handled = true;
+        }
+
+        private void treeView_Unchecked(object sender, Telerik.Windows.RadRoutedEventArgs e)
+        {
+            RadTreeViewItem currentChecked = e.OriginalSource as RadTreeViewItem;
+            var item = currentChecked.DataContext as ITreeNode;
+
+            bool isInitiallyChecked = (e as RadTreeViewCheckEventArgs).IsUserInitiated;
+            if (!isInitiallyChecked)
+            {
+                e.Handled = true;
+                return;
+            }
+
+            if (item.CanHaveChildren)
+            {
+                foreach (var child in item.Children)
+                {
+                    RemoveFromViewModel(child);
+                }
+            }
+            else
+            {
+                RemoveFromViewModel(item);
+            }
+
+            e.Handled = true;
         }
     }
 }

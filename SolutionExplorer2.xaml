@@ -74,9 +74,13 @@
             <Button Grid.Column="1" VerticalAlignment="Bottom" Command="{Binding Search}" Content="{trn:Translation NativeText=Search}" Margin="3,3,0,3"></Button>
         </Grid>
         <Border Grid.Row="1" BorderThickness="1" BorderBrush="{DynamicResource BorderBrushNormal}" Margin="3 3 0 3" Padding="0">
-            <telerik:RadTreeView x:Name="treeView" IsVirtualizing="True" IsLoadOnDemandEnabled="True" 
+            <telerik:RadTreeView x:Name="treeView" 
+                             IsVirtualizing="True" 
+                             IsLoadOnDemandEnabled="True" 
                              IsOptionElementsEnabled="True"
-							 
+                             IsTriStateMode="True"
+							 Checked="treeView_Checked"
+                             Unchecked="treeView_Unchecked"
 							 SelectionMode="Multiple"
                              telerik:AnimationManager.IsAnimationEnabled="False"
                              ItemsSource="{Binding Children}"  
@@ -99,6 +103,12 @@
                 </telerik:RadTreeView.InputBindings>
             </telerik:RadTreeView>
         </Border>
-        <Button x:Name="SelectBtn" Content="{trn:Translation NativeText=Select}" Grid.Row="2" VerticalAlignment="Bottom" Margin="3,3,0,0" Click="SelectBtn_Click"/>
+        <Button x:Name="SelectBtn" 
+                Grid.Row="2"
+                IsEnabled="{Binding HasSelection}"
+                Content="{trn:Translation NativeText=Select}" 
+                VerticalAlignment="Bottom" 
+                Margin="3,3,0,0" 
+                Click="SelectBtn_Click"/>
     </Grid>
 </UserControl>
