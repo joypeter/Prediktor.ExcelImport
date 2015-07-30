@@ -67,30 +67,6 @@ namespace Prediktor.ExcelImport
             }
         }
 
-        private void OnPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            Telerik.Windows.Controls.RadTreeViewItem treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
-            var treeView = sender as Telerik.Windows.Controls.RadTreeView;
-            if (treeViewItem != null)
-            {
-                bool selectAndFocus = false;
-                if (treeView != null)
-                {
-                    if (!treeView.SelectedItems.Contains(treeViewItem.DataContext))
-                    {
-                        treeView.SelectedItems.Clear();
-                        selectAndFocus = true;
-                    }
-                }
-                if (selectAndFocus)
-                {
-                    treeViewItem.IsSelected = true;
-                    treeViewItem.Focus();
-                }
-                e.Handled = true;
-            }
-        }
-
         static Telerik.Windows.Controls.RadTreeViewItem VisualUpwardSearch(DependencyObject source)
         {
             while (source != null && !(source is Telerik.Windows.Controls.RadTreeViewItem))

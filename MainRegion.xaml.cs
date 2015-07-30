@@ -69,5 +69,27 @@ namespace Prediktor.ExcelImport
         {
             SelectView(2);
         }
+
+        private void ListView_Drop(object sender, DragEventArgs e)
+        {
+            var viewModel = DataContext as MainRegionViewModel;
+            if (viewModel != null)
+            {
+                if (e.Data.GetDataPresent(typeof(IDragData)))
+                {
+                    IDragData o = e.Data.GetData(typeof(IDragData)) as IDragData;
+                    if (o != null)
+                    {
+                        viewModel.ListViewModel.InsertDroppedData(o);
+                        viewModel.ChartModel.InsertDroppedData(o);
+                        e.Effects = DragDropEffects.Move;
+                        e.Handled = true;
+                        return;
+                    }
+                }
+            }
+            e.Effects = DragDropEffects.None;
+            e.Handled = true;
+        }
     }
 }

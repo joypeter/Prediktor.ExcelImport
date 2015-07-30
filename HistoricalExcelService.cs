@@ -75,9 +75,6 @@ namespace Prediktor.ExcelImport
                                 HistoricalPropertyListViewModel periodViewModel)
         {
             Excel.Worksheet sheet = ((Excel.Worksheet)_thisAddIn.Application.ActiveWorkbook.Sheets[1]);
-            int startrow = 1;
-            int startcol = 1;
-            int col, row;
 
             var propertIds = listViewModel.GetHistoricalProperties();
             var objectInfoResutls = _objectServiceOperations.GetObjectInfos(propertIds.Select(a => a.GetContext()).ToArray());

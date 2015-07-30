@@ -31,7 +31,6 @@ namespace Prediktor.ExcelImport
         private readonly IHdaFileExportService _hdaFileExportService;
         private IEventAggregator _eventAggregator;
         private IApplicationProperties _appliationProperties;
-        private bool _activated;
 
         private SubscriptionToken _solutionSelectionChangedToken;
         private SubscriptionToken _addItemsToCurrentHistoryViewToken;
@@ -117,8 +116,7 @@ namespace Prediktor.ExcelImport
             _solutionSelectionChangedToken = _eventAggregator.GetEvent<SolutionExplorerSelectionChangedEvent>().Subscribe(
                 SolutionExplorerSelectionChanged, ThreadOption.UIThread);
             _addItemsToCurrentHistoryViewToken = _eventAggregator.GetEvent<AddItemsToCurrentHistoryViewEvent>().Subscribe(AddItemsToCurrentHistoryView,
-                                                                                     ThreadOption.UIThread, false,
-                                                                                     a => _activated);
+                                                                                     ThreadOption.UIThread, false);
         }
 
         private void Export()

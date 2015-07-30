@@ -35,8 +35,8 @@ namespace Prediktor.ExcelImport
         private readonly INetworkBrowser _networkBrowser;
         private static ITraceLog _log = LogManager.GetLogger(typeof(ShellViewModel));
 
-        private ICommand _windowClosing;
         private string _configFile;
+
 
         public ShellViewModel(IThemeProvider themeProvider, IEventAggregator eventAggregator, IInteractionService interactionService,
             IApplicationProperties applicationProperties, IApplicationFeatures applicationFeatures,
@@ -53,25 +53,9 @@ namespace Prediktor.ExcelImport
             _networkBrowser = networkBrowser;
             InitializeTheme();
             ConnectCommand = new DelegateCommand(Connect);
-            _windowClosing = new DelegateCommand<System.ComponentModel.CancelEventArgs>(OnWindowClosing);
+            BrowseCommand = new DelegateCommand(Browse);
 
             _configFile = _applicationService.CurrentFile;
-
-            _eventAggregator.GetEvent<AddedServiceEvent>().Subscribe(OnServiceAdded, ThreadOption.UIThread);
-        }
-
-
-        private void OnExitCommand()
-        {
-            //if (DoNew())
-            //{
-            _eventAggregator.GetEvent<ClosingEvent>().Publish(new Close());
-            //Application.Current.Shutdown();
-            //}
-        }
-
-        private void OnServiceAdded(ServiceAdded obj)
-        {
         }
 
         private void Connect()
@@ -87,7 +71,27 @@ namespace Prediktor.ExcelImport
             }
         }
 
+        private void Browse()
+        {
+            var browseDialog = new BrowseDialog();
+
+            //Due to a bug in Prism v4, regions can not be added either from xaml or programatically
+            //, so here we add the view directly to the ItemControl
+            _log.DebugFormat("Initializing main region");
+            MainRegion mainRegion = ServiceLocator.Current.GetInstance<MainRegion>();
+            browseDialog.AddSolutionMainRegion(mainRegion);
+            _log.DebugFormat("Main region initialized");
+
+            _log.DebugFormat("Initializing TreeViewRegion");
+            SolutionExplorer2 se2 = ServiceLocator.Current.GetInstance<SolutionExplorer2>();
+            browseDialog.AddSolutionExplorer2(se2);
+            _log.DebugFormat("TreeViewRegion Initialized");
+
+            browseDialog.ShowDialog();
+        }
+
         public ICommand ConnectCommand { get; private set; }
+        public ICommand BrowseCommand { get; private set; }
 
         private void InitializeTheme()
         {
@@ -106,15 +110,6 @@ namespace Prediktor.ExcelImport
             System.Windows.Application.Current.Resources.MergedDictionaries.Add(rd);
         }
 
-
-        private void OnWindowClosing(System.ComponentModel.CancelEventArgs ea)
-        {
-            //if (DoNew())
-            _eventAggregator.GetEvent<ClosingEvent>().Publish(new Close());
-            //else
-            //ea.Cancel = true;
-        }
-
         public string Title
         {
             get
@@ -126,11 +121,6 @@ namespace Prediktor.ExcelImport
                 }
                 return t;
             }
-        }
-
-        public ICommand WindowClosing
-        {
-            get { return _windowClosing; }
         }
     }
 }
