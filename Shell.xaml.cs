@@ -19,31 +19,15 @@ using System.Collections.ObjectModel;
 namespace Prediktor.ExcelImport
 {
     /// <summary>
-    /// Interaction logic for UserControl1.xaml
+    /// Interaction logic for Shell.xaml
     /// </summary>
-    public partial class Shell : ThemedWindow
+    public partial class Shell : Window
     {
-        private ObservableCollection<SolutionExplorer2> SE;
-        private ObservableCollection<MainRegion> MainRegion;
         public Shell(ShellViewModel viewModel)
         {
             InitializeComponent();
 
             DataContext = viewModel;
-        }
-
-        public void AddSolutionExplorer2(SolutionExplorer2 se2)
-        {
-            SE = new ObservableCollection<SolutionExplorer2>();
-            SE.Add(se2);
-            this.TreeViewUC.ItemsSource = SE;
-        }
-
-        public void AddSolutionMainRegion(MainRegion mainRegion)
-        {
-            MainRegion = new ObservableCollection<MainRegion>();
-            MainRegion.Add(mainRegion);
-            this.MainToolbar.ItemsSource = MainRegion;
         }
     }
 }

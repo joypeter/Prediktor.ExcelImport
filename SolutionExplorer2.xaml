@@ -75,6 +75,7 @@
         </Grid>
         <Border Grid.Row="1" BorderThickness="1" BorderBrush="{DynamicResource BorderBrushNormal}" Margin="3 3 0 3" Padding="0">
             <telerik:RadTreeView x:Name="treeView" 
+                             
                              IsVirtualizing="True" 
                              IsLoadOnDemandEnabled="True" 
                              IsOptionElementsEnabled="True"
@@ -97,9 +98,6 @@
                         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
                     </Style>
                 </telerik:RadTreeView.ItemContainerStyle>
-                <telerik:RadTreeView.InputBindings>
-                    <KeyBinding Command="{Binding RemoveSelectedItems}" Key="Delete"></KeyBinding>
-                </telerik:RadTreeView.InputBindings>
             </telerik:RadTreeView>
         </Border>
         <Button x:Name="SelectBtn" 

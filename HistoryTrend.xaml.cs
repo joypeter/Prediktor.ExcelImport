@@ -78,30 +78,6 @@ namespace Prediktor.ExcelImport
             }
         }
 
-
-
-        protected override void OnDrop(DragEventArgs e)
-        {
-            base.OnDrop(e);
-            var m = DataContext as HistoricalChartViewModel;
-            if (m != null)
-            {
-                if (e.Data.GetDataPresent(typeof(IDragData)))
-                {
-                    IDragData o = e.Data.GetData(typeof(IDragData)) as IDragData;
-                    if (o != null)
-                    {
-                        m.InsertDroppedData(o);
-                        e.Effects = DragDropEffects.Move;
-                        e.Handled = true;
-                        return;
-                    }
-                }
-            }
-            e.Effects = DragDropEffects.None;
-            e.Handled = true;
-        }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Chart.Zoom = new Size(1, 1);

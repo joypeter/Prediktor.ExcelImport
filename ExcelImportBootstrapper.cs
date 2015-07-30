@@ -20,7 +20,6 @@ using Prediktor.Ioc;
 using Prediktor.Log;
 using PrismContrib.WindsorExtensions;
 using Prediktor.Carbon.Configuration.Definitions.ModuleServices;
-//using Prediktor.Carbon.Configuration.Views;
 
 namespace Prediktor.ExcelImport
 {
@@ -86,17 +85,6 @@ namespace Prediktor.ExcelImport
             base.ConfigureContainer();
 
             FluentConfiguration();
-
-            Container.Register(Component.For<IApplicationProperties>()
-                .ImplementedBy<ApplicationProperties>()
-                .Named("ApplicationProperties"));
-
-            Container.Register(Component.For<ConnectionDialogViewModel>()
-                .ImplementedBy<ConnectionDialogViewModel>()
-                .LifeStyle.Transient);
-
-            RegisterTypeIfMissing(typeof(IRegionManager), 
-                typeof(RegionManager), true);
         }
 
         protected override void InitializeShell()
@@ -112,23 +100,6 @@ namespace Prediktor.ExcelImport
 
             //To use Telerik library a resource item must be added
             Application.Current.Resources.Add("Telerik.Windows.Controls.Key", "Prediktor Telerik Application");
-            
-
-            //Due to a bug in Prism v4, regions can not be added either from xaml or programatically
-            //, so here we add the view directly to the ItemControl
-            Shell shell = (Shell)this.Shell;
-
-            _log.DebugFormat("Initializing main region");
-            MainRegion mainRegion = this.Container.Resolve<MainRegion>();
-            shell.AddSolutionMainRegion(mainRegion);
-            _log.DebugFormat("Main region initialized");
-
-            _log.DebugFormat("Initializing TreeViewRegion");
-            SolutionExplorer2 se2 = ServiceLocator.Current.GetInstance<SolutionExplorer2>();
-            shell.AddSolutionExplorer2(se2);
-            _log.DebugFormat("TreeViewRegion Initialized");
-
-            Application.Current.MainWindow = (Window)this.Shell;
         }
 
         public void Connect()
@@ -140,12 +111,10 @@ namespace Prediktor.ExcelImport
 
         public void Browse()
         {
-            //Application.Current.MainWindow.Show();
+            var shellViewModel = ((Window)Shell).DataContext as ShellViewModel;
 
-            Shell shell = (Shell)this.Shell;
-            shell.ShowDialog();
-            
-            _log.DebugFormat("MainWindow displayed");
+            shellViewModel.BrowseCommand.Execute(null);
+            _log.DebugFormat("Browsed");
         }
     }
 }
