@@ -34,7 +34,6 @@ namespace Prediktor.ExcelImport.ViewModels
             set
             {
                 _isIncludeTimestamps = value;
-                RaisePropertyChanged(() => _isIncludeTimestamps);
                 if (!value)
                 {
                     IsTimestampsInLocalZone = false;
@@ -49,7 +48,7 @@ namespace Prediktor.ExcelImport.ViewModels
             set
             {
                 _isTimestampsInFirstCol = value;
-                RaisePropertyChanged(() => _isTimestampsInFirstCol);
+                //RaisePropertyChanged(() => _isTimestampsInFirstCol);
             }
         }
 
@@ -60,7 +59,6 @@ namespace Prediktor.ExcelImport.ViewModels
             set
             {
                 _isTimestampsInLocalZone = value;
-                RaisePropertyChanged(() => _isTimestampsInLocalZone);
             }
         }
 
@@ -71,7 +69,6 @@ namespace Prediktor.ExcelImport.ViewModels
             set
             {
                 _isQuelityInSeperateCol = value;
-                RaisePropertyChanged(() => _isQuelityInSeperateCol);
             }
         }
 
