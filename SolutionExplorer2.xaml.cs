@@ -46,15 +46,20 @@ namespace Prediktor.ExcelImport
                 var vm = DataContext as SolutionExplorer2ViewModel;
                 if (vm != null)
                 {
-                    List<IObjectId> objectIds = new List<IObjectId>();
-                    foreach (var selectedItem in vm.SelectedItems)
+                    RadTreeViewItem currentClicked = VisualUpwardSearch(e.OriginalSource as DependencyObject);
+                    if (currentClicked == null)
                     {
-                        ITreeNode treeViewModel = selectedItem as ITreeNode;
-                        if (treeViewModel != null && treeViewModel.Id != null && treeViewModel.Id is IObjectId)
-                        {
-                            objectIds.Add((IObjectId)treeViewModel.Id);
-                        }
+                        return;
                     }
+
+                    List<IObjectId> objectIds = new List<IObjectId>();
+                    var item = ((FrameworkElement)e.OriginalSource).DataContext as ITreeNode;
+
+                    if (item != null && item.Id != null && item.Id is IObjectId)
+                    {
+                        objectIds.Add((IObjectId)item.Id);
+                    }
+
                     if (objectIds.Count > 0)
                     {
                         DataObject data = new DataObject();

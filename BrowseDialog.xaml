@@ -30,11 +30,8 @@
                     <ItemsPanelTemplate>
                         <Grid Margin="10,10,10,10"></Grid>
                     </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                
-                
+                </ItemsControl.ItemsPanel>  
             </ItemsControl>
-
 
             <GridSplitter Background="{DynamicResource BorderBrushNormal}" x:Name="solutionsplitter" Grid.Row="0" Grid.Column="1" Height="Auto" Width="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             <Grid Grid.Row="0" Grid.Column="2">

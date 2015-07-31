@@ -20,7 +20,9 @@
                     <Image Style="{Binding ImageStyle}" Height="16" Width="16" Visibility="{Binding ImageVisibility}" 
                    Margin="0 0 2 0"></Image>
                 </Border>
-                <TextBlock Text="{Binding Name}" trn:HelpProvider.HelpKeyword="{Binding HelpKeyword}">
+                <TextBlock Text="{Binding Name}" 
+                           trn:HelpProvider.HelpKeyword="{Binding HelpKeyword}
+                           ">
                 </TextBlock>
             </StackPanel>
         </HierarchicalDataTemplate>
@@ -37,16 +39,25 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" x:Name="Search" Style="{StaticResource SearchTextBox}"  Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}" ToolTip="{trn:Translation NativeText='Search the content of the tree. * is used as wildcard.'}">
+            <TextBox Grid.Column="0" x:Name="Search" 
+                     Style="{StaticResource SearchTextBox}"  
+                     Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}" 
+                     ToolTip="{trn:Translation NativeText='Search the content of the tree. * is used as wildcard.'}">
                 <TextBox.InputBindings>
                     <KeyBinding Command="{Binding Search}" Key="Enter" />
                 </TextBox.InputBindings>
             </TextBox>
-            <Button Grid.Column="1" VerticalAlignment="Bottom" Command="{Binding Search}" Content="{trn:Translation NativeText=Search}" Margin="3,3,0,3"></Button>
+            <Button Grid.Column="1" 
+                    VerticalAlignment="Bottom" 
+                    Command="{Binding Search}" 
+                    Content="{trn:Translation NativeText=Search}" 
+                    Margin="3,3,0,3"></Button>
         </Grid>
-        <Border Grid.Row="1" BorderThickness="1" BorderBrush="{DynamicResource BorderBrushNormal}" Margin="3 3 0 3" Padding="0">
+        <Border Grid.Row="1" BorderThickness="1" 
+                BorderBrush="{DynamicResource BorderBrushNormal}" 
+                Margin="3 3 0 3" 
+                Padding="0">
             <telerik:RadTreeView x:Name="treeView" 
-                             
                              IsVirtualizing="True" 
                              IsLoadOnDemandEnabled="True" 
                              IsOptionElementsEnabled="True"

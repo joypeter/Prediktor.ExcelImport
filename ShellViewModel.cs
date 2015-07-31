@@ -74,6 +74,7 @@ namespace Prediktor.ExcelImport
         private void Browse()
         {
             var browseDialog = new BrowseDialog();
+            browseDialog.Title = Title;
 
             //Due to a bug in Prism v4, regions can not be added either from xaml or programatically
             //, so here we add the view directly to the ItemControl
