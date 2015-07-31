@@ -152,7 +152,9 @@ namespace Prediktor.ExcelImport
                                HistoricalPropertyListViewModel listViewModel, 
                                HistoricalTimePeriodViewModel timePeriodViewModel)
         {
-            Excel.Worksheet sheet = ((Excel.Worksheet)_thisAddIn.Application.ActiveWorkbook.Sheets[1]);
+            Excel.Worksheet sheet = ((Excel.Worksheet)_thisAddIn.Application.ActiveWorkbook.ActiveSheet);
+            //sheet.Select();
+            sheet.Cells.Clear();
 
             var propertIds = listViewModel.GetHistoricalProperties();
             var endTime = _historicalTimeUtility.Parse(timePeriodViewModel.EndTime);
@@ -163,7 +165,6 @@ namespace Prediktor.ExcelImport
             bool isTimestampsInFirstCol = true;
             bool isTimestampsInLocalZone = excelViewModel.IsTimestampsInLocalZone;
             bool isQuelityInSeperateCol = excelViewModel.IsQuelityInSeperateCol;
-
 
             if (endTime.Success && startTime.Success && timePeriodViewModel.SelectedAggregate != null)
             {
@@ -242,7 +243,10 @@ namespace Prediktor.ExcelImport
 
                         //Write time zone
                         row++;
-                        sheet.Cells[row, col] = "Local time";
+                        if (isTimestampsInLocalZone)
+                            sheet.Cells[row, col] = "Local time";
+                        else
+                            sheet.Cells[row, col] = "UTC time";
                         sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("Timestamps time zone");
 
                         //Write space
@@ -302,6 +306,8 @@ namespace Prediktor.ExcelImport
             }
 
             sheet.Columns.AutoFit();
+
+            _thisAddIn.CloseBrowse();
         }
 
         /*        for (int i = 0; i < objectInfos.Length; ++i)
