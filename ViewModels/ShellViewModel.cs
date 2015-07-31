@@ -37,6 +37,7 @@ namespace Prediktor.ExcelImport
 
         private string _configFile;
 
+        private BrowseDialog browseDialog;
 
         public ShellViewModel(IThemeProvider themeProvider, IEventAggregator eventAggregator, IInteractionService interactionService,
             IApplicationProperties applicationProperties, IApplicationFeatures applicationFeatures,
@@ -54,6 +55,7 @@ namespace Prediktor.ExcelImport
             InitializeTheme();
             ConnectCommand = new DelegateCommand(Connect);
             BrowseCommand = new DelegateCommand(Browse);
+            CloseBrowseCommand = new DelegateCommand(CloseBrowse);
 
             _configFile = _applicationService.CurrentFile;
         }
@@ -91,8 +93,15 @@ namespace Prediktor.ExcelImport
             browseDialog.ShowDialog();
         }
 
+        private void CloseBrowse()
+        {
+            if (browseDialog != null)
+                browseDialog.Close();
+        }
+
         public ICommand ConnectCommand { get; private set; }
         public ICommand BrowseCommand { get; private set; }
+        public ICommand CloseBrowseCommand { get; private set; }
 
         private void InitializeTheme()
         {

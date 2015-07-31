@@ -279,18 +279,18 @@
     <Compile Include="ApplicationProperties.cs" />
     <Compile Include="HistoricalExcelService.cs" />
     <Compile Include="ExcelImportBootstrapper.cs" />
-    <Compile Include="Shell.xaml.cs">
+    <Compile Include="Views\Shell.xaml.cs">
       <DependentUpon>Shell.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SolutionExplorer2ViewModel.cs" />
-    <Compile Include="MainRegionViewModel.cs" />
+    <Compile Include="ViewModels\SolutionExplorer2ViewModel.cs" />
+    <Compile Include="ViewModels\MainRegionViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainRegion.xaml.cs">
+    <Compile Include="Views\MainRegion.xaml.cs">
       <DependentUpon>MainRegion.xaml</DependentUpon>
     </Compile>
-    <Compile Include="HistoryTrend.xaml.cs">
+    <Compile Include="Views\HistoryTrend.xaml.cs">
       <DependentUpon>HistoryTrend.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\ExportExcelDialogViewModel.cs" />
@@ -329,12 +329,12 @@
     <Compile Include="Ribbon.Designer.cs">
       <DependentUpon>Ribbon.cs</DependentUpon>
     </Compile>
-    <Compile Include="BrowseDialog.xaml.cs">
+    <Compile Include="Views\BrowseDialog.xaml.cs">
       <DependentUpon>BrowseDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShellInstaller.cs" />
-    <Compile Include="ShellViewModel.cs" />
-    <Compile Include="SolutionExplorer2.xaml.cs">
+    <Compile Include="ViewModels\ShellViewModel.cs" />
+    <Compile Include="Views\SolutionExplorer2.xaml.cs">
       <DependentUpon>SolutionExplorer2.xaml</DependentUpon>
     </Compile>
     <Compile Include="ThisAddIn.cs">
@@ -355,23 +355,23 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="MainRegion.xaml">
+    <Page Include="Views\MainRegion.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BrowseDialog.xaml">
+    <Page Include="Views\BrowseDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="HistoryTrend.xaml">
+    <Page Include="Views\HistoryTrend.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Shell.xaml">
+    <Page Include="Views\Shell.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SolutionExplorer2.xaml">
+    <Page Include="Views\SolutionExplorer2.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

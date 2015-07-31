@@ -43,6 +43,11 @@ namespace Prediktor.ExcelImport
             Bootstrapper.Browse();
         }
 
+        public void CloseBrowse()
+        {
+            Bootstrapper.CloseBrowse();
+        }
+
         protected override Microsoft.Office.Core.IRibbonExtensibility CreateRibbonExtensibilityObject()
         {
             Ribbon apisExcelImport = new Ribbon();

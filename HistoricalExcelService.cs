@@ -152,12 +152,19 @@ namespace Prediktor.ExcelImport
                                HistoricalPropertyListViewModel listViewModel, 
                                HistoricalTimePeriodViewModel timePeriodViewModel)
         {
-            Excel.Worksheet sheet = ((Excel.Worksheet)_thisAddIn.Application.ActiveWorkbook.Sheets[1]);
+            Excel.Worksheet sheet = ((Excel.Worksheet)_thisAddIn.Application.ActiveWorkbook.ActiveSheet);
+            //sheet.Select();
+            sheet.Cells.Clear();
 
             var propertIds = listViewModel.GetHistoricalProperties();
             var endTime = _historicalTimeUtility.Parse(timePeriodViewModel.EndTime);
             var startTime = _historicalTimeUtility.Parse(timePeriodViewModel.StartTime);
             var historicalAggregate = timePeriodViewModel.SelectedAggregate;
+
+            bool isIncludeTimestamps = true;
+            bool isTimestampsInFirstCol = true;
+            bool isTimestampsInLocalZone = excelViewModel.IsTimestampsInLocalZone;
+            bool isQuelityInSeperateCol = excelViewModel.IsQuelityInSeperateCol;
 
             if (endTime.Success && startTime.Success && timePeriodViewModel.SelectedAggregate != null)
             {
@@ -171,14 +178,20 @@ namespace Prediktor.ExcelImport
 
                 int startrow = 1;
                 int startcol = 1;
-                int col, row;
+                int col, row, qcol, tcol;
 
                 if (objectInfos.Any())
                 {
                     for (int i = 0; i < objectInfos.Length; i++)
                     {
-                        //write Item ID
                         col = i + startcol + 1;
+                        //if (isQuelityInSeperateCol)
+                        //{
+                        //    col = i * 2 + startcol + 1;
+                        //    qcol = col + 1;
+                        //}
+
+                        //write Item ID
                         row = startrow;
                         sheet.Cells[row, col] = objectInfos[i].FullName;
                         sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("Item ID");
@@ -215,12 +228,12 @@ namespace Prediktor.ExcelImport
 
                         //Write start time
                         row++;
-                        sheet.Cells[row, col] = startTime.Value.AbsoluteTime;
+                        sheet.Cells[row, col] = _valueFormatter.Format(startTime.Value.AbsoluteTime);
                         sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("Start Time");
 
                         //Write end time
                         row++;
-                        sheet.Cells[row, col] = endTime.Value.AbsoluteTime;
+                        sheet.Cells[row, col] = _valueFormatter.Format(endTime.Value.AbsoluteTime); ;
                         sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("End Time");
 
                         //Write resample intervals
@@ -230,7 +243,10 @@ namespace Prediktor.ExcelImport
 
                         //Write time zone
                         row++;
-                        sheet.Cells[row, col] = "Local time";
+                        if (isTimestampsInLocalZone)
+                            sheet.Cells[row, col] = "Local time";
+                        else
+                            sheet.Cells[row, col] = "UTC time";
                         sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("Timestamps time zone");
 
                         //Write space
@@ -258,6 +274,15 @@ namespace Prediktor.ExcelImport
                                 quality = v.Values[j].Quality.Quality;
 
                                 sheet.Cells[row, col] = formattedValue;
+
+                                if (isIncludeTimestamps)
+                                {
+                                    if (isTimestampsInFirstCol)
+                                    {
+                                        sheet.Cells[row, startcol] = formattedTime;
+                                    }
+                                }
+
                                 row++;
                             }
                         }
@@ -279,6 +304,10 @@ namespace Prediktor.ExcelImport
                     }
                 }
             }
+
+            sheet.Columns.AutoFit();
+
+            _thisAddIn.CloseBrowse();
         }
 
         /*        for (int i = 0; i < objectInfos.Length; ++i)
