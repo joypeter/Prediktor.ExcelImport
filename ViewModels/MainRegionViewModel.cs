@@ -122,8 +122,6 @@ namespace Prediktor.ExcelImport
         private void Export()
         {
             ExcelService.ExportDataToExcel();
-
-            //Close Shell Command
         }
 
         private void AddItemsToCurrentHistoryView(IObjectId[] obj)
