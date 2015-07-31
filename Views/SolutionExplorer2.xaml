@@ -20,37 +20,9 @@
                     <Image Style="{Binding ImageStyle}" Height="16" Width="16" Visibility="{Binding ImageVisibility}" 
                    Margin="0 0 2 0"></Image>
                 </Border>
-                <TextBlock Text="{Binding Name}" trn:HelpProvider.HelpKeyword="{Binding HelpKeyword}">
-                    <TextBlock.ContextMenu>
-                        <ContextMenu ItemsSource="{Binding ContextMenuItems}" >
-                            <ContextMenu.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Header}"></TextBlock>
-                                </DataTemplate>
-                            </ContextMenu.ItemTemplate>
-                            <ContextMenu.ItemContainerStyle>
-                                <Style TargetType="MenuItem">
-                                    <Setter Property="Template" Value="{DynamicResource MenuItemTemplate}" />
-                                    <Setter Property="Command" Value="{Binding Command}" />
-                                    <Setter Property="CommandParameter" Value="{Binding CommandParameter}" />
-                                    <Setter Property="ItemsSource" Value="{Binding ContextSubMenuItems}" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Path=IsSeparator}" Value="true">
-                                            <Setter Property="MenuItem.Template">
-                                                <Setter.Value>
-                                                    <ControlTemplate TargetType="{x:Type MenuItem}">
-                                                        <Separator Style="{DynamicResource {x:Static MenuItem.SeparatorStyleKey}}"/>
-                                                    </ControlTemplate>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ContextMenu.ItemContainerStyle>
-                        </ContextMenu>
-                    </TextBlock.ContextMenu>
-            </TextBlock>
-
+                <TextBlock Text="{Binding Name}" 
+                           trn:HelpProvider.HelpKeyword="{Binding HelpKeyword}">
+                </TextBlock>
             </StackPanel>
         </HierarchicalDataTemplate>
     </UserControl.Resources>
@@ -66,16 +38,25 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" x:Name="Search" Style="{StaticResource SearchTextBox}"  Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}" ToolTip="{trn:Translation NativeText='Search the content of the tree. * is used as wildcard.'}">
+            <TextBox Grid.Column="0" x:Name="Search" 
+                     Style="{StaticResource SearchTextBox}"  
+                     Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}" 
+                     ToolTip="{trn:Translation NativeText='Search the content of the tree. * is used as wildcard.'}">
                 <TextBox.InputBindings>
                     <KeyBinding Command="{Binding Search}" Key="Enter" />
                 </TextBox.InputBindings>
             </TextBox>
-            <Button Grid.Column="1" VerticalAlignment="Bottom" Command="{Binding Search}" Content="{trn:Translation NativeText=Search}" Margin="3,3,0,3"></Button>
+            <Button Grid.Column="1" 
+                    VerticalAlignment="Bottom" 
+                    Command="{Binding Search}" 
+                    Content="{trn:Translation NativeText=Search}" 
+                    Margin="3,3,0,3"></Button>
         </Grid>
-        <Border Grid.Row="1" BorderThickness="1" BorderBrush="{DynamicResource BorderBrushNormal}" Margin="3 3 0 3" Padding="0">
-            <telerik:RadTreeView x:Name="treeView" 
-                             
+        <Border Grid.Row="1" BorderThickness="1" 
+                BorderBrush="{DynamicResource BorderBrushNormal}" 
+                Margin="3 3 0 3" 
+                Padding="0">
+            <telerik:RadTreeView x:Name="treeView"                             
                              IsVirtualizing="True" 
                              IsLoadOnDemandEnabled="True" 
                              IsOptionElementsEnabled="True"
@@ -96,7 +77,88 @@
                         <EventSetter Event="TreeViewItem.MouseMove" Handler="treeView_MouseMove"/>
                         <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
                         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                    </Style>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type telerik:RadTreeViewItem}">
+                                    <Grid x:Name="RootElement">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <Grid x:Name="HeaderRow" Background="Transparent" MinHeight="{TemplateBinding MinHeight}" SnapsToDevicePixels="True">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.ColumnSpan="6" Grid.Column="2"/>
+                                            <Border x:Name="MouseOverVisual" Grid.ColumnSpan="6" Grid.Column="2"  Opacity="0" />
+                                            <Border x:Name="SelectionUnfocusedVisual" BorderBrush="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Grid.ColumnSpan="6" Grid.Column="2" Visibility="Collapsed" />
+                                            <Border x:Name="SelectionVisual" Background="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" Grid.ColumnSpan="6" Grid.Column="2" Visibility="Collapsed" />
+                                            <StackPanel x:Name="IndentContainer" Orientation="Horizontal" Margin="0" Background="Transparent">
+                                                <Rectangle x:Name="IndentFirstVerticalLine" Stroke="#FFCCCCCC" Visibility="Collapsed" VerticalAlignment="Top" Width="1"/>
+                                            </StackPanel>
+                                            <CheckBox x:Name="CheckBoxElement" Grid.Column="2" IsTabStop="False" Margin="5,0,0,0"  Visibility="Collapsed" VerticalAlignment="Center"/>
+                                            <Grid x:Name="ListRootContainer" Grid.Column="1" HorizontalAlignment="Center" MinWidth="20">
+                                                <Rectangle x:Name="HorizontalLine" HorizontalAlignment="Right" Height="1" Stroke="#FFCCCCCC" VerticalAlignment="Center"/>
+                                                <Rectangle x:Name="VerticalLine" HorizontalAlignment="Center" Stroke="#FFCCCCCC" VerticalAlignment="Top" Width="1" />
+                                                <ToggleButton x:Name="Expander" IsTabStop="False"/>
+                                                <Grid x:Name="LoadingVisual" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed" VerticalAlignment="Center">
+                                                    <Grid.RenderTransform>
+                                                        <TransformGroup>
+                                                            <RotateTransform Angle="0" CenterY="0.5" CenterX="0.5"/>
+                                                        </TransformGroup>
+                                                    </Grid.RenderTransform>
+                                                    <Path Data="M1,0A1,1,90,1,1,0,-1" Height="10" StrokeStartLineCap="Round" Stretch="Fill" Stroke="{TemplateBinding Foreground}" StrokeThickness="1" Width="10"/>
+                                                    <Path Data="M0,-1.1L0.1,-1 0,-0.9" Fill="{TemplateBinding Foreground}" HorizontalAlignment="Left" Height="4" Margin="5,-1.5,0,0" Stretch="Fill" StrokeThickness="1" VerticalAlignment="Top" Width="4"/>
+                                                </Grid>
+                                            </Grid>
+                                            <Image x:Name="Image" Grid.Column="3" HorizontalAlignment="Center" MaxWidth="16" MaxHeight="16" Margin="0" VerticalAlignment="Center"/>
+                                            <Grid Grid.ColumnSpan="2" Grid.Column="4" Background="Transparent" Margin="0" x:Name="GridContent">
+                                                <ContentPresenter x:Name="Header" ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
+							                Content="{TemplateBinding Header}"
+							                ContentTemplate="{TemplateBinding HeaderTemplate}"
+							                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+							                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+							                Margin="{TemplateBinding Padding}" TextBlock.Foreground="{DynamicResource Foreground}"  />
+                                            </Grid>
+                                        </Grid>
+                                        <ItemsPresenter x:Name="ItemsHost" Grid.Row="1" Visibility="Collapsed"/>
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsInEditMode" Value="true">
+                                            <Setter Property="Visibility" TargetName="Header" Value="Collapsed" />
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="true">
+                                            <Setter Property="Visibility" TargetName="SelectionVisual" Value="Visible" />
+                                        </Trigger>
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="IsSelected" Value="true" />
+                                                <Condition Property="IsSelectionActive" Value="false" />
+                                            </MultiTrigger.Conditions>
+                                            <Setter Property="Visibility" TargetName="SelectionVisual" Value="Collapsed" />
+                                            <Setter Property="Visibility" TargetName="SelectionUnfocusedVisual" Value="Visible" />
+                                        </MultiTrigger>
+                                        <Trigger Property="IsEnabled" Value="false">
+                                            <Setter Property="Opacity" TargetName="RootElement" Value="0.5" />
+                                        </Trigger>
+
+                                        <Trigger Property="IsExpanded" Value="true">
+                                            <Setter TargetName="ItemsHost" Property="Visibility" Value="Visible" />
+                                        </Trigger>
+                                        <Trigger Property="IsLoadingOnDemand" Value="true">
+                                            <Setter TargetName="LoadingVisual" Property="Visibility" Value="Visible" />
+                                            <Setter TargetName="Expander" Property="Visibility" Value="Collapsed" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style> 
                 </telerik:RadTreeView.ItemContainerStyle>
             </telerik:RadTreeView>
         </Border>
