@@ -15,6 +15,7 @@ using System.Windows.Input;
 using System.Linq;
 using System;
 using System.IO;
+using System.Collections.Specialized;
 using Microsoft.Practices.Prism.Commands;
 using Prediktor.Carbon.Configuration.Views;
 using Prediktor.Utilities;
@@ -33,7 +34,9 @@ namespace Prediktor.ExcelImport
         private IApplicationProperties _appliationProperties;
 
         private SubscriptionToken _solutionSelectionChangedToken;
-        private SubscriptionToken _addItemsToCurrentHistoryViewToken;
+
+        //bind to Import button
+        private bool _hasItems;
 
         public MainRegionViewModel(IEventAggregator eventAggregator, 
             IResourceDictionaryProvider resourceDictionaryProvider,
@@ -67,10 +70,21 @@ namespace Prediktor.ExcelImport
             EventListViewModel = new HistoricalEventListViewModel(eventContext, objectServiceOperations, columnNameService,
                 historicalColumnService, interactionService, serializationService, valueFormatter);
             ChartModel = new HistoricalChartViewModel(eventContext, objectServiceOperations, interactionService, columnNameService, valueFormatter, serializationService);
+            ChartModel.Legend.CollectionChanged += Legend_CollectionChanged;
             ExcelService = new HistoricalExcelService(this, eventContext, objectServiceOperations, interactionService, historicalTimeUtility, valueFormatter);
 
             ExportCommand = new DelegateCommand(Export);
             SubscribeEvents();
+        }
+
+        public bool HasItems
+        {
+            get { return _hasItems; }
+            set
+            {
+                _hasItems = value;
+                RaisePropertyChanged(() => HasItems);
+            }
         }
 
         public IResourceDictionaryProvider ResourceDictionaryProvider
@@ -115,8 +129,18 @@ namespace Prediktor.ExcelImport
         {
             _solutionSelectionChangedToken = _eventAggregator.GetEvent<SolutionExplorerSelectionChangedEvent>().Subscribe(
                 SolutionExplorerSelectionChanged, ThreadOption.UIThread);
-            _addItemsToCurrentHistoryViewToken = _eventAggregator.GetEvent<AddItemsToCurrentHistoryViewEvent>().Subscribe(AddItemsToCurrentHistoryView,
-                                                                                     ThreadOption.UIThread, false);
+        }
+
+        private void Legend_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (ChartModel.Legend.Count > 0) 
+            {
+                HasItems = true;
+            }
+            else
+            {
+                HasItems = false;
+            }
         }
 
         private void Export()
@@ -124,20 +148,23 @@ namespace Prediktor.ExcelImport
             ExcelService.ExportDataToExcel();
         }
 
-        private void AddItemsToCurrentHistoryView(IObjectId[] obj)
-        {
-            _eventContext.ContextualEventAggregator.GetEvent<ObjectsAddedToViewEvent>().Publish(obj);
-        }
-
         private void SolutionExplorerSelectionChanged(SolutionExplorerSelection obj)
         {
-             _eventContext.ContextualEventAggregator.GetEvent<ObjectsAddedToViewEvent>().Publish(obj.Selection.ToArray());
+            IObjectId [] objs = obj.Selection.ToArray();
+            _eventContext.ContextualEventAggregator.GetEvent<ObjectsAddedToViewEvent>().Publish(objs);
+            if (0 < objs.Count<IObjectId>())
+            {
+                HasItems = true;
+            }
+            else
+            {
+                HasItems = false;
+            }
         }
         private void UnsubscribeEvents()
         {
             _eventAggregator.GetEvent<SolutionExplorerSelectionChangedEvent>().Unsubscribe(
                     _solutionSelectionChangedToken);
-            _eventAggregator.GetEvent<AddItemsToCurrentHistoryViewEvent>().Unsubscribe(_addItemsToCurrentHistoryViewToken);
         }
 
         public bool IsRemovable()

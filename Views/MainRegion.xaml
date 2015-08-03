@@ -94,7 +94,8 @@
         <!--Row 4: import button-->
         <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="{trn:Translation NativeText='Import'}" 
-                    Command="{Binding ExportCommand}"/>
+                    Command="{Binding ExportCommand}"
+                    IsEnabled="{Binding HasItems}"/>
         </StackPanel>
     </Grid>
 </UserControl>
