@@ -169,12 +169,16 @@ namespace Prediktor.ExcelImport
 
                         //Write start time
                         row++;
-                        sheet.Cells[row, col] = _valueFormatter.Format(startTime.Value.AbsoluteTime);
+                        //historicalArguments.StartTime.AbsoluteTime.ToLocalTime().ToString()
+                        sheet.Cells[row, col] = startTime.Value.AbsoluteTime.ToLocalTime().ToString();
+                        sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].NumberFormatLocal = "m/d/yyyy hh:mm";
                         sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("Start Time");
 
                         //Write end time
                         row++;
-                        sheet.Cells[row, col] = _valueFormatter.Format(endTime.Value.AbsoluteTime); ;
+                        sheet.Cells[row, col] = startTime.Value.AbsoluteTime.ToLocalTime().ToString();
+                        //sheet.Cells[row, col] = _valueFormatter.Format(endTime.Value.AbsoluteTime);
+                        sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].NumberFormatLocal = "m/d/yyyy hh:mm";
                         sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("End Time");
 
                         //Write resample intervals
@@ -237,8 +241,11 @@ namespace Prediktor.ExcelImport
                                 sheet.Cells[row, col] = formattedValue;
 
                                 //visualize timestamps and qualities.
-                                if (tcol > 0)
+                                if (tcol > 0) 
+                                {
+                                    sheet.Range[sheet.Cells[row, tcol], sheet.Cells[row, tcol]].NumberFormatLocal = "m/d/yyyy hh:mm";
                                     sheet.Cells[row, tcol] = formattedTime;
+                                }
                                 
                                 if (qcol > 0)
                                     sheet.Cells[row, qcol] = quality;
