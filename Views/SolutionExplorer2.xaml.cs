@@ -121,6 +121,14 @@ namespace Prediktor.ExcelImport
 
         private void AddToViewModel(ITreeNode item)
         {
+            if (item.CanHaveChildren)
+            {
+                foreach (var child in item.Children)
+                {
+                    AddToViewModel(child);
+                }
+            }
+
             var vm = DataContext as SolutionExplorer2ViewModel;
             if (vm != null && !vm.SelectedItems.Contains(item))
             {
@@ -131,6 +139,14 @@ namespace Prediktor.ExcelImport
 
         private void RemoveFromViewModel(ITreeNode item)
         {
+            if (item.CanHaveChildren)
+            {
+                foreach (var child in item.Children)
+                {
+                    RemoveFromViewModel(child);
+                }
+            }
+
             var vm = DataContext as SolutionExplorer2ViewModel;
             if (vm != null && vm.SelectedItems.Contains(item))
             {
@@ -154,17 +170,7 @@ namespace Prediktor.ExcelImport
                 return;
             }
 
-            if (item.CanHaveChildren)
-            {
-                foreach (var child in item.Children)
-                {
-                    AddToViewModel(child);
-                }
-            }
-            else
-            {
-                AddToViewModel(item);
-            }
+            AddToViewModel(item);
 
             e.Handled = true;
         }
@@ -181,17 +187,7 @@ namespace Prediktor.ExcelImport
                 return;
             }
 
-            if (item.CanHaveChildren)
-            {
-                foreach (var child in item.Children)
-                {
-                    RemoveFromViewModel(child);
-                }
-            }
-            else
-            {
-                RemoveFromViewModel(item);
-            }
+            RemoveFromViewModel(item);
 
             e.Handled = true;
         }
