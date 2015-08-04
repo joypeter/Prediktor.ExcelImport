@@ -111,14 +111,7 @@ namespace Prediktor.ExcelImport
             string dllDirectory = new Uri(dllstr).LocalPath;
             // set Environment.CurrentDirectory so later when FileInfo is allocated it will 
             // use the value Environment.CurrentDirectory as its Directory property to find config/uaclient.xml
-            try
-            {
-                Environment.CurrentDirectory = dllDirectory;
-            }
-            catch(Exception ex)
-            {
-                Console.Write("failed to update Environment.CurrentDirectory: " + ex);
-            }
+            Environment.CurrentDirectory = dllDirectory;
 
             var shellViewModel = ((Window)Shell).DataContext as ShellViewModel;
             shellViewModel.ConnectCommand.Execute(null);
