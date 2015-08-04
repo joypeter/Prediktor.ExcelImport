@@ -81,6 +81,7 @@
             this.btnUpdate.Label = "Update";
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.ShowImage = true;
+            this.btnUpdate.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnUpdate_Click);
             // 
             // btnTest
             // 
