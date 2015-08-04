@@ -10,12 +10,6 @@ using System.Collections.ObjectModel;
 
 namespace Prediktor.ExcelImport.ViewModels
 {
-    public interface IExcelColumn
-    {
-        string Name { get; }
-        uint Col { get; }
-    }
-
     public class UpdateExcelDialogViewModel : NotificationObject
     {
         //private readonly IInteractionService _interactionService;
