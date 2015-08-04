@@ -10,8 +10,10 @@ namespace Prediktor.ExcelImport
     {
         public delegate void ConnectDelegate();
         public delegate void BrowseDelegate();
+        public delegate void UpdateDelegate();
         public ConnectDelegate ConnectMethod { get; set; }
         public BrowseDelegate BrowseMethod { get; set; }
+        public UpdateDelegate UpdateMethod { get; set; }
         public event EventHandler TestEvent;
 
         private void Ribbon_Load(object sender, RibbonUIEventArgs e)
@@ -32,6 +34,11 @@ namespace Prediktor.ExcelImport
         private void btnTest_Click(object sender, RibbonControlEventArgs e)
         {
             TestEvent.Invoke(null, null);
+        }
+
+        private void btnUpdate_Click(object sender, RibbonControlEventArgs e)
+        {
+            UpdateMethod();
         }
 
     }

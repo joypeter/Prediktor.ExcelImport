@@ -169,12 +169,22 @@ namespace Prediktor.ExcelImport
 
                         //Write start time
                         row++;
-                        sheet.Cells[row, col] = _valueFormatter.Format(startTime.Value.AbsoluteTime);
+                        //historicalArguments.StartTime.AbsoluteTime.ToLocalTime().ToString()
+                        if (isTimestampsInLocalZone)
+                            sheet.Cells[row, col] = startTime.Value.AbsoluteTime.ToLocalTime();
+                        else
+                            sheet.Cells[row, col] = startTime.Value.AbsoluteTime.ToUniversalTime();
+                        sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].NumberFormatLocal = "m/d/yyyy hh:mm";
                         sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("Start Time");
 
                         //Write end time
                         row++;
-                        sheet.Cells[row, col] = _valueFormatter.Format(endTime.Value.AbsoluteTime); ;
+                        if (isTimestampsInLocalZone)
+                            sheet.Cells[row, col] = endTime.Value.AbsoluteTime.ToLocalTime();
+                        else
+                            sheet.Cells[row, col] = endTime.Value.AbsoluteTime.ToUniversalTime();
+                        //sheet.Cells[row, col] = _valueFormatter.Format(endTime.Value.AbsoluteTime);
+                        sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].NumberFormatLocal = "m/d/yyyy hh:mm";
                         sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].AddComment("End Time");
 
                         //Write resample intervals
@@ -213,9 +223,6 @@ namespace Prediktor.ExcelImport
 
                         //Write value
                         row++;
-                        string formattedTime = string.Empty;
-                        string quality = string.Empty;
-                        string formattedValue = string.Empty;
                         if (result[i].Success)
                         {
                             var v = result[i].Value;
@@ -230,18 +237,23 @@ namespace Prediktor.ExcelImport
 
                             for (int j = 0; j < v.Values.Length; j++ )
                             {
-                                formattedTime = _valueFormatter.Format(v.Values[j].Time);
-                                formattedValue = _valueFormatter.Format(v.Values[j].Value);
-                                quality = v.Values[j].Quality.Quality;
-                                
-                                sheet.Cells[row, col] = formattedValue;
+                                //formattedTime = _valueFormatter.Format(v.Values[j].Time.ToLocalTime());
+                                //formattedValue = _valueFormatter.Format(v.Values[j].Value);
 
-                                //visualize timestamps and qualities.
-                                if (tcol > 0)
-                                    sheet.Cells[row, tcol] = formattedTime;
+                                //visualize value, timestamps and qualities.
+                                sheet.Cells[row, col] = v.Values[j].Value;
+
+                                if (tcol > 0) 
+                                {
+                                    sheet.Range[sheet.Cells[row, tcol], sheet.Cells[row, tcol]].NumberFormatLocal = "m/d/yyyy hh:mm";
+                                    if (isTimestampsInLocalZone)
+                                        sheet.Cells[row, tcol] = v.Values[j].Time.ToLocalTime();
+                                    else
+                                        sheet.Cells[row, tcol] = v.Values[j].Time.ToUniversalTime();
+                                }
                                 
                                 if (qcol > 0)
-                                    sheet.Cells[row, qcol] = quality;
+                                    sheet.Cells[row, qcol] = v.Values[j].Quality.Quality;
 
                                 row++;
                             }

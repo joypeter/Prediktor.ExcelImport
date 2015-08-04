@@ -48,12 +48,18 @@ namespace Prediktor.ExcelImport
             Bootstrapper.CloseBrowse();
         }
 
+        public void Update()
+        {
+            Bootstrapper.Update();
+        }
+
         protected override Microsoft.Office.Core.IRibbonExtensibility CreateRibbonExtensibilityObject()
         {
             Ribbon apisExcelImport = new Ribbon();
             apisExcelImport.TestEvent += ThisAddIn_Test;
             apisExcelImport.ConnectMethod = this.Connect;
             apisExcelImport.BrowseMethod = this.Browse;
+            apisExcelImport.UpdateMethod = this.Update;
 
             return Globals.Factory.GetRibbonFactory().CreateRibbonManager(new Microsoft.Office.Tools.Ribbon.IRibbonExtension[] { apisExcelImport });
         }

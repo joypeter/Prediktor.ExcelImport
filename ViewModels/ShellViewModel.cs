@@ -19,6 +19,7 @@ using Prediktor.Carbon.Infrastructure.Definitions.Events;
 using Prediktor.Configuration.Definitions;
 using Prediktor.Log;
 using Prediktor.Services.Definitions;
+using Prediktor.ExcelImport.Views;
 
 namespace Prediktor.ExcelImport
 {
@@ -55,6 +56,7 @@ namespace Prediktor.ExcelImport
             InitializeTheme();
             ConnectCommand = new DelegateCommand(Connect);
             BrowseCommand = new DelegateCommand(Browse);
+            UpdateCommand = new DelegateCommand(Update);
             CloseBrowseCommand = new DelegateCommand(CloseBrowse);
 
             _configFile = _applicationService.CurrentFile;
@@ -93,6 +95,12 @@ namespace Prediktor.ExcelImport
             browseDialog.ShowDialog();
         }
 
+        private void Update()
+        {
+            var updateDialog = new UpdateExcelDialog();
+            updateDialog.ShowDialog();
+        }
+
         private void CloseBrowse()
         {
             if (browseDialog != null)
@@ -101,6 +109,7 @@ namespace Prediktor.ExcelImport
 
         public ICommand ConnectCommand { get; private set; }
         public ICommand BrowseCommand { get; private set; }
+        public ICommand UpdateCommand { get; private set; }
         public ICommand CloseBrowseCommand { get; private set; }
 
         private void InitializeTheme()

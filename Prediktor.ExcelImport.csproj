@@ -279,6 +279,10 @@
     <Compile Include="ApplicationProperties.cs" />
     <Compile Include="HistoricalExcelService.cs" />
     <Compile Include="ExcelImportBootstrapper.cs" />
+    <Compile Include="ViewModels\UpdateExcelDialogViewModel.cs" />
+    <Compile Include="Views\UpdateExcelDialog.xaml.cs">
+      <DependentUpon>UpdateExcelDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Shell.xaml.cs">
       <DependentUpon>Shell.xaml</DependentUpon>
     </Compile>
@@ -358,6 +362,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\UpdateExcelDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\MainRegion.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
