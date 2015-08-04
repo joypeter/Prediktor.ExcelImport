@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Reflection;
+using System.IO;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
@@ -104,6 +106,20 @@ namespace Prediktor.ExcelImport
 
         public void Connect()
         {
+            //To check: use Assembly.GetExecutingAssembly().CodeBase or Assembly.GetExecutingAssembly().Locatioon?
+            string dllstr = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase);
+            string dllDirectory = new Uri(dllstr).LocalPath;
+            // set Environment.CurrentDirectory so later when FileInfo is allocated it will 
+            // use the value Environment.CurrentDirectory as its Directory property to find config/uaclient.xml
+            try
+            {
+                Environment.CurrentDirectory = dllDirectory;
+            }
+            catch(Exception ex)
+            {
+                Console.Write("failed to update Environment.CurrentDirectory: " + ex);
+            }
+
             var shellViewModel = ((Window)Shell).DataContext as ShellViewModel;
             shellViewModel.ConnectCommand.Execute(null);
             _log.DebugFormat("Connected");
@@ -112,7 +128,6 @@ namespace Prediktor.ExcelImport
         public void Browse()
         {
             var shellViewModel = ((Window)Shell).DataContext as ShellViewModel;
-
             shellViewModel.BrowseCommand.Execute(null);
             _log.DebugFormat("Browsed");
         }
