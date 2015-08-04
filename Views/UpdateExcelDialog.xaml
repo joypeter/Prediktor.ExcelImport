@@ -1,0 +1,54 @@
+﻿<Window x:Class="Prediktor.ExcelImport.Views.UpdateExcelDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:trn="clr-namespace:Prediktor.Carbon.Infrastructure.Implementation;assembly=Prediktor.Carbon.Infrastructure"
+        Title="{trn:Translation NativeText='Update Excel'}" Height="191" Width="353"
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        Style="{StaticResource ApisWindow}">
+    <Grid Margin="0,0,16,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="53*"/>
+            <ColumnDefinition Width="193*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="217*"/>
+                <ColumnDefinition Width="75*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <GroupBox Grid.Row="1" Header="Select end time to use when update" Margin="10,10,0,-8" HorizontalAlignment="Left" Width="311" Grid.ColumnSpan="2">
+                <Grid Margin="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </Grid>
+            </GroupBox>
+
+            <CheckBox IsChecked="{Binding IsUseCurrentTime, Mode=TwoWay}" Content="Use current time" Margin="138,72,9,32" Grid.Row="1" Grid.ColumnSpan="2"/>
+            <CheckBox IsChecked="{Binding IsAppendNewData, Mode=TwoWay}" Content="Append new data only" Margin="138,94,9,7" Grid.Row="1" Grid.ColumnSpan="2"/>
+            <TextBlock Visibility="{Binding ResampleVisibility}" Margin="19,36,87,52" Grid.Row="1" Grid.Column="0" RenderTransformOrigin="0.459,0.121" ><Run Text="Enter new end time"/><LineBreak/><Run Text="(Local time-zone)"/></TextBlock>
+            <TextBox Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="23" Margin="139,41,0,0" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="145"/>
+        </Grid>
+        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Update" IsDefault="True" Command="{Binding SaveCommand}" Click="Button_Click" />
+                <Button Content="{trn:Translation NativeText=Cancel}" IsCancel="True" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
