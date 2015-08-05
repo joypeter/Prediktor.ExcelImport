@@ -28,9 +28,10 @@ namespace Prediktor.ExcelImport
         private void OnIdle(Object sender, EventArgs e)
         {
             System.Windows.Forms.Application.Idle -= OnIdle;
-            Bootstrapper = new ExcelImportBootstrapper();
+            
             try
             {
+                Bootstrapper = new ExcelImportBootstrapper();
                 Bootstrapper.Run();
             }
             catch (Exception ex)

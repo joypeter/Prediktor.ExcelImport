@@ -36,15 +36,26 @@ namespace Prediktor.ExcelImport
             //To check: use Assembly.GetExecutingAssembly().CodeBase or Assembly.GetExecutingAssembly().Locatioon?
             string dllstr = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase);
             string dllDirectory = new Uri(dllstr).LocalPath;
-            string deployDataDirectory = ApplicationDeployment.CurrentDeployment.DataDirectory;
             // set Environment.CurrentDirectory so later when FileInfo is allocated it will 
             // use the value Environment.CurrentDirectory as its Directory property to find config/uaclient.xml
             Environment.CurrentDirectory = dllDirectory;
-            ioc_config = deployDataDirectory + "/" + ioc_config;
 
             Prediktor.Log.Log4NetLog.Configure();
             LogManager.TraceLogFactory = (name) => new Prediktor.Log.Log4NetLog(name);
             _log = LogManager.GetLogger(typeof(ExcelImportBootstrapper));
+
+            // When use ClickOnce to publish the solution, xml files will be put to Data folder
+            // by ClickOnce, so we need to give full path to them
+            // When running in debug mode in VS, this will throw an exception, which is safe to ignore
+            try
+            {
+                string deployDataDirectory = ApplicationDeployment.CurrentDeployment.DataDirectory;
+                ioc_config = deployDataDirectory + "/" + ioc_config;
+            }
+            catch (Exception ex)
+            {
+                _log.DebugFormat("Failed to add deployDataDirectory to ioc_config: " + ex.ToString());
+            }
         }
 
         protected override IWindsorContainer CreateContainer()
