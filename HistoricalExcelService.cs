@@ -37,9 +37,9 @@ namespace Prediktor.ExcelImport
 
         private int _startCol = 1;
         private bool _isIncludeTimestamps = true;
-        private bool _isTimestampsInFirstCol = true;
+        private bool _isTimestampsInFirstCol = false;
         private bool _isTimestampsInLocalZone = true;
-        private bool _isQualityInSeperateCol = false;
+        private bool _isQualityInSeperateCol = true;
         private bool _isUseCurrentTime = true;
         private bool _isAppendNewData = false;
 
