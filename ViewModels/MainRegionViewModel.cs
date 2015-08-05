@@ -71,7 +71,9 @@ namespace Prediktor.ExcelImport
                 historicalColumnService, interactionService, serializationService, valueFormatter);
             ChartModel = new HistoricalChartViewModel(eventContext, objectServiceOperations, interactionService, columnNameService, valueFormatter, serializationService);
             ChartModel.Legend.CollectionChanged += Legend_CollectionChanged;
-            ExcelService = new HistoricalExcelService(this, eventContext, objectServiceOperations, interactionService, historicalTimeUtility, valueFormatter);
+            if (HistoricalExcelService.Current == null)
+                HistoricalExcelService.Current = new HistoricalExcelService(this, 
+                    eventContext, objectServiceOperations, interactionService, historicalTimeUtility, valueFormatter, appliationProperties);
 
             ExportCommand = new DelegateCommand(Export);
             SubscribeEvents();
@@ -117,12 +119,6 @@ namespace Prediktor.ExcelImport
             private set;
         }
 
-        public HistoricalExcelService ExcelService
-        {
-            get;
-            private set;
-        }
-
         public ICommand ExportCommand { get; private set; }
 
         private void SubscribeEvents()
@@ -145,7 +141,8 @@ namespace Prediktor.ExcelImport
 
         private void Export()
         {
-            ExcelService.ExportDataToExcel();
+            if (HistoricalExcelService.Current != null)
+                HistoricalExcelService.Current.ExportDataToExcel();
         }
 
         private void SolutionExplorerSelectionChanged(SolutionExplorerSelection obj)

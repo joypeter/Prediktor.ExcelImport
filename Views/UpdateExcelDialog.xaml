@@ -42,7 +42,9 @@
             <CheckBox IsChecked="{Binding IsUseCurrentTime, Mode=TwoWay}" Content="Use current time" Margin="138,72,9,32" Grid.Row="1" Grid.ColumnSpan="2"/>
             <CheckBox IsChecked="{Binding IsAppendNewData, Mode=TwoWay}" Content="Append new data only" Margin="138,94,9,7" Grid.Row="1" Grid.ColumnSpan="2"/>
             <TextBlock Visibility="{Binding ResampleVisibility}" Margin="19,36,87,52" Grid.Row="1" Grid.Column="0" RenderTransformOrigin="0.459,0.121" ><Run Text="Enter new end time"/><LineBreak/><Run Text="(Local time-zone)"/></TextBlock>
-            <TextBox Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="23" Margin="139,41,0,0" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="145"/>
+            <TextBox Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="23" Margin="139,41,0,0" 
+                     Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="145"
+                     Text="{Binding NewTime, Mode=TwoWay}" />
         </Grid>
         <Grid Grid.Row="1" Grid.ColumnSpan="2">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

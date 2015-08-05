@@ -130,5 +130,65 @@ namespace Prediktor.ExcelImport.Properties {
                 this["ConnectionView"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int StartInColum {
+            get {
+                return ((int)(this["StartInColum"]));
+            }
+            set {
+                this["StartInColum"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IncludeTimestamp {
+            get {
+                return ((bool)(this["IncludeTimestamp"]));
+            }
+            set {
+                this["IncludeTimestamp"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IncludeQuality {
+            get {
+                return ((bool)(this["IncludeQuality"]));
+            }
+            set {
+                this["IncludeQuality"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool TimestampsInFirstCol {
+            get {
+                return ((bool)(this["TimestampsInFirstCol"]));
+            }
+            set {
+                this["TimestampsInFirstCol"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool TimestampsInLocalZone {
+            get {
+                return ((bool)(this["TimestampsInLocalZone"]));
+            }
+            set {
+                this["TimestampsInLocalZone"] = value;
+            }
+        }
     }
 }

@@ -7,18 +7,32 @@ using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.ViewModel;
 using Prediktor.Carbon.Infrastructure.Definitions;
 using System.Collections.ObjectModel;
+using Prediktor.Utilities;
+using Prediktor.Configuration.BaseTypes.Definitions;
 
 namespace Prediktor.ExcelImport.ViewModels
 {
     public class UpdateExcelDialogViewModel : NotificationObject
     {
-        //private readonly IInteractionService _interactionService;
-
-        public UpdateExcelDialogViewModel()
+        public UpdateExcelDialogViewModel(IResult<IHistoricalTime> endtime,
+            bool isUseCurrentTime,
+            bool isAppendNewData)
         {
-            //_interactionService = interactionService;
-            _isUseCurrentTime = false;
-            _isAppendNewData = false;
+            _isUseCurrentTime = isUseCurrentTime;
+            _isAppendNewData = isAppendNewData;
+            _newTime = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss t\\M");
+
+            //if (endtime.Value.IsRelativeTime)
+            //    _newTime = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss t\\M");
+            //else
+            //    _newTime = endtime.Value.AbsoluteTime.ToString("MM/dd/yyyy hh:mm:ss t\\M");
+        }
+
+        private string _newTime;
+        public string NewTime
+        {
+            get { return _newTime; }
+            set { _newTime = value; }
         }
 
         private bool _isUseCurrentTime;

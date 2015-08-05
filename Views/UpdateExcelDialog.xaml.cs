@@ -8,11 +8,11 @@ namespace Prediktor.ExcelImport.Views
     /// </summary>
     public partial class UpdateExcelDialog : Window
     {
-        public UpdateExcelDialog()
+        public UpdateExcelDialog(UpdateExcelDialogViewModel updateExcelDialogViewModel)
         {
             InitializeComponent();
 
-            //DataContext = exportExcelDialogViewModel;
+            DataContext = updateExcelDialogViewModel;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
