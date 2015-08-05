@@ -82,8 +82,11 @@ namespace Prediktor.ExcelImport
             get { return _hasItems; }
             set
             {
-                _hasItems = value;
-                RaisePropertyChanged(() => HasItems);
+                if (value != _hasItems)
+                {
+                    _hasItems = value;
+                    RaisePropertyChanged(() => HasItems);
+                }
             }
         }
 

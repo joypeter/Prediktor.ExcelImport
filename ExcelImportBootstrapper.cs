@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows;
 using System.Reflection;
 using System.IO;
+using System.Deployment.Application;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
@@ -32,6 +33,16 @@ namespace Prediktor.ExcelImport
 
         public ExcelImportBootstrapper()
         {
+            //To check: use Assembly.GetExecutingAssembly().CodeBase or Assembly.GetExecutingAssembly().Locatioon?
+            string dllstr = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase);
+            string dllDirectory = new Uri(dllstr).LocalPath;
+            string deployDataDirectory = ApplicationDeployment.CurrentDeployment.DataDirectory;
+            // set Environment.CurrentDirectory so later when FileInfo is allocated it will 
+            // use the value Environment.CurrentDirectory as its Directory property to find config/uaclient.xml
+            Environment.CurrentDirectory = dllDirectory;
+            ioc_config = deployDataDirectory + "/" + ioc_config;
+
+            Prediktor.Log.Log4NetLog.Configure();
             LogManager.TraceLogFactory = (name) => new Prediktor.Log.Log4NetLog(name);
             _log = LogManager.GetLogger(typeof(ExcelImportBootstrapper));
         }
@@ -106,13 +117,6 @@ namespace Prediktor.ExcelImport
 
         public void Connect()
         {
-            //To check: use Assembly.GetExecutingAssembly().CodeBase or Assembly.GetExecutingAssembly().Locatioon?
-            string dllstr = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase);
-            string dllDirectory = new Uri(dllstr).LocalPath;
-            // set Environment.CurrentDirectory so later when FileInfo is allocated it will 
-            // use the value Environment.CurrentDirectory as its Directory property to find config/uaclient.xml
-            Environment.CurrentDirectory = dllDirectory;
-
             var shellViewModel = ((Window)Shell).DataContext as ShellViewModel;
             shellViewModel.ConnectCommand.Execute(null);
             _log.DebugFormat("Connected");

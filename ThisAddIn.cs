@@ -29,7 +29,14 @@ namespace Prediktor.ExcelImport
         {
             System.Windows.Forms.Application.Idle -= OnIdle;
             Bootstrapper = new ExcelImportBootstrapper();
-            Bootstrapper.Run();
+            try
+            {
+                Bootstrapper.Run();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("ExcelImport failed to run bootstrapper: " + ex.ToString());
+            }
         }
 
 
