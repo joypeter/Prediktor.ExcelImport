@@ -10,21 +10,47 @@ using System.Collections.ObjectModel;
 
 namespace Prediktor.ExcelImport.ViewModels
 {
-    public interface IExcelColumn
+    public class ExcelColumn
     {
-        string Name { get; }
-        uint Col { get; }
+        public string Name { get; set; }
+        public int Col { get; set; }
     }
 
     public class ExportExcelDialogViewModel : NotificationObject
     {
         //private readonly IInteractionService _interactionService;
 
-        public ExportExcelDialogViewModel()
+        public ExportExcelDialogViewModel(
+            int startInColomn,
+            bool isIncludeTimestamps,
+            bool isTimestampsInFirstCol,
+            bool isTimestampsInLocalZone,
+            bool isQualityInSeperateCol)
         {
             //_interactionService = interactionService;
-            _isIncludeTimestamps = true;
-            _isTimestampsInFirstCol = true;
+            _isIncludeTimestamps = isIncludeTimestamps;
+            _isTimestampsInFirstCol = isTimestampsInFirstCol;
+            _isTimestampsInLocalZone = isTimestampsInLocalZone;
+            _isQualityInSeperateCol = isQualityInSeperateCol;
+
+            if (_startInColumn == null)
+            {
+                _startInColumn = new ObservableCollection<ExcelColumn>();
+                for (int i = 0; i < 26; i++)
+                {
+                    char a = (char)(i + 65);
+                    ExcelColumn ec = new ExcelColumn() { Name = a.ToString(), Col = i + 1 };
+                    StartInColumn.Add(ec);
+                }
+                _selectedStartInColumn = _startInColumn[startInColomn - 1];
+            }
+            //StartInColumn = new ObservableCollection<ExcelColumn>();
+            //for (uint i = 0; i<26; i++)
+            //{
+            //    char a = (char)(i+65);
+            //    ExcelColumn ec = new ExcelColumn(a.ToString(), i + 1);
+            //    StartInColumn.Add(ec); 
+            //}
         }
 
         private bool _isIncludeTimestamps;
@@ -62,31 +88,70 @@ namespace Prediktor.ExcelImport.ViewModels
             }
         }
 
-        private bool _isQuelityInSeperateCol;
+        private bool _isQualityInSeperateCol;
         public bool IsQuelityInSeperateCol
         {
-            get { return _isQuelityInSeperateCol; }
+            get { return _isQualityInSeperateCol; }
             set
             {
-                _isQuelityInSeperateCol = value;
+                _isQualityInSeperateCol = value;
             }
         }
 
-        public ObservableCollection<IExcelColumn> StartInColumn
+        private ObservableCollection<ExcelColumn> _startInColumn;
+        public ObservableCollection<ExcelColumn> StartInColumn
         {
-            get;
-            private set;
+            get
+            {
+                
+                return _startInColumn;
+            }
+            private set
+            {
+                _startInColumn = value;
+            }
         }
 
-        private IExcelColumn _selectedStartInColumn = null;
-        public IExcelColumn SelectedStartInColumn
+        private ExcelColumn _selectedStartInColumn = null;
+        public ExcelColumn SelectedStartInColumn
         {
             get { return _selectedStartInColumn; }
             set
             {
                 _selectedStartInColumn = value;
-                RaisePropertyChanged(() => _selectedStartInColumn);
+                //RaisePropertyChanged(() => _selectedStartInColumn);
             }
         }
+
+        //private ObservableCollection<string> _startColumn;
+        //public ObservableCollection<string> StartColumn
+        //{
+        //    get 
+        //    {
+        //        if (_startColumn == null)
+        //        {
+        //            for (int i = 0; i < 26; i++)
+        //            {
+        //                char a = (char)(i+65);
+        //                _startColumn.Add(a.ToString());
+        //            }
+        //        }
+        //        return _startColumn;
+        //    }
+        //    set
+        //    {
+        //        this._startColumn = value;
+        //    }
+        //}
+
+        //private string _selectedStartColumn = null;
+        //public string SelectedStartColumn
+        //{
+        //    get { return _selectedStartColumn; }
+        //    set { 
+        //        _selectedStartColumn = value;
+        //        RaisePropertyChanged(() => _selectedStartInColumn);
+        //    }
+        //}
     }
 }

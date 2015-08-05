@@ -18,7 +18,7 @@ namespace Prediktor.ExcelImport
 
         private void Ribbon_Load(object sender, RibbonUIEventArgs e)
         {
-            
+            btnTest.Visible = false;
         }
 
         private void btnConfigure_Click(object sender, RibbonControlEventArgs e)

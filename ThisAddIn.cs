@@ -74,8 +74,8 @@ namespace Prediktor.ExcelImport
         /* Test writing excel */
         public void ThisAddIn_Test(object sender, System.EventArgs e)
         {
-            HistoricalExcelService excelService = new HistoricalExcelService();
-            excelService.WriteExcelTest();
+            //HistoricalExcelService excelService = new HistoricalExcelService();
+            //excelService.WriteExcelTest();
         }
 
         #region VSTO generated code

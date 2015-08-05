@@ -62,25 +62,34 @@
             // btnConfigure
             // 
             this.btnConfigure.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnConfigure.Image = global::Prediktor.ExcelImport.Properties.Resources.connect;
             this.btnConfigure.Label = "Configure";
             this.btnConfigure.Name = "btnConfigure";
+            this.btnConfigure.ScreenTip = "Connect APIS Historian";
             this.btnConfigure.ShowImage = true;
+            this.btnConfigure.SuperTip = "Connect APIS Historian";
             this.btnConfigure.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnConfigure_Click);
             // 
             // btnImport
             // 
             this.btnImport.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnImport.Image = global::Prediktor.ExcelImport.Properties.Resources.import;
             this.btnImport.Label = "Import";
             this.btnImport.Name = "btnImport";
+            this.btnImport.ScreenTip = "Import data from APIS";
             this.btnImport.ShowImage = true;
+            this.btnImport.SuperTip = "Import data from APIS";
             this.btnImport.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnImport_Click);
             // 
             // btnUpdate
             // 
             this.btnUpdate.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnUpdate.Image = global::Prediktor.ExcelImport.Properties.Resources.update;
             this.btnUpdate.Label = "Update";
             this.btnUpdate.Name = "btnUpdate";
+            this.btnUpdate.ScreenTip = "Update APIS data";
             this.btnUpdate.ShowImage = true;
+            this.btnUpdate.SuperTip = "Update APIS data";
             this.btnUpdate.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnUpdate_Click);
             // 
             // btnTest

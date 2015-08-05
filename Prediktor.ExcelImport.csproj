@@ -385,6 +385,9 @@
     <Content Include="Config\uaclient.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\import.png" />
+    <None Include="Resources\update.png" />
+    <None Include="Resources\connect.png" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\UpdateExcelDialog.xaml">

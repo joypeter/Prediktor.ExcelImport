@@ -119,5 +119,65 @@ namespace Prediktor.ExcelImport
                 Properties.Settings.Default.LastUri = value;
             }
         }
+
+        public int StartCol
+        {
+            get
+            { 
+                return Properties.Settings.Default.StartInColum; 
+            }
+            set
+            {
+                Properties.Settings.Default.StartInColum = value;
+            }
+        }
+
+        public bool IncludeTimestamp
+        {
+            get
+            {
+                return Properties.Settings.Default.IncludeTimestamp;
+            }
+            set
+            {
+                Properties.Settings.Default.IncludeTimestamp = value;
+            }
+        }
+
+        public bool IncludeQuality
+        {
+            get
+            {
+                return Properties.Settings.Default.IncludeQuality;
+            }
+            set
+            {
+                Properties.Settings.Default.IncludeQuality = value;
+            }
+        }
+
+        public bool TimestampsInFirstCol
+        {
+            get
+            {
+                return Properties.Settings.Default.TimestampsInFirstCol;
+            }
+            set
+            {
+                Properties.Settings.Default.TimestampsInFirstCol = value;
+            }
+        }
+
+        public bool TimestampsInLocalZone
+        {
+            get
+            {
+                return Properties.Settings.Default.TimestampsInLocalZone;
+            }
+            set
+            {
+                Properties.Settings.Default.TimestampsInLocalZone = value;
+            }
+        }
     }
 }

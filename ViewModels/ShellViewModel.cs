@@ -20,6 +20,7 @@ using Prediktor.Configuration.Definitions;
 using Prediktor.Log;
 using Prediktor.Services.Definitions;
 using Prediktor.ExcelImport.Views;
+using Prediktor.ExcelImport.ViewModels;
 
 namespace Prediktor.ExcelImport
 {
@@ -97,8 +98,8 @@ namespace Prediktor.ExcelImport
 
         private void Update()
         {
-            var updateDialog = new UpdateExcelDialog();
-            updateDialog.ShowDialog();
+            if (HistoricalExcelService.Current != null)
+                HistoricalExcelService.Current.UpdateDataToExcel();
         }
 
         private void CloseBrowse()
