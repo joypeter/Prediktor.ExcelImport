@@ -31,7 +31,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" >
             <Grid.ColumnDefinitions>
@@ -162,12 +161,5 @@
                 </telerik:RadTreeView.ItemContainerStyle>
             </telerik:RadTreeView>
         </Border>
-        <Button x:Name="SelectBtn" 
-                Grid.Row="2"
-                IsEnabled="{Binding HasSelection}"
-                Content="{trn:Translation NativeText=Select}" 
-                VerticalAlignment="Bottom" 
-                Margin="3,3,0,0" 
-                Click="SelectBtn_Click"/>
     </Grid>
 </UserControl>

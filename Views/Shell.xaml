@@ -8,8 +8,5 @@
              d:DesignWidth="300"
              Title="{Binding Title}" Height="352" Width="845"
              WindowState="Maximized"
-             Style="{StaticResource ApisWindow}">
-    <Grid>
-            
-    </Grid>
+             >
 </Window>

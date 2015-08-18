@@ -35,9 +35,6 @@ namespace Prediktor.ExcelImport
             container.Register(Component.For<SolutionExplorer2>()
                 .ImplementedBy<SolutionExplorer2>()
                 .Named("SolutionExplorer2"));
-            container.Register(Component.For<SolutionExplorer2ViewModel>()
-                .ImplementedBy<SolutionExplorer2ViewModel>()
-                .Named("SolutionExplorerViewModel"));
 
             _log.Debug("Exiting Install");
         }

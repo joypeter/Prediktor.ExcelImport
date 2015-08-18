@@ -36,7 +36,6 @@
         {
             this.tab1 = this.Factory.CreateRibbonTab();
             this.apisExcelImport = this.Factory.CreateRibbonGroup();
-            this.btnConfigure = this.Factory.CreateRibbonButton();
             this.btnImport = this.Factory.CreateRibbonButton();
             this.btnUpdate = this.Factory.CreateRibbonButton();
             this.btnTest = this.Factory.CreateRibbonButton();
@@ -52,23 +51,11 @@
             // 
             // apisExcelImport
             // 
-            this.apisExcelImport.Items.Add(this.btnConfigure);
             this.apisExcelImport.Items.Add(this.btnImport);
             this.apisExcelImport.Items.Add(this.btnUpdate);
             this.apisExcelImport.Items.Add(this.btnTest);
             this.apisExcelImport.Label = "ApisExcelImport";
             this.apisExcelImport.Name = "apisExcelImport";
-            // 
-            // btnConfigure
-            // 
-            this.btnConfigure.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.btnConfigure.Image = global::Prediktor.ExcelImport.Properties.Resources.connect;
-            this.btnConfigure.Label = "Configure";
-            this.btnConfigure.Name = "btnConfigure";
-            this.btnConfigure.ScreenTip = "Connect APIS Historian";
-            this.btnConfigure.ShowImage = true;
-            this.btnConfigure.SuperTip = "Connect APIS Historian";
-            this.btnConfigure.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnConfigure_Click);
             // 
             // btnImport
             // 
@@ -117,7 +104,6 @@
 
         internal Microsoft.Office.Tools.Ribbon.RibbonTab tab1;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup apisExcelImport;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnConfigure;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnImport;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnUpdate;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnTest;

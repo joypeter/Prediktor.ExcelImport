@@ -1,24 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Prediktor.Carbon.Configuration.Definitions.Views;
 using Prediktor.Carbon.Configuration.ViewModels;
 using Prediktor.Carbon.Infrastructure.Definitions;
 using Prediktor.Configuration.Definitions;
 using Prediktor.Ioc;
 using Prediktor.Log;
-using Microsoft.Practices.Prism.Events;
-using Prediktor.Carbon.Configuration.Definitions.Events;
 using Telerik.Windows.Controls;
 
 namespace Prediktor.ExcelImport
@@ -30,7 +21,7 @@ namespace Prediktor.ExcelImport
     public partial class SolutionExplorer2 : UserControl
     {
         private static ITraceLog _log = LogManager.GetLogger(typeof(SolutionExplorer2));
-        public SolutionExplorer2(SolutionExplorer2ViewModel viewModel)
+        public SolutionExplorer2(SolutionExplorerViewModel viewModel)
         {
             _log.Debug("Create");
             InitializeComponent();
@@ -43,7 +34,7 @@ namespace Prediktor.ExcelImport
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                var vm = DataContext as SolutionExplorer2ViewModel;
+                var vm = DataContext as SolutionExplorerViewModel;
                 if (vm != null)
                 {
                     RadTreeViewItem currentClicked = VisualUpwardSearch(e.OriginalSource as DependencyObject);
@@ -102,20 +93,11 @@ namespace Prediktor.ExcelImport
 
         private void RadTreeView_ItemPrepared(object sender, Telerik.Windows.Controls.RadTreeViewItemPreparedEventArgs e)
         {
-            var vm = DataContext as SolutionExplorer2ViewModel;
+            var vm = DataContext as SolutionExplorerViewModel;
             var t = e.PreparedItem.DataContext as ITreeNode;
             if (vm != null && t != null)
             {
                 e.PreparedItem.IsLoadOnDemandEnabled = t.CanHaveChildren && (t.Children == null || t.Children.Count == 0);
-            }
-        }
-
-        private void SelectBtn_Click(object sender, RoutedEventArgs e)
-        {
-            var vm = DataContext as SolutionExplorer2ViewModel;
-            if (vm != null)
-            {
-                vm.SelectedItemsChangedCommand.Execute(null);
             }
         }
 
@@ -129,11 +111,11 @@ namespace Prediktor.ExcelImport
                 }
             }
 
-            var vm = DataContext as SolutionExplorer2ViewModel;
+            var vm = DataContext as SolutionExplorerViewModel;
             if (vm != null && !vm.SelectedItems.Contains(item))
             {
                 vm.SelectedItems.Add(item);
-                vm.HasSelection = true;
+                vm.SelectedItemsChangedCommand.Execute(null);
             }
         }
 
@@ -147,14 +129,11 @@ namespace Prediktor.ExcelImport
                 }
             }
 
-            var vm = DataContext as SolutionExplorer2ViewModel;
+            var vm = DataContext as SolutionExplorerViewModel;
             if (vm != null && vm.SelectedItems.Contains(item))
             {
                 vm.SelectedItems.Remove(item);
-                if (vm.SelectedItems.Count == 0)
-                {
-                    vm.HasSelection = false;
-                }
+                vm.SelectedItemsChangedCommand.Execute(null);
             }
         }
 
