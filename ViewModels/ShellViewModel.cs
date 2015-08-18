@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows;
@@ -10,17 +7,13 @@ using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.ViewModel;
 using Microsoft.Practices.ServiceLocation;
-using Prediktor.Carbon.Configuration.Definitions.Events;
 using Prediktor.Carbon.Configuration.Definitions.ModuleServices;
 using Prediktor.Carbon.Configuration.ViewModels;
 using Prediktor.Carbon.Configuration.Views;
 using Prediktor.Carbon.Infrastructure.Definitions;
-using Prediktor.Carbon.Infrastructure.Definitions.Events;
 using Prediktor.Configuration.Definitions;
 using Prediktor.Log;
 using Prediktor.Services.Definitions;
-using Prediktor.ExcelImport.Views;
-using Prediktor.ExcelImport.ViewModels;
 
 namespace Prediktor.ExcelImport
 {
@@ -59,6 +52,8 @@ namespace Prediktor.ExcelImport
             BrowseCommand = new DelegateCommand(Browse);
             UpdateCommand = new DelegateCommand(Update);
             CloseBrowseCommand = new DelegateCommand(CloseBrowse);
+            AboutCommand = new DelegateCommand(About);
+            HelpCommand = new DelegateCommand(Help);
 
             _configFile = _applicationService.CurrentFile;
         }
@@ -78,7 +73,7 @@ namespace Prediktor.ExcelImport
 
         private void Browse()
         {
-            browseDialog = new BrowseDialog();
+            browseDialog = new BrowseDialog(this);
             browseDialog.Title = Title;
 
             //Due to a bug in Prism v4, regions can not be added either from xaml or programatically
@@ -108,16 +103,38 @@ namespace Prediktor.ExcelImport
                 browseDialog.Close();
         }
 
+        private void Help()
+        {
+            //_documentationService.ShowDocumentation();
+        }
+
+        private void About()
+        {
+            var about = new StringBuilder();
+            var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            var tr = _interactionService.TranslatingService;
+            var dlg = _interactionService.DialogService;
+            about.Append(tr.GetSystemText(_title));
+            about.Append("\n");
+            about.Append(tr.GetSystemText("Copyright © Prediktor AS"));
+            about.Append("\n\n");
+            about.Append(tr.GetSystemText("Version: "));
+            about.Append(version);
+            dlg.GetMessageDialog().ShowInfo(about.ToString(), tr.GetSystemText("About " + _title));
+        }
+
         public ICommand ConnectCommand { get; private set; }
         public ICommand BrowseCommand { get; private set; }
         public ICommand UpdateCommand { get; private set; }
+        public ICommand AboutCommand { get; private set; }
+        public ICommand HelpCommand { get; private set; }
         public ICommand CloseBrowseCommand { get; private set; }
 
         private void InitializeTheme()
         {
             _log.Debug("Entering InitializeTheme");
             if (!UriParser.IsKnownScheme("pack"))
-                new System.Windows.Application();
+                new Application();
 
             var rd = _themeProvider.GetDefaultTheme();
             UpdateTheme(rd);

@@ -25,9 +25,10 @@ namespace Prediktor.ExcelImport
     {
         private ObservableCollection<SolutionExplorer2> SE;
         private ObservableCollection<MainRegion> MainRegion;
-        public BrowseDialog()
+        public BrowseDialog(ShellViewModel viewModel)
         {
             InitializeComponent();
+            DataContext = viewModel;
         }
 
         public void AddSolutionExplorer2(SolutionExplorer2 se2)

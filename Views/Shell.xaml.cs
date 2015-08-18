@@ -23,11 +23,10 @@ namespace Prediktor.ExcelImport
     /// </summary>
     public partial class Shell : Window
     {
-        public Shell(ShellViewModel viewModel)
+        public Shell(ShellViewModel model)
         {
             InitializeComponent();
-
-            DataContext = viewModel;
+            DataContext = model;
         }
     }
 }

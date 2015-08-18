@@ -40,12 +40,6 @@ namespace Prediktor.ExcelImport
             }
         }
 
-
-        public void Connect()
-        {
-            Bootstrapper.Connect();
-        }
-
         public void Browse()
         {
             Bootstrapper.Browse();
@@ -65,7 +59,6 @@ namespace Prediktor.ExcelImport
         {
             Ribbon apisExcelImport = new Ribbon();
             apisExcelImport.TestEvent += ThisAddIn_Test;
-            apisExcelImport.ConnectMethod = this.Connect;
             apisExcelImport.BrowseMethod = this.Browse;
             apisExcelImport.UpdateMethod = this.Update;
 
