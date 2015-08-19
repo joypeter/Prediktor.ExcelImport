@@ -76,6 +76,7 @@ namespace Prediktor.ExcelImport
                                                             _isTimestampsInLocalZone, _isQualityInSeperateCol);
             var excelDialog = new ExportExcelDialog(excelViewModel);
             var r = excelDialog.ShowDialog();
+            int rt = 0;
 
             if (r.HasValue && r.Value)
             {
@@ -86,7 +87,7 @@ namespace Prediktor.ExcelImport
                 _isQualityInSeperateCol = excelViewModel.IsQuelityInSeperateCol;
 
                 //WriteDataTable(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
-                WriteEventlist(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
+                rt = WriteEventlist(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
 
                 _thisAddIn.CloseBrowse();
                 return true;
@@ -160,7 +161,7 @@ namespace Prediktor.ExcelImport
             sheet.Cells[row, col] = value;
         }
 
-        public void WriteDataTable(HistoricalPropertyListViewModel listViewModel, 
+        public int WriteDataTable(HistoricalPropertyListViewModel listViewModel, 
                                HistoricalTimePeriodViewModel timePeriodViewModel)
         {
             Excel.Worksheet sheet = ((Excel.Worksheet)_thisAddIn.Application.ActiveWorkbook.ActiveSheet);
@@ -338,6 +339,7 @@ namespace Prediktor.ExcelImport
             }
 
             sheet.Columns.AutoFit();
+            return 0;
         }
 
         private void WriteDataValue(Excel.Worksheet sheet, int row, int col, int tcol, int qcol,
@@ -380,7 +382,7 @@ namespace Prediktor.ExcelImport
             }
         }
 
-        public void WriteEventlist(HistoricalPropertyListViewModel listViewModel,
+        public int WriteEventlist(HistoricalPropertyListViewModel listViewModel,
                                HistoricalTimePeriodViewModel timePeriodViewModel)
         {
             Excel.Worksheet sheet = ((Excel.Worksheet)_thisAddIn.Application.ActiveWorkbook.ActiveSheet);
@@ -398,15 +400,6 @@ namespace Prediktor.ExcelImport
                 var objectInfoResutls = _objectServiceOperations.GetObjectInfos(propertIds.Select(a => a.GetContext()).ToArray());
                 var objectInfos = objectInfoResutls.Where(a => a.Success).Select(a => a.Value).ToArray();
 
-                //file.Write(string.Format("% Start time (local timezone):{0}; End time (local timezone): {1}",
-                //    historicalArguments.StartTime.IsRelativeTime ? historicalArguments.StartTime.RelativeTime : historicalArguments.StartTime.AbsoluteTime.ToLocalTime().ToString(),
-                //    historicalArguments.EndTime.IsRelativeTime ? historicalArguments.EndTime.RelativeTime : historicalArguments.EndTime.AbsoluteTime.ToLocalTime().ToString()));
-
-                //file.WriteLine();
-
-                //var objectInfoResutls = _objectServiceOperations.GetObjectInfos(propertIds.Select(a => a.GetContext()).ToArray());
-                //var objectInfos = objectInfoResutls.Where(a => a.Success).Select(a => a.Value).ToArray();
-
                 int row = 1;
                 int tcol = 0, qcol = 0;
                 int lcol = 1, vcol = 2;
@@ -419,9 +412,8 @@ namespace Prediktor.ExcelImport
 
                 if (_isDisplayQuality)
                 {
-                    qcol = tcol + 1;
-                    lcol++;
-                    vcol++;
+                    qcol = lcol + 1;
+                    vcol = qcol + 1;
                 }
 
                 if (objectInfos.Any())
@@ -502,12 +494,16 @@ namespace Prediktor.ExcelImport
                         row++;
                         indexes[t]++;
                         if (row > 5000)
-                            break;
+                        {
+                            return 1;
+                        }
                     }
+
+                    sheet.Columns.AutoFit();
                 }
             }
 
-            sheet.Columns.AutoFit();
+            return 0;
         }
 
         private void WriteTest()
