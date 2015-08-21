@@ -69,7 +69,7 @@ namespace Prediktor.ExcelImport
                 historicalColumnService, interactionService, serializationService, valueFormatter);
             EventListViewModel = new HistoricalEventListViewModel(eventContext, objectServiceOperations, columnNameService,
                 historicalColumnService, interactionService, serializationService, valueFormatter);
-            ChartModel = new HistoricalChartViewModel(eventContext, objectServiceOperations, interactionService, columnNameService, valueFormatter, serializationService);
+            ChartModel = new HistoricalChartViewModel(eventContext, eventAggregator, objectServiceOperations, interactionService, columnNameService, valueFormatter, serializationService);
             ChartModel.Legend.CollectionChanged += Legend_CollectionChanged;
             if (HistoricalExcelService.Current == null)
                 HistoricalExcelService.Current = new HistoricalExcelService(this, 
@@ -132,14 +132,7 @@ namespace Prediktor.ExcelImport
 
         private void Legend_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (ChartModel.Legend.Count > 0) 
-            {
-                HasItems = true;
-            }
-            else
-            {
-                HasItems = false;
-            }
+            HasItems = ChartModel.Legend.Count > 0 ? true : false;
         }
 
         private void Export()
@@ -152,14 +145,7 @@ namespace Prediktor.ExcelImport
         {
             IObjectId [] objs = obj.Selection.ToArray();
             _eventContext.ContextualEventAggregator.GetEvent<ObjectsAddedToViewEvent>().Publish(objs);
-            if (0 < objs.Count<IObjectId>())
-            {
-                HasItems = true;
-            }
-            else
-            {
-                HasItems = false;
-            }
+            HasItems = 0 < objs.Count<IObjectId>() ? true : false;
         }
         private void UnsubscribeEvents()
         {
