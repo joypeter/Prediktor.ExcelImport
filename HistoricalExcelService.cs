@@ -86,8 +86,8 @@ namespace Prediktor.ExcelImport
                 _isTimestampsInLocalZone = excelViewModel.IsTimestampsInLocalZone;
                 _isQualityInSeperateCol = excelViewModel.IsQuelityInSeperateCol;
 
-                //WriteDataTable(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
-                rt = WriteEventlist(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
+                WriteDataTable(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
+                //rt = WriteEventlist(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
 
                 _thisAddIn.CloseBrowse();
                 return true;
