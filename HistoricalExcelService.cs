@@ -86,7 +86,7 @@ namespace Prediktor.ExcelImport
                 _isTimestampsInLocalZone = excelViewModel.IsTimestampsInLocalZone;
                 _isQualityInSeperateCol = excelViewModel.IsQuelityInSeperateCol;
 
-                WriteDataTable(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
+                //WriteDataTable(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
                 //rt = WriteEventlist(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
 
                 _thisAddIn.CloseBrowse();
@@ -113,14 +113,15 @@ namespace Prediktor.ExcelImport
                 var newtime = _historicalTimeUtility.Parse(viewModel.NewTime);
                 if (newtime.Success)
                 {
-                    _mainViewModel.TimePeriodViewModel.EndTime = viewModel.NewTime;
+                    //_mainViewModel.TimePeriodViewModel.EndTime = viewModel.NewTime;
                     if (!viewModel.IsAppendNewData)
-                        WriteDataTable(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
+                        ;
+                    //WriteDataTable(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
                     else
                     {
                         if (newtime.Value.AbsoluteTime > _actualEndtime)        //new time is newer than actualendtime
                         {
-                            WriteDataTable(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
+                            // WriteDataTable(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
                         }
                     }
                 }

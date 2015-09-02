@@ -21,6 +21,7 @@ using Prediktor.Carbon.Configuration.Views;
 using Prediktor.Utilities;
 using Prediktor.ExcelImport.ViewModels;
 using Prediktor.ExcelImport.Views;
+using System.Collections.Generic;
 
 namespace Prediktor.ExcelImport
 {
@@ -62,15 +63,14 @@ namespace Prediktor.ExcelImport
             _appliationProperties = appliationProperties;
 
             ResourceDictionaryProvider = resourceDictionaryProvider;
-
-            TimePeriodViewModel = new HistoricalTimePeriodViewModel(eventContext, objectServiceOperations, historicalTimeUtility,
-                interactionService, helpExtension, documentationService);
+            ItemsViewModel = new ItemsHistoricalTimePeriodViewModel(eventContext, columnNameService, objectServiceOperations,
+                interactionService, historicalTimeUtility);
+            ItemsViewModel.Items.CollectionChanged += Items_CollectionChanged;
             ListViewModel = new HistoricalPropertyListViewModel(eventContext, objectServiceOperations, columnNameService,
                 historicalColumnService, interactionService, serializationService, valueFormatter);
             EventListViewModel = new HistoricalEventListViewModel(eventContext, objectServiceOperations, columnNameService,
                 historicalColumnService, interactionService, serializationService, valueFormatter);
             ChartModel = new HistoricalChartViewModel(eventContext, objectServiceOperations, interactionService, columnNameService, valueFormatter, serializationService);
-            ChartModel.Legend.CollectionChanged += Legend_CollectionChanged;
             if (HistoricalExcelService.Current == null)
                 HistoricalExcelService.Current = new HistoricalExcelService(this, 
                     eventContext, objectServiceOperations, interactionService, historicalTimeUtility, valueFormatter, appliationProperties);
@@ -98,7 +98,7 @@ namespace Prediktor.ExcelImport
             private set;
         }
 
-        public HistoricalTimePeriodViewModel TimePeriodViewModel
+        public ItemsHistoricalTimePeriodViewModel ItemsViewModel
         {
             get;
             private set;
@@ -130,16 +130,32 @@ namespace Prediktor.ExcelImport
                 SolutionExplorerSelectionChanged, ThreadOption.UIThread);
         }
 
-        private void Legend_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private bool StillHasPropertyIDForItem(ItemHistoricalInfo removedItem)
         {
-            if (ChartModel.Legend.Count > 0) 
+            foreach (ItemHistoricalInfo existingItem in ItemsViewModel.Items)
             {
-                HasItems = true;
+                if (existingItem.PropertyId == removedItem.PropertyId)
+                    return true;
             }
-            else
+
+            return false;
+        }
+
+        private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action != NotifyCollectionChangedAction.Remove)
+                return;
+
+            List<IPropertyId> ids = new List<IPropertyId>();
+            foreach (var item in e.OldItems)
             {
-                HasItems = false;
+                //only publish event when it's the last property for a given item
+                if (StillHasPropertyIDForItem(item as ItemHistoricalInfo))
+                    return;
+
+                ids.Add((item as ItemHistoricalInfo).PropertyId);
             }
+            _eventAggregator.GetEvent<RemovePropertiesFromViewEvent>().Publish(ids.ToArray());
         }
 
         private void Export()
@@ -152,14 +168,7 @@ namespace Prediktor.ExcelImport
         {
             IObjectId [] objs = obj.Selection.ToArray();
             _eventContext.ContextualEventAggregator.GetEvent<ObjectsAddedToViewEvent>().Publish(objs);
-            if (0 < objs.Count<IObjectId>())
-            {
-                HasItems = true;
-            }
-            else
-            {
-                HasItems = false;
-            }
+            HasItems = 0 < objs.Count<IObjectId>() ? true : false;
         }
         private void UnsubscribeEvents()
         {

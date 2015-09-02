@@ -11,6 +11,13 @@ using Prediktor.Configuration.Definitions;
 using Prediktor.Ioc;
 using Prediktor.Log;
 using Telerik.Windows.Controls;
+using Microsoft.Practices.Prism.Events;
+using Prediktor.Carbon.Configuration.Definitions.Events;
+using Prediktor.Configuration.BaseTypes.Definitions;
+using Prediktor.Configuration.BaseTypes.Implementation;
+using Prediktor.Configuration.OpcHda.Implementation;
+using Prediktor.Configuration.UA.Implementation.Node;
+using Prediktor.Configuration.OpcHda.Implementation.Item;
 
 namespace Prediktor.ExcelImport
 {
@@ -21,13 +28,57 @@ namespace Prediktor.ExcelImport
     public partial class SolutionExplorer2 : UserControl
     {
         private static ITraceLog _log = LogManager.GetLogger(typeof(SolutionExplorer2));
-        public SolutionExplorer2(SolutionExplorerViewModel viewModel)
+        private IEventAggregator _eventAggregator;
+        public SolutionExplorer2(SolutionExplorerViewModel viewModel, IEventAggregator eventAggregator)
         {
             _log.Debug("Create");
             InitializeComponent();
             _log.Debug("Component Initialized");
             DataContext = viewModel;
+            _eventAggregator = eventAggregator;
+            _eventAggregator.GetEvent<RemovePropertiesFromViewEvent>().Subscribe(OnPropertiesRemoved, ThreadOption.UIThread, false, a => true);
             _log.Debug("Created");
+        }
+
+        private void UnCheckedItemByPropertyID(IPropertyId propertyID)
+        {
+            var vm = DataContext as SolutionExplorerViewModel;
+            foreach (var treeViewItem in treeView.ChildrenOfType<RadTreeViewItem>())
+            {
+                ITreeNode item = treeViewItem.DataContext as ITreeNode;
+                if ((propertyID as PropertyId).ContextId is OpcItemId)
+                { //HDA item
+                    OpcHierarchicalItemId hierachicalID = item.Id as OpcHierarchicalItemId;
+                    if (hierachicalID == null) continue;
+                    if (hierachicalID.OpcItemId == (propertyID as PropertyId).ContextId)
+                    {
+                        //item.IsSelected is two-way bound to treeViewItem.IsChecked;
+                        item.IsSelected = false;
+                        vm.SelectedItems.Remove(item);
+                    }
+                } 
+                else if ((propertyID as PropertyId).ContextId is StringNodeId)
+                { //UA item
+                    if (item.Id == (propertyID as PropertyId).ContextId)
+                    {
+                        //item.IsSelected is two-way bound to treeViewItem.IsChecked;
+                        item.IsSelected = false;
+                        vm.SelectedItems.Remove(item);
+                    }
+                }
+            }
+        }
+
+        private void OnPropertiesRemoved(IPropertyId[] properties)
+        {
+            if (properties != null && properties.Length > 0)
+            {
+                for (int i = 0; i < properties.Length; i++)
+                {
+                    var p = properties[i];
+                    UnCheckedItemByPropertyID(p);
+                }
+            }
         }
 
         public void treeView_MouseMove(object sender, MouseEventArgs e)
@@ -63,19 +114,19 @@ namespace Prediktor.ExcelImport
             }
         }
 
-        static Telerik.Windows.Controls.RadTreeViewItem VisualUpwardSearch(DependencyObject source)
+        static RadTreeViewItem VisualUpwardSearch(DependencyObject source)
         {
-            while (source != null && !(source is Telerik.Windows.Controls.RadTreeViewItem))
+            while (source != null && !(source is RadTreeViewItem))
                 source = VisualTreeHelper.GetParent(source);
 
-            return source as Telerik.Windows.Controls.RadTreeViewItem;
+            return source as RadTreeViewItem;
         }
 
         private void RadTreeView_LoadOnDemand(object sender, Telerik.Windows.RadRoutedEventArgs e)
         {
             if (e.OriginalSource is FrameworkElement)
             {
-                var treeViewItem = (FrameworkElement)e.OriginalSource as Telerik.Windows.Controls.RadTreeViewItem;
+                var treeViewItem = (FrameworkElement)e.OriginalSource as RadTreeViewItem;
                 var t = ((FrameworkElement)e.OriginalSource).DataContext as ITreeNode;
                 Action<int> a = itemCount =>
                 {
@@ -91,7 +142,7 @@ namespace Prediktor.ExcelImport
             }
         }
 
-        private void RadTreeView_ItemPrepared(object sender, Telerik.Windows.Controls.RadTreeViewItemPreparedEventArgs e)
+        private void RadTreeView_ItemPrepared(object sender, RadTreeViewItemPreparedEventArgs e)
         {
             var vm = DataContext as SolutionExplorerViewModel;
             var t = e.PreparedItem.DataContext as ITreeNode;
@@ -114,6 +165,7 @@ namespace Prediktor.ExcelImport
             var vm = DataContext as SolutionExplorerViewModel;
             if (vm != null && !vm.SelectedItems.Contains(item))
             {
+                item.IsSelected = true;
                 vm.SelectedItems.Add(item);
                 vm.SelectedItemsChangedCommand.Execute(null);
             }
@@ -132,6 +184,7 @@ namespace Prediktor.ExcelImport
             var vm = DataContext as SolutionExplorerViewModel;
             if (vm != null && vm.SelectedItems.Contains(item))
             {
+                item.IsSelected = false;
                 vm.SelectedItems.Remove(item);
                 vm.SelectedItemsChangedCommand.Execute(null);
             }

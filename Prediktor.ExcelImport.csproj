@@ -199,6 +199,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Application Services\Prediktor.Configuration.OpcHda\bin\Debug\Prediktor.Configuration.OpcHda.dll</HintPath>
     </Reference>
+    <Reference Include="Prediktor.Configuration.UA, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Application Services\Prediktor.Configuration.UA\bin\Debug\Prediktor.Configuration.UA.dll</HintPath>
+    </Reference>
     <Reference Include="Prediktor.Configuration.Windsor, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Application Services\Prediktor.Configuration.Windsor\bin\Debug\Prediktor.Configuration.Windsor.dll</HintPath>
@@ -256,6 +260,7 @@
       <HintPath>..\..\..\Dependencies\Telerik\Telerik.Windows.Data.dll</HintPath>
     </Reference>
     <Reference Include="UIAutomationProvider" />
+    <Reference Include="UIAutomationTypes" />
     <Reference Include="WindowsBase" />
     <Reference Include="WpfAnimatedGif">
       <HintPath>..\..\..\Dependencies\UI\WpfAnimatedGif.dll</HintPath>
