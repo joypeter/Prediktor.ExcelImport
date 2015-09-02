@@ -9,7 +9,9 @@
     <DockPanel LastChildFill="True">
                 <Border DockPanel.Dock="Top" BorderThickness="0 0 0 2" BorderBrush="{DynamicResource BorderBrushNormal}">
             <Menu>
-                <MenuItem Header="{trn:Translation NativeText='_Connect'}" Command="{Binding ConnectCommand}"/>
+                <MenuItem Header="{trn:Translation NativeText=_SERVERS}">
+                    <MenuItem Header="{trn:Translation NativeText='_Connect'}" Command="{Binding ConnectCommand}"/>
+                </MenuItem>
                 <MenuItem Header="{trn:Translation NativeText=_HELP}">
                     <MenuItem Header="{trn:Translation NativeText=_Help...}" Command="{Binding HelpCommand}" InputGestureText="Ctrl+F1"/>
                     <MenuItem Header="{trn:Translation NativeText=_About...}" Command="{Binding AboutCommand}" />

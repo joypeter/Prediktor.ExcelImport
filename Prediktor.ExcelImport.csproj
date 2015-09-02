@@ -184,9 +184,6 @@
     <Reference Include="Prediktor.Carbon.Configuration.Windsor">
       <HintPath>..\Prediktor.Carbon.Configuration.Windsor\bin\Debug\Prediktor.Carbon.Configuration.Windsor.dll</HintPath>
     </Reference>
-    <Reference Include="Prediktor.Carbon.Controls">
-      <HintPath>..\Prediktor.Carbon.Controls\bin\Debug\Prediktor.Carbon.Controls.dll</HintPath>
-    </Reference>
     <Reference Include="Prediktor.Carbon.Infrastructure, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Prediktor.Carbon.Infrastructure\bin\Debug\Prediktor.Carbon.Infrastructure.dll</HintPath>
