@@ -34,6 +34,10 @@ namespace Prediktor.ExcelImport
         private IEventAggregator _eventAggregator;
         private IApplicationProperties _appliationProperties;
 
+        private TabContentViewModel _tableViewTab;
+        private TabContentViewModel _eventListViewTab;
+        private TabContentViewModel _chartViewTab;
+
         private SubscriptionToken _solutionSelectionChangedToken;
 
         //bind to Import button
@@ -74,6 +78,19 @@ namespace Prediktor.ExcelImport
             if (HistoricalExcelService.Current == null)
                 HistoricalExcelService.Current = new HistoricalExcelService(this, 
                     eventContext, objectServiceOperations, interactionService, historicalTimeUtility, valueFormatter, appliationProperties);
+
+            _tableViewTab = new TabContentViewModel("Table View", "Table View", false, 
+                null) ;
+            _tableViewTab.Content = ListViewModel;
+            _eventListViewTab = new TabContentViewModel("Event List View", "Event List View", false, 
+                null) ;
+            _chartViewTab = new TabContentViewModel("Graph View", "Graph View", false,
+                null);
+            LowerTabbedViewModel = new LowerTabViewModel();
+            LowerTabbedViewModel.AddTabItem(_tableViewTab);
+            LowerTabbedViewModel.AddTabItem(_eventListViewTab);
+            LowerTabbedViewModel.AddTabItem(_chartViewTab);
+            LowerTabbedViewModel.SelectedItem = LowerTabbedViewModel.TabItems[0];
 
             ExportCommand = new DelegateCommand(Export);
             SubscribeEvents();
@@ -117,6 +134,12 @@ namespace Prediktor.ExcelImport
         }
 
         public HistoricalChartViewModel ChartModel
+        {
+            get;
+            private set;
+        }
+
+        public LowerTabViewModel LowerTabbedViewModel
         {
             get;
             private set;
