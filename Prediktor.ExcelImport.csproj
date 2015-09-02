@@ -184,6 +184,10 @@
     <Reference Include="Prediktor.Carbon.Configuration.Windsor">
       <HintPath>..\Prediktor.Carbon.Configuration.Windsor\bin\Debug\Prediktor.Carbon.Configuration.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="Prediktor.Carbon.Controls, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Prediktor.Carbon.Controls\bin\Debug\Prediktor.Carbon.Controls.dll</HintPath>
+    </Reference>
     <Reference Include="Prediktor.Carbon.Infrastructure, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Prediktor.Carbon.Infrastructure\bin\Debug\Prediktor.Carbon.Infrastructure.dll</HintPath>
@@ -198,6 +202,10 @@
     <Reference Include="Prediktor.Configuration.OpcHda, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Application Services\Prediktor.Configuration.OpcHda\bin\Debug\Prediktor.Configuration.OpcHda.dll</HintPath>
+    </Reference>
+    <Reference Include="Prediktor.Configuration.UA, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Application Services\Prediktor.Configuration.UA\bin\Debug\Prediktor.Configuration.UA.dll</HintPath>
     </Reference>
     <Reference Include="Prediktor.Configuration.Windsor, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
