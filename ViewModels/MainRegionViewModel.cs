@@ -21,7 +21,6 @@ using Prediktor.Carbon.Configuration.Views;
 using Prediktor.Utilities;
 using Prediktor.ExcelImport.ViewModels;
 using Prediktor.ExcelImport.Views;
-using System.Collections.Generic;
 
 namespace Prediktor.ExcelImport
 {
@@ -33,10 +32,6 @@ namespace Prediktor.ExcelImport
         private readonly IHdaFileExportService _hdaFileExportService;
         private IEventAggregator _eventAggregator;
         private IApplicationProperties _appliationProperties;
-
-        private TabContentViewModel _tableViewTab;
-        private TabContentViewModel _eventListViewTab;
-        private TabContentViewModel _chartViewTab;
 
         private SubscriptionToken _solutionSelectionChangedToken;
 
@@ -67,30 +62,18 @@ namespace Prediktor.ExcelImport
             _appliationProperties = appliationProperties;
 
             ResourceDictionaryProvider = resourceDictionaryProvider;
-            ItemsViewModel = new ItemsHistoricalTimePeriodViewModel(eventContext, columnNameService, objectServiceOperations,
-                interactionService, historicalTimeUtility);
-            ItemsViewModel.Items.CollectionChanged += Items_CollectionChanged;
+
+            TimePeriodViewModel = new HistoricalTimePeriodViewModel(eventContext, objectServiceOperations, historicalTimeUtility,
+                interactionService, helpExtension, documentationService);
             ListViewModel = new HistoricalPropertyListViewModel(eventContext, objectServiceOperations, columnNameService,
                 historicalColumnService, interactionService, serializationService, valueFormatter);
             EventListViewModel = new HistoricalEventListViewModel(eventContext, objectServiceOperations, columnNameService,
                 historicalColumnService, interactionService, serializationService, valueFormatter);
             ChartModel = new HistoricalChartViewModel(eventContext, objectServiceOperations, interactionService, columnNameService, valueFormatter, serializationService);
+            ChartModel.Legend.CollectionChanged += Legend_CollectionChanged;
             if (HistoricalExcelService.Current == null)
                 HistoricalExcelService.Current = new HistoricalExcelService(this, 
                     eventContext, objectServiceOperations, interactionService, historicalTimeUtility, valueFormatter, appliationProperties);
-
-            _tableViewTab = new TabContentViewModel("Table View", "Table View", false, 
-                null) ;
-            _tableViewTab.Content = ListViewModel;
-            _eventListViewTab = new TabContentViewModel("Event List View", "Event List View", false, 
-                null) ;
-            _chartViewTab = new TabContentViewModel("Graph View", "Graph View", false,
-                null);
-            LowerTabbedViewModel = new LowerTabViewModel();
-            LowerTabbedViewModel.AddTabItem(_tableViewTab);
-            LowerTabbedViewModel.AddTabItem(_eventListViewTab);
-            LowerTabbedViewModel.AddTabItem(_chartViewTab);
-            LowerTabbedViewModel.SelectedItem = LowerTabbedViewModel.TabItems[0];
 
             ExportCommand = new DelegateCommand(Export);
             SubscribeEvents();
@@ -115,7 +98,7 @@ namespace Prediktor.ExcelImport
             private set;
         }
 
-        public ItemsHistoricalTimePeriodViewModel ItemsViewModel
+        public HistoricalTimePeriodViewModel TimePeriodViewModel
         {
             get;
             private set;
@@ -139,12 +122,6 @@ namespace Prediktor.ExcelImport
             private set;
         }
 
-        public LowerTabViewModel LowerTabbedViewModel
-        {
-            get;
-            private set;
-        }
-
         public ICommand ExportCommand { get; private set; }
 
         private void SubscribeEvents()
@@ -153,32 +130,16 @@ namespace Prediktor.ExcelImport
                 SolutionExplorerSelectionChanged, ThreadOption.UIThread);
         }
 
-        private bool StillHasPropertyIDForItem(ItemHistoricalInfo removedItem)
+        private void Legend_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            foreach (ItemHistoricalInfo existingItem in ItemsViewModel.Items)
+            if (ChartModel.Legend.Count > 0) 
             {
-                if (existingItem.PropertyId == removedItem.PropertyId)
-                    return true;
+                HasItems = true;
             }
-
-            return false;
-        }
-
-        private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action != NotifyCollectionChangedAction.Remove)
-                return;
-
-            List<IPropertyId> ids = new List<IPropertyId>();
-            foreach (var item in e.OldItems)
+            else
             {
-                //only publish event when it's the last property for a given item
-                if (StillHasPropertyIDForItem(item as ItemHistoricalInfo))
-                    return;
-
-                ids.Add((item as ItemHistoricalInfo).PropertyId);
+                HasItems = false;
             }
-            _eventAggregator.GetEvent<RemovePropertiesFromViewEvent>().Publish(ids.ToArray());
         }
 
         private void Export()
@@ -191,7 +152,14 @@ namespace Prediktor.ExcelImport
         {
             IObjectId [] objs = obj.Selection.ToArray();
             _eventContext.ContextualEventAggregator.GetEvent<ObjectsAddedToViewEvent>().Publish(objs);
-            HasItems = 0 < objs.Count<IObjectId>() ? true : false;
+            if (0 < objs.Count<IObjectId>())
+            {
+                HasItems = true;
+            }
+            else
+            {
+                HasItems = false;
+            }
         }
         private void UnsubscribeEvents()
         {
