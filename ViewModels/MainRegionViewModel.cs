@@ -20,6 +20,7 @@ namespace Prediktor.ExcelImport
     {
         private IEventAggregator _eventAggregator;
         private IEventContext _eventContext;
+        private IHistoricalTimeUtility _historicalTimeUtility;
         public MainRegionViewModel(IEventAggregator eventAggregator,
             IResourceDictionaryProvider resourceDictionaryProvider,
             IApplicationProperties appliationProperties,
@@ -43,6 +44,7 @@ namespace Prediktor.ExcelImport
         {
             _eventAggregator = eventAggregator;
             _eventContext = eventContext;
+            _historicalTimeUtility = historicalTimeUtility;
 
             if (HistoricalExcelService.Current == null)
                 HistoricalExcelService.Current = new HistoricalExcelService(this,
@@ -95,13 +97,17 @@ namespace Prediktor.ExcelImport
         private void ExportPropertyList()
         {
             if (HistoricalExcelService.Current != null)
-                HistoricalExcelService.Current.ExportDataTableToExcel();
+                HistoricalExcelService.Current.DataTableToExcel(ListViewModel.DisplayTime, ListViewModel.DisplayQuality, ListViewModel.ShowLocalTime,
+                            GetCurrentData().Item1.Select(a => new HistoricalQuery(a.PropertyId, a.Aggregate, _historicalTimeUtility.Parse(a.StartTime).Value, _historicalTimeUtility.Parse(a.EndTime).Value, a.Resample, a.MaxValues)).ToArray(),
+                            GetCurrentData().Item2);
         }
 
         private void ExportEventList()
         {
             if (HistoricalExcelService.Current != null)
-                HistoricalExcelService.Current.ExportDataToExcel();
+                HistoricalExcelService.Current.EventListToExcel(EventListViewModel.DisplayTime, EventListViewModel.DisplayQuality, EventListViewModel.ShowLocalTime,
+                            GetCurrentData().Item1.Select(a => new HistoricalQuery(a.PropertyId, a.Aggregate, _historicalTimeUtility.Parse(a.StartTime).Value, _historicalTimeUtility.Parse(a.EndTime).Value, a.Resample, a.MaxValues)).ToArray(),
+                            GetCurrentData().Item2);
         }
     }
 }

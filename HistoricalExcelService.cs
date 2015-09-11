@@ -23,6 +23,8 @@ namespace Prediktor.ExcelImport
     {
         public static HistoricalExcelService Current;
 
+        private readonly int MAX_ROWS = 50000;
+
         private readonly IObjectServiceOperations _objectServiceOperations;
         private readonly IInteractionService _interactionService;
         private readonly IHistoricalTimeUtility _historicalTimeUtility;
@@ -32,8 +34,8 @@ namespace Prediktor.ExcelImport
         private ThisAddIn _thisAddIn = ThisAddIn.G_ThisAddIn;
         private MainRegionViewModel _mainViewModel;
 
-        private IResult<IHistoricalTime> startTime;
-        private IResult<IHistoricalTime> endTime;
+        //private IResult<IHistoricalTime> startTime;
+        //private IResult<IHistoricalTime> endTime;
 
         private int _startCol = 1;
         private bool _isIncludeTimestamps = true;
@@ -64,36 +66,31 @@ namespace Prediktor.ExcelImport
             _appliationProperties = appliationProperties;
         }
 
-        public void WriteExcelTest()
-        {
-            WriteTest();
-        }
-
-        private void DataTableToExcel(bool displayTime, bool displayQuality, bool localTime,
-                                     IHistoricalQuery[] queries, IHistoricalPropertyValue[] historicalPropertyValues)
+        public void DataTableToExcel(bool displayTime, bool displayQuality, bool localTime,
+                                     IHistoricalQuery[] queries, IHistoricalPropertyValue[] values)
         {
             int i = 0;
-            int startrow = 1;
-            int qcol = 0;
-            int tcol = 0;
-            int vcol = _startCol;
+            int startrow = 1, row = 1;
+            int qcol, tcol, vcol;
             int unitcols = 1;
-            int row = startrow;
 
             Excel.Worksheet sheet = ((Excel.Worksheet)_thisAddIn.Application.ActiveWorkbook.ActiveSheet);
             sheet.Cells.Clear();
 
-            var objectInfoResutls = _objectServiceOperations.GetObjectInfos(queries.Select(a => a.PropertyId.GetContext()).ToArray());
-            var objectInfos = objectInfoResutls.Where(a => a.Success).Select(a => a.Value).ToArray();
-            var serviceInfos = _objectServiceOperations.GetServiceInfos(queries.Select(a => a.PropertyId.GetContext()).ToArray());
+            var objectInfoResults = _objectServiceOperations.GetObjectInfos(queries.Select(a => a.PropertyId.GetContext()).ToArray());
+            var objectInfos = objectInfoResults.Where(a => a.Success).Select(a => a.Value).ToArray();
+            var serviceInfoResults = _objectServiceOperations.GetServiceInfos(queries.Select(a => a.PropertyId.GetContext()).ToArray());
+            var serviceInfos = serviceInfoResults.Where(a => a.Success).Select(a => a.Value).ToArray();
 
+            vcol = _startCol;
+            tcol = 0;
+            qcol = 0;
             if (displayTime)
             {
                 tcol = _startCol;
                 vcol = tcol + 1;
                 unitcols++;
             }
-
             if (displayQuality)
             {
                 qcol = vcol + 1;
@@ -102,114 +99,27 @@ namespace Prediktor.ExcelImport
 
             foreach (IHistoricalQuery query in queries)
             {
-                //write Item ID
                 row = startrow;
-                WriteLabel(sheet, row, vcol, objectInfos[i].FullName, "Item ID");
-                if (tcol == _startCol)
-                    WriteValue(sheet, row, tcol, "Item ID");
 
-                //write Item Description
-                row++;
-                WriteLabel(sheet, row, vcol, objectInfos[i].Description, "Item Description");
-                if (tcol == _startCol)
-                    WriteValue(sheet, row, tcol, "Item Description");
-
-                //write Engineering Unit
-                row++;
-                WriteLabel(sheet, row, vcol, "", "Engineering Unit");
-                if (tcol == _startCol)
-                    WriteValue(sheet, row, tcol, "Engineering Unit");
-
-                string link = serviceInfos[i].Value.Name;
-                string[] s = link.Split('/');
-                //write Data Source
-                row++;
-                WriteLabel(sheet, row, vcol, s[s.Length - 1], "Data Source");
-                if (tcol == _startCol)
-                    WriteValue(sheet, row, tcol, "Data Source");
-
-                //write Location
-                row++;
-                WriteLabel(sheet, row, vcol, s[s.Length - 2], "Location");
-                if (tcol == _startCol)
-                    WriteValue(sheet, row, tcol, "Location");
-
-                //write aggregation ID
-                row++;
-                WriteLabel(sheet, row, vcol, query.Aggregate.Id, "Aggregation ID");
-                if (tcol == _startCol)
-                    WriteValue(sheet, row, tcol, "Aggregation ID");
-
-                //Write aggretation name
-                row++;
-                WriteLabel(sheet, row, vcol, query.Aggregate.Name, "Aggregation Name");
-                if (tcol == _startCol)
-                    WriteValue(sheet, row, tcol, "Aggregation Name");
-
-                //Write start time
-                row++;
-                if (query.StartTime.IsRelativeTime)
-                    WriteTimeLabel(sheet, row, vcol, query.StartTime.RelativeTime, "Start Time");
-                else
-                {
-                    DateTime starttime;
-                    if (_isTimestampsInLocalZone)
-                        starttime = query.StartTime.AbsoluteTime.ToLocalTime();
-                    else
-                        starttime = query.StartTime.AbsoluteTime.ToUniversalTime();
-                    WriteTimeLabel(sheet, row, vcol, starttime, "Start Time");
-                }
-                if (tcol == _startCol)
-                    WriteValue(sheet, row, tcol, "Start Time");
-
-                //Write end time
-                row++;
-                if (query.EndTime.IsRelativeTime)
-                    WriteTimeLabel(sheet, row, vcol, query.EndTime.RelativeTime, "End Time");
-                else
-                {
-                    DateTime endtime;
-                    if (_isTimestampsInLocalZone)
-                        endtime = query.EndTime.AbsoluteTime.ToLocalTime();
-                    else
-                        endtime = query.EndTime.AbsoluteTime.ToUniversalTime();
-                    WriteTimeLabel(sheet, row, vcol, endtime, "End Time");
-                }
-                if (tcol == _startCol)
-                    WriteValue(sheet, row, tcol, "End Time");
-
-                //Write resample intervals
-                row++;
-                WriteLabel(sheet, row, vcol, query.Resample, "Resample interval(in seconds)");
-                if (tcol == _startCol)
-                    WriteValue(sheet, row, tcol, "Resample interval(in seconds)");
-
-                //Write time zone
-                row++;
-                string timezone;
-                if (_isTimestampsInLocalZone)
-                    timezone = "Local time";
-                else
-                    timezone = "UTC time";
-                WriteLabel(sheet, row, vcol, timezone, "Timestamps time zone");
-                if (tcol == _startCol)
-                    WriteValue(sheet, row, tcol, "Timestamps time zone");
-
-                //Write space
-                row++;
+                row = WriteLabels(sheet, row, tcol, vcol, qcol, objectInfos[i], serviceInfos[i], query, localTime);
 
                 //Write labels
                 row++;
-                WriteValue(sheet, row, vcol, "Values");
+                WriteCommon(sheet, row, vcol, "Values");
                 if (tcol > 0)
-                    WriteValue(sheet, row, tcol, "Timestamps");
+                    WriteCommon(sheet, row, tcol, "Timestamps");
                 if (qcol > 0)
-                    WriteValue(sheet, row, qcol, "Qualities");
+                    WriteCommon(sheet, row, qcol, "Qualities");
 
                 //Write timezone
                 row++;
+                string timezone;
+                if (localTime)
+                    timezone = "Local time";
+                else
+                    timezone = "UTC time";
                 if (tcol > 0)
-                    WriteValue(sheet, row, tcol, "(" + timezone + ")");
+                    WriteCommon(sheet, row, tcol, "(" + timezone + ")");
 
                 vcol += unitcols;
                 if (displayTime)
@@ -219,82 +129,300 @@ namespace Prediktor.ExcelImport
 
                 i++;
             }
-        }
 
-        private void EventListToExcel(string fileName, bool displayTime, bool displayQuality, IHistoricalQuery[] queries, IHistoricalPropertyValue[] historicalPropertyValues)
-        {
-
-        }
-
-        public bool ExportDataTableToExcel()
-        {
-            var excelViewModel = new ExportExcelDialogViewModel(_startCol,
-                                                            _isIncludeTimestamps, _isTimestampsInFirstCol, 
-                                                            _isTimestampsInLocalZone, _isQualityInSeperateCol);
-            var excelDialog = new ExportExcelDialog(excelViewModel);
-            var r = excelDialog.ShowDialog();
-            int rt = 0;
-
-            if (r.HasValue && r.Value)
+            vcol = _startCol;
+            tcol = 0;
+            qcol = 0;
+            if (displayTime)
             {
-                _startCol = excelViewModel.SelectedStartInColumn.Col;
-                _isIncludeTimestamps = excelViewModel.IsIncludeTimestamps;
-                _isTimestampsInFirstCol = excelViewModel.IsTimestampsInFirstCol;
-                _isTimestampsInLocalZone = excelViewModel.IsTimestampsInLocalZone;
-                _isQualityInSeperateCol = excelViewModel.IsQuelityInSeperateCol;
+                tcol = _startCol;
+                vcol = tcol + 1;
+            }
+            if (displayQuality)
+            {
+                qcol = vcol + 1;
+            }
+            startrow = row + 1;
 
-                //WriteDataTable(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
-                //rt = WriteEventlist(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
+            foreach (IHistoricalPropertyValue value in values)
+            {
+                row = startrow;
 
-                _thisAddIn.CloseBrowse();
-                return true;
+                if (value.Values.Length == 0)
+                {
+                    WriteCommon(sheet, row, vcol, "<empty dataset>");
+                    if (tcol > 0)
+                        WriteCommon(sheet, row, tcol, "<empty dataset>");
+                    if (qcol > 0)
+                        WriteCommon(sheet, row, qcol, "<empty dataset>");
+                }
+
+                foreach (IHistoricalValue v in value.Values)
+                {
+                    WriteDataTableValue(sheet, row, tcol, vcol, qcol, v, localTime);
+                    row++;
+                }
+
+                vcol += unitcols;
+                if (displayTime)
+                    tcol = vcol - 1;
+                if (displayQuality)
+                    qcol = vcol + 1;
             }
 
-            return false;
+            sheet.Columns.AutoFit();
+            _thisAddIn.CloseBrowse();
         }
 
-        public bool ExportEventListToExcel()
+        public void EventListToExcel(bool displayTime, bool displayQuality, bool localTime,
+                                      IHistoricalQuery[] queries, IHistoricalPropertyValue[] historicalPropertyValues)
         {
-            return false;
-        }
+            int i = 0;
+            int startrow = 1, row = 1;
+            int qcol, tcol, vcol, icol;
 
-        public bool UpdateDataToExcel()
-        {
-            UpdateExcelDialogViewModel viewModel = new UpdateExcelDialogViewModel(endTime, _isUseCurrentTime, _isAppendNewData);
-            var updateDialog = new UpdateExcelDialog(viewModel);
-            var r = updateDialog.ShowDialog();
+            Excel.Worksheet sheet = ((Excel.Worksheet)_thisAddIn.Application.ActiveWorkbook.ActiveSheet);
+            sheet.Cells.Clear();
 
-            if (r.HasValue && r.Value)
+            var objectInfoResults = _objectServiceOperations.GetObjectInfos(queries.Select(a => a.PropertyId.GetContext()).ToArray());
+            var objectInfos = objectInfoResults.Where(a => a.Success).Select(a => a.Value).ToArray();
+            var serviceInfoResults = _objectServiceOperations.GetServiceInfos(queries.Select(a => a.PropertyId.GetContext()).ToArray());
+            var serviceInfos = serviceInfoResults.Where(a => a.Success).Select(a => a.Value).ToArray();
+
+            icol = _startCol;
+            vcol = _startCol + 1;
+            tcol = 0;
+            qcol = 0;
+            if (displayTime)
             {
-                _isUseCurrentTime = viewModel.IsUseCurrentTime;
-                _isAppendNewData = viewModel.IsAppendNewData;
+                tcol = _startCol;
+                icol = _startCol + 1;
+                vcol = _startCol + 2;
+            }
+            if (displayQuality)
+            {
+                qcol = vcol + 1;
+            }
 
-                if (viewModel.IsUseCurrentTime)
-                    viewModel.NewTime = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss t\\M");
+            foreach (IHistoricalQuery query in queries)
+            {
+                row = startrow;
 
-                var newtime = _historicalTimeUtility.Parse(viewModel.NewTime);
-                if (newtime.Success)
+                row = WriteLabels(sheet, row, _startCol, _startCol + i + 1, 0, objectInfos[i], serviceInfos[i], query, localTime);
+
+                //Write value labels
+                row++;
+                if (tcol > 0)
+                    WriteCommon(sheet, row, tcol, "Timestamps");
+                WriteCommon(sheet, row, icol, "Item ID");
+                WriteCommon(sheet, row, vcol, "Values");
+                if (qcol > 0)
+                    WriteCommon(sheet, row, qcol, "Qualities");
+
+                //Write timezone
+                row++;
+                string timezone;
+                if (localTime)
+                    timezone = "Local time";
+                else
+                    timezone = "UTC time";
+                if (tcol > 0)
+                    WriteCommon(sheet, row, tcol, "(" + timezone + ")");
+
+                i++;
+            }
+
+            int[] indexes = new int[historicalPropertyValues.Length];
+            for (i = 0; i < indexes.Length; i++)
+            {
+                indexes[i] = 0;
+            }
+
+            while (true)
+            {
+                IHistoricalValue historicalValue = null;
+                int t = 0;
+                for (i = 0; i < indexes.Length; ++i)
                 {
-                    //_mainViewModel.TimePeriodViewModel.EndTime = viewModel.NewTime;
-                    if (!viewModel.IsAppendNewData)
-                        ;
-                    //WriteDataTable(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
-                    else
+                    if (indexes[i] < historicalPropertyValues[i].Values.Length)
                     {
-                        if (newtime.Value.AbsoluteTime > _actualEndtime)        //new time is newer than actualendtime
+                        historicalValue = historicalPropertyValues[i].Values[indexes[i]];
+                        t = i;
+                        break;
+                    }
+                }
+
+                if (historicalValue == null)
+                {
+                    break;
+                }
+
+                for (i = t + 1; i < indexes.Length; ++i)
+                {
+                    if (indexes[i] < historicalPropertyValues[i].Values.Length)
+                    {
+                        if (historicalPropertyValues[i].Values[indexes[i]].Time < historicalValue.Time)
                         {
-                            // WriteDataTable(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
+                            historicalValue = historicalPropertyValues[i].Values[indexes[i]];
+                            t = i;
                         }
                     }
                 }
-                
-                return true;
-            }
 
-            return false;
+                //var formattedTime = localTime ? _valueFormatter.Format(historicalValue.Time.ToLocalTime()) : _valueFormatter.Format(historicalValue.Time);
+                //var formattedValue = _valueFormatter.Format(historicalValue.Value);
+
+                WriteCommon(sheet, row, icol, objectInfos[t].Name);
+                WriteNumber(sheet, row, vcol, historicalValue.Value);
+
+                if (tcol > 0)
+                {
+                    DateTime dt;
+                    if (localTime)
+                        dt = historicalValue.Time.ToLocalTime();
+                    else
+                        dt = historicalValue.Time;
+                    WriteTime(sheet, row, tcol, dt);
+                }
+
+                if (qcol > 0)
+                {
+                    WriteCommon(sheet, row, qcol, historicalValue.Quality.Quality);
+                }
+
+                row++;
+                indexes[t]++;
+                if (row > MAX_ROWS)
+                    break;
+            }
+            sheet.Columns.AutoFit();
+            _thisAddIn.CloseBrowse();
         }
 
-        private void WriteValue(Excel.Worksheet sheet, int row, int col, object value)
+        private int WriteLabels(Excel.Worksheet sheet,
+            int row, int tcol, int vcol, int qcol,
+            IObjectInfo objectInfo, IServiceInfo serviceInfo, IHistoricalQuery query,
+            bool localTime)
+        {
+            //write Item ID
+            WriteLabel(sheet, row, vcol, objectInfo.FullName, "Item ID");
+            if (tcol == _startCol)
+                WriteCommon(sheet, row, tcol, "Item ID");
+
+            //write Item Description
+            row++;
+            WriteLabel(sheet, row, vcol, objectInfo.Description, "Item Description");
+            if (tcol == _startCol)
+                WriteCommon(sheet, row, tcol, "Item Description");
+
+            //write Engineering Unit
+            row++;
+            WriteLabel(sheet, row, vcol, "", "Engineering Unit");
+            if (tcol == _startCol)
+                WriteCommon(sheet, row, tcol, "Engineering Unit");
+
+            string link = serviceInfo.Name;
+            string[] s = link.Split('/');
+            //write Data Source
+            row++;
+            WriteLabel(sheet, row, vcol, s[s.Length - 1], "Data Source");
+            if (tcol == _startCol)
+                WriteCommon(sheet, row, tcol, "Data Source");
+
+            //write Location
+            row++;
+            WriteLabel(sheet, row, vcol, s[s.Length - 2], "Location");
+            if (tcol == _startCol)
+                WriteCommon(sheet, row, tcol, "Location");
+
+            //write aggregation ID
+            row++;
+            WriteLabel(sheet, row, vcol, query.Aggregate.Id.ToString(), "Aggregation ID");
+            if (tcol == _startCol)
+                WriteCommon(sheet, row, tcol, "Aggregation ID");
+
+            //Write aggretation name
+            row++;
+            WriteLabel(sheet, row, vcol, query.Aggregate.Name, "Aggregation Name");
+            if (tcol == _startCol)
+                WriteCommon(sheet, row, tcol, "Aggregation Name");
+
+            //Write start time
+            row++;
+            if (query.StartTime.IsRelativeTime)
+                WriteTimeLabel(sheet, row, vcol, query.StartTime.RelativeTime, "Start Time");
+            else
+            {
+                DateTime starttime;
+                if (localTime)
+                    starttime = query.StartTime.AbsoluteTime.ToLocalTime();
+                else
+                    starttime = query.StartTime.AbsoluteTime.ToUniversalTime();
+                WriteTimeLabel(sheet, row, vcol, starttime, "Start Time");
+            }
+            if (tcol == _startCol)
+                WriteCommon(sheet, row, tcol, "Start Time");
+
+            //Write end time
+            row++;
+            if (query.EndTime.IsRelativeTime)
+                WriteTimeLabel(sheet, row, vcol, query.EndTime.RelativeTime, "End Time");
+            else
+            {
+                DateTime endtime;
+                if (localTime)
+                    endtime = query.EndTime.AbsoluteTime.ToLocalTime();
+                else
+                    endtime = query.EndTime.AbsoluteTime.ToUniversalTime();
+                WriteTimeLabel(sheet, row, vcol, endtime, "End Time");
+            }
+            if (tcol == _startCol)
+                WriteCommon(sheet, row, tcol, "End Time");
+
+            //Write resample intervals
+            row++;
+            WriteLabel(sheet, row, vcol, query.Resample, "Resample interval(in seconds)");
+            if (tcol == _startCol)
+                WriteCommon(sheet, row, tcol, "Resample interval(in seconds)");
+
+            //Write time zone
+            row++;
+            string timezone;
+            if (localTime)
+                timezone = "Local time";
+            else
+                timezone = "UTC time";
+            WriteLabel(sheet, row, vcol, timezone, "Timestamps time zone");
+            if (tcol == _startCol)
+                WriteCommon(sheet, row, tcol, "Timestamps time zone");
+
+            //Write space
+            row++;
+
+            return row;
+        }
+
+        private void WriteDataTableValue(Excel.Worksheet sheet,
+            int row, int tcol, int vcol, int qcol,
+            IHistoricalValue v, bool localTime)
+        {
+            WriteNumber(sheet, row, vcol, v.Value);
+
+            if (tcol > 0)
+            {
+                DateTime dt;
+                if (localTime)
+                    dt = v.Time.ToLocalTime();
+                else
+                    dt = v.Time.ToUniversalTime();
+                WriteTime(sheet, row, tcol, dt);
+            }
+
+            if (qcol > 0)
+                WriteCommon(sheet, row, qcol, v.Quality.Quality);
+        }
+
+        private void WriteCommon(Excel.Worksheet sheet, int row, int col, object value)
         {
             //sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].Clear();
             sheet.Cells[row, col] = value;
@@ -324,351 +452,77 @@ namespace Prediktor.ExcelImport
             sheet.Cells[row, col] = value;
         }
 
-        private void WriteDataTableValue(Excel.Worksheet sheet, int row, int col, int tcol, int qcol,
-                            IHistoricalPropertyValue v)
+        private void WriteNumber(Excel.Worksheet sheet, int row, int col, object value)
         {
-            if (v.Values.Length == 0)
-            {
-                WriteValue(sheet, row, col, "<empty dataset>");
-                if (tcol > 0)
-                    WriteValue(sheet, row, tcol, "<empty dataset>");
-                if (qcol > 0)
-                    WriteValue(sheet, row, qcol, "<empty dataset>");
-            }
+            //sheet.Range[sheet.Cells[row, col], sheet.Cells[row, col]].NumberFormatLocal = "0";
+            sheet.Cells[row, col] = value;
+        }      
 
-            for (int j = 0; j < v.Values.Length; j++)
-            {
-                //visualize value, timestamps and qualities.
-                WriteValue(sheet, row, col, v.Values[j].Value);
-
-                if (tcol > 0)
-                {
-                    DateTime dt;
-                    if (_isTimestampsInLocalZone)
-                        dt = v.Values[j].Time.ToLocalTime();
-                    else
-                        dt = v.Values[j].Time.ToUniversalTime();
-                    WriteTime(sheet, row, tcol, dt);
-                }
-
-                if (qcol > 0)
-                    WriteValue(sheet, row, qcol, v.Values[j].Quality.Quality);
-
-                if (j == v.Values.Length - 1)
-                {
-                    if (_actualEndtime < v.Values[j].Time)
-                        _actualEndtime = v.Values[j].Time;
-                }
-
-                row++;
-            }
-        }
-        
-        //Write data table
-        public int WriteDataTable(HistoricalPropertyListViewModel listViewModel, 
-                               HistoricalTimePeriodViewModel timePeriodViewModel)
+        private bool ExportExcelDialog()
         {
-            Excel.Worksheet sheet = ((Excel.Worksheet)_thisAddIn.Application.ActiveWorkbook.ActiveSheet);
-            sheet.Cells.Clear();
+            var excelViewModel = new ExportExcelDialogViewModel(_startCol,
+                                                            _isIncludeTimestamps, _isTimestampsInFirstCol,
+                                                            _isTimestampsInLocalZone, _isQualityInSeperateCol);
+            var excelDialog = new ExportExcelDialog(excelViewModel);
+            var r = excelDialog.ShowDialog();
 
-            var propertIds = listViewModel.GetHistoricalProperties();
-            startTime = _historicalTimeUtility.Parse(timePeriodViewModel.StartTime);
-            endTime = _historicalTimeUtility.Parse(timePeriodViewModel.EndTime);
-            var historicalAggregate = timePeriodViewModel.SelectedAggregate;
-
-            if (endTime.Success && startTime.Success && timePeriodViewModel.SelectedAggregate != null)
+            if (r.HasValue && r.Value)
             {
-                var historicalArguments = new HistoricalArguments(startTime.Value, endTime.Value, timePeriodViewModel.Resample, timePeriodViewModel.MaxValues);
+                _startCol = excelViewModel.SelectedStartInColumn.Col;
+                _isIncludeTimestamps = excelViewModel.IsIncludeTimestamps;
+                _isTimestampsInFirstCol = excelViewModel.IsTimestampsInFirstCol;
+                _isTimestampsInLocalZone = excelViewModel.IsTimestampsInLocalZone;
+                _isQualityInSeperateCol = excelViewModel.IsQuelityInSeperateCol;
 
-                var objectInfoResutls = _objectServiceOperations.GetObjectInfos(propertIds.Select(a => a.GetContext()).ToArray());
-                var objectInfos = objectInfoResutls.Where(a => a.Success).Select(a => a.Value).ToArray();
+                //WriteDataTable(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
+                //rt = WriteEventlist(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
 
-                int startrow = 1;
-                int qcol = 0;
-                int tcol = _startCol;
-                int unitcols = 1;
-                int col, row;
-
-                if (objectInfos.Any())
-                {
-                    var serviceInfos = _objectServiceOperations.GetServiceInfos(propertIds.Select(a => a.GetContext()).ToArray());
-
-                    var properties = propertIds.Select(a => new HistoricalPropertyRead(a, historicalAggregate.Id)).ToArray();
-                    var result = _objectServiceOperations.GetHistoricalPropertyValues(historicalArguments, properties);
-
-                    if (_isIncludeTimestamps && !_isTimestampsInFirstCol)
-                        unitcols++;
-                    if (_isQualityInSeperateCol)
-                        unitcols++;
-
-                    col = _startCol;
-                    if (_isIncludeTimestamps)
-                        col += 1;
-                    else
-                        tcol = 0;
-                    if (_isQualityInSeperateCol)
-                        col += 1;
-
-                    for (int i = 0; i < objectInfos.Length; i++)
-                    {
-                        if (_isIncludeTimestamps && !_isTimestampsInFirstCol)
-                            tcol = col - unitcols + 1;
-
-                        if (_isQualityInSeperateCol)
-                            qcol = col - 1;
-
-                        //write Item ID
-                        row = startrow;
-                        WriteLabel(sheet, row, col, objectInfos[i].FullName, "Item ID");
-                        if (tcol == _startCol)
-                            WriteValue(sheet, row, tcol, "Item ID");
-
-                        //write Item Description
-                        row++;
-                        WriteLabel(sheet, row, col, objectInfos[i].Description, "Item Description");
-                        if (tcol == _startCol)
-                            WriteValue(sheet, row, tcol, "Item Description");
-
-                        //write Engineering Unit
-                        row++;
-                        WriteLabel(sheet, row, col, "", "Engineering Unit");
-                        if (tcol == _startCol)
-                            WriteValue(sheet, row, tcol, "Engineering Unit");
-
-                        string link = serviceInfos[i].Value.Name;
-                        string[] s = link.Split('/');
-                        //write Data Source
-                        row++;
-                        WriteLabel(sheet, row, col, s[s.Length - 1], "Data Source"); 
-                        if (tcol == _startCol)
-                            WriteValue(sheet, row, tcol, "Data Source");
-
-                        //write Location
-                        row++;
-                        WriteLabel(sheet, row, col, s[s.Length - 2], "Location");
-                        if (tcol == _startCol)
-                            WriteValue(sheet, row, tcol, "Location");
-
-                        //write aggregation ID
-                        row++;
-                        WriteLabel(sheet, row, col, historicalAggregate.Id.ToString(), "Aggregation ID");
-                        if (tcol == _startCol)
-                            WriteValue(sheet, row, tcol, "Aggregation ID");
-
-                        //Write aggretation name
-                        row++;
-                        WriteLabel(sheet, row, col, historicalAggregate.Name, "Aggregation Name");
-                        if (tcol == _startCol)
-                            WriteValue(sheet, row, tcol, "Aggregation Name");
-
-                        //Write start time
-                        row++;
-                        if (startTime.Value.IsRelativeTime)
-                            WriteTimeLabel(sheet, row, col, startTime.Value.RelativeTime, "Start Time");
-                        else 
-                        {
-                            DateTime starttime;
-                            if (_isTimestampsInLocalZone)
-                                starttime = startTime.Value.AbsoluteTime.ToLocalTime();
-                            else
-                                starttime = startTime.Value.AbsoluteTime.ToUniversalTime();
-                            WriteTimeLabel(sheet, row, col, starttime, "Start Time");
-                        }
-                        if (tcol == _startCol)
-                            WriteValue(sheet, row, tcol, "Start Time");
-
-                        //Write end time
-                        row++;
-                        if (endTime.Value.IsRelativeTime)
-                            WriteTimeLabel(sheet, row, col, endTime.Value.RelativeTime, "End Time");
-                        else
-                        { 
-                            DateTime endtime;
-                            if (_isTimestampsInLocalZone)
-                                endtime = endTime.Value.AbsoluteTime.ToLocalTime();
-                            else
-                                endtime = endTime.Value.AbsoluteTime.ToUniversalTime();
-                            WriteTimeLabel(sheet, row, col, endtime, "End Time");
-                        }
-                        if (tcol == _startCol)
-                            WriteValue(sheet, row, tcol, "End Time");
-
-                        //Write resample intervals
-                        row++;
-                        WriteLabel(sheet, row, col, timePeriodViewModel.ReadInterval, "Resample interval(in seconds)");
-                        if (tcol == _startCol)
-                            WriteValue(sheet, row, tcol, "Resample interval(in seconds)");
-
-                        //Write time zone
-                        row++;
-                        string timezone;
-                        if (_isTimestampsInLocalZone)
-                            timezone = "Local time";
-                        else
-                            timezone = "UTC time";
-                        WriteLabel(sheet, row, col, timezone, "Timestamps time zone");
-                        if (tcol == _startCol)
-                            WriteValue(sheet, row, tcol, "Timestamps time zone");
-
-                        //Write space
-                        row++;
-
-                        //Write labels
-                        row++;
-                        WriteValue(sheet, row, col, "Values");
-                        if (tcol > 0)
-                            WriteValue(sheet, row, tcol, "Timestamps");
-                        if (qcol > 0)
-                            WriteValue(sheet, row, qcol, "Qualities"); 
-                        
-                        //Write timezone
-                        row++;
-                        if (tcol > 0) 
-                            WriteValue(sheet, row, tcol, "(" + timezone + ")");
-
-                        //Write value
-                        row++;
-                        if (result[i].Success)
-                        {
-                            var v = result[i].Value;
-                            WriteDataTableValue(sheet, row, col, tcol, qcol, v);
-                        }
-
-                        //col operate
-                        col += unitcols;
-                        if (_isIncludeTimestamps && _isTimestampsInFirstCol)
-                            tcol = 0;
-                    }
-                }
+                _thisAddIn.CloseBrowse();
+                return true;
             }
 
-            sheet.Columns.AutoFit();
-            return 0;
+            return false;
         }
 
-        // Write Event list
-        public int WriteEventlist(HistoricalPropertyListViewModel listViewModel,
-                               HistoricalTimePeriodViewModel timePeriodViewModel)
+        public bool UpdateDataToExcel()
         {
-            Excel.Worksheet sheet = ((Excel.Worksheet)_thisAddIn.Application.ActiveWorkbook.ActiveSheet);
-            sheet.Cells.Clear();
+            //UpdateExcelDialogViewModel viewModel = new UpdateExcelDialogViewModel(endTime, _isUseCurrentTime, _isAppendNewData);
+            //var updateDialog = new UpdateExcelDialog(viewModel);
+            //var r = updateDialog.ShowDialog();
 
-            var propertIds = listViewModel.GetHistoricalProperties();
-            startTime = _historicalTimeUtility.Parse(timePeriodViewModel.StartTime);
-            endTime = _historicalTimeUtility.Parse(timePeriodViewModel.EndTime);
-            var historicalAggregate = timePeriodViewModel.SelectedAggregate;
+            //if (r.HasValue && r.Value)
+            //{
+            //    _isUseCurrentTime = viewModel.IsUseCurrentTime;
+            //    _isAppendNewData = viewModel.IsAppendNewData;
 
-            if (endTime.Success && startTime.Success && timePeriodViewModel.SelectedAggregate != null)
-            {
-                var historicalArguments = new HistoricalArguments(startTime.Value, endTime.Value, timePeriodViewModel.Resample, timePeriodViewModel.MaxValues);
+            //    if (viewModel.IsUseCurrentTime)
+            //        viewModel.NewTime = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss t\\M");
 
-                var objectInfoResutls = _objectServiceOperations.GetObjectInfos(propertIds.Select(a => a.GetContext()).ToArray());
-                var objectInfos = objectInfoResutls.Where(a => a.Success).Select(a => a.Value).ToArray();
+            //    var newtime = _historicalTimeUtility.Parse(viewModel.NewTime);
+            //    if (newtime.Success)
+            //    {
+            //        //_mainViewModel.TimePeriodViewModel.EndTime = viewModel.NewTime;
+            //        if (!viewModel.IsAppendNewData)
+            //            ;
+            //        //WriteDataTable(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
+            //        else
+            //        {
+            //            if (newtime.Value.AbsoluteTime > _actualEndtime)        //new time is newer than actualendtime
+            //            {
+            //                // WriteDataTable(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
+            //            }
+            //        }
+            //    }
 
-                int row = 1;
-                int tcol = 0, qcol = 0;
-                int lcol = 1, vcol = 2;
-                if (_isDisplayTime)
-                {
-                    tcol = 1;
-                    lcol++;
-                    vcol++;
-                }
+            //    return true;
+            //}
 
-                if (_isDisplayQuality)
-                {
-                    qcol = lcol + 1;
-                    vcol = qcol + 1;
-                }
+            return false;
+        }
 
-                if (objectInfos.Any())
-                {
-                    var serviceInfos = _objectServiceOperations.GetServiceInfos(propertIds.Select(a => a.GetContext()).ToArray());
-
-                    var properties = propertIds.Select(a => new HistoricalPropertyRead(a, historicalAggregate.Id)).ToArray();
-                    var result = _objectServiceOperations.GetHistoricalPropertyValues(historicalArguments, properties);
-
-                    WriteValue(sheet, row, vcol, "Value");
-                    WriteValue(sheet, row, lcol, "Item ID");
-                    if (qcol > 0)
-                        WriteValue(sheet, row, qcol, "Quality");
-                    if (tcol > 0)
-                        WriteValue(sheet, row, tcol, "Time");
-                    row++;
-
-                    int[] indexes = new int[result.Length];
-                    for (int i = 0; i < indexes.Length; i++)
-                    {
-                        indexes[i] = 0;
-                    }
-
-                    while (true)
-                    {
-                        IHistoricalValue historicalValue = null;
-                        int t = 0;
-                        for (int i = 0; i < indexes.Length; ++i)
-                        {
-                            if (indexes[i] < result[i].Value.Values.Length)
-                            {
-                                historicalValue = result[i].Value.Values[indexes[i]];
-                                t = i;
-                                break;
-                            }
-                        }
-
-                        if (historicalValue == null)
-                        {
-                            break;
-                        }
-
-                        for (int i = t + 1; i < indexes.Length; ++i)
-                        {
-                            if (indexes[i] < result[i].Value.Values.Length)
-                            {
-                                if (result[i].Value.Values[indexes[i]].Time < historicalValue.Time)
-                                {
-                                    historicalValue = result[i].Value.Values[indexes[i]];
-                                    t = i;
-                                }
-                            }
-                        }
-
-                        var formattedTime = _valueFormatter.Format(historicalValue.Time);
-                        var formattedValue = _valueFormatter.Format(historicalValue.Value);
-
-                        WriteValue(sheet, row, vcol, historicalValue.Value);
-                        WriteValue(sheet, row, lcol, objectInfos[t].Name);
-
-                        if (tcol > 0)
-                        {
-                            DateTime dt;
-                            if (_isTimestampsInLocalZone)
-                                dt = historicalValue.Time.ToLocalTime();
-                            else
-                                dt = historicalValue.Time.ToUniversalTime();
-                            WriteTime(sheet, row, tcol, dt);
-                        }
-
-                        if (qcol > 0)
-                        {
-                            WriteValue(sheet, row, qcol, historicalValue.Quality.Quality);
-                            //file.Write(historicalValue.Quality.Quality);
-                            //file.Write(columnSeparator);
-                        }
-
-                        row++;
-                        indexes[t]++;
-                        if (row > 5000)
-                        {
-                            return 1;
-                        }
-                    }
-
-                    sheet.Columns.AutoFit();
-                }
-            }
-
-            return 0;
+        public void WriteExcelTest()
+        {
+            WriteTest();
         }
 
         private void WriteTest()
