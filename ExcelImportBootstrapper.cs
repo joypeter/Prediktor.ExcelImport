@@ -122,6 +122,8 @@ namespace Prediktor.ExcelImport
 
         public void Browse()
         {
+            Connect();
+
             var shellViewModel = ((Window)Shell).DataContext as ShellViewModel;
             shellViewModel.BrowseCommand.Execute(null);
             _log.DebugFormat("Browsed");

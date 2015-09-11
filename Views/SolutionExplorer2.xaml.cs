@@ -54,15 +54,17 @@ namespace Prediktor.ExcelImport
                     {
                         //item.IsSelected is two-way bound to treeViewItem.IsChecked;
                         item.IsSelected = false;
+                        treeViewItem.IsSelected = false;
                         vm.SelectedItems.Remove(item);
                     }
-                } 
+                }
                 else if ((propertyID as PropertyId).ContextId is StringNodeId)
                 { //UA item
                     if (item.Id == (propertyID as PropertyId).ContextId)
                     {
                         //item.IsSelected is two-way bound to treeViewItem.IsChecked;
                         item.IsSelected = false;
+                        treeViewItem.IsSelected = false;
                         vm.SelectedItems.Remove(item);
                     }
                 }
@@ -202,6 +204,7 @@ namespace Prediktor.ExcelImport
                 return;
             }
 
+            currentChecked.IsSelected = true;
             AddToViewModel(item);
 
             e.Handled = true;
@@ -219,6 +222,7 @@ namespace Prediktor.ExcelImport
                 return;
             }
 
+            currentChecked.IsSelected = false;
             RemoveFromViewModel(item);
 
             e.Handled = true;
