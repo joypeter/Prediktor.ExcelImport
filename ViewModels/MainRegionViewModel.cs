@@ -95,7 +95,7 @@ namespace Prediktor.ExcelImport
         private void ExportPropertyList()
         {
             if (HistoricalExcelService.Current != null)
-                HistoricalExcelService.Current.ExportDataToExcel();
+                HistoricalExcelService.Current.ExportDataTableToExcel();
         }
 
         private void ExportEventList()
