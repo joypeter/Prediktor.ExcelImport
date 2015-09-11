@@ -32,23 +32,14 @@ namespace Prediktor.ExcelImport
         private IApplicationProperties _appliationProperties;
 
         private ThisAddIn _thisAddIn = ThisAddIn.G_ThisAddIn;
-        private MainRegionViewModel _mainViewModel;
 
-        //private IResult<IHistoricalTime> startTime;
-        //private IResult<IHistoricalTime> endTime;
+        private IHistoricalQuery[] _queries;
+        private int _dataStyle;     // 0 datatable; 1 eventlist
 
         private int _startCol = 1;
-        private bool _isIncludeTimestamps = true;
-        private bool _isTimestampsInFirstCol = false;
-        private bool _isTimestampsInLocalZone = true;
-        private bool _isQualityInSeperateCol = true;
-        private bool _isUseCurrentTime = true;
-        private bool _isAppendNewData = false;
-
-        private bool _isDisplayTime = true;
-        private bool _isDisplayQuality = true;
-
-        private DateTime _actualEndtime = DateTime.MinValue;
+        private bool _displayTime = true;
+        private bool _displayQuality = true;
+        private bool _localTime = false;
 
         public HistoricalExcelService(MainRegionViewModel main,
             IEventContext eventContext, 
@@ -58,7 +49,6 @@ namespace Prediktor.ExcelImport
             IValueFormatter valueFormatter,
             IApplicationProperties appliationProperties)
         {
-            _mainViewModel = main;
             _historicalTimeUtility = historicalTimeUtility;
             _valueFormatter = valueFormatter;
             _objectServiceOperations = objectServiceOperations;
@@ -73,6 +63,11 @@ namespace Prediktor.ExcelImport
             int startrow = 1, row = 1;
             int qcol, tcol, vcol;
             int unitcols = 1;
+
+            _displayTime = displayTime;
+            _displayQuality = displayQuality;
+            _localTime = localTime;
+            _queries = queries;
 
             Excel.Worksheet sheet = ((Excel.Worksheet)_thisAddIn.Application.ActiveWorkbook.ActiveSheet);
             sheet.Cells.Clear();
@@ -170,6 +165,7 @@ namespace Prediktor.ExcelImport
                     qcol = vcol + 1;
             }
 
+            _dataStyle = 0;
             sheet.Columns.AutoFit();
             _thisAddIn.CloseBrowse();
         }
@@ -180,6 +176,11 @@ namespace Prediktor.ExcelImport
             int i = 0;
             int startrow = 1, row = 1;
             int qcol, tcol, vcol, icol;
+
+            _displayTime = displayTime;
+            _displayQuality = displayQuality;
+            _localTime = localTime;
+            _queries = queries;
 
             Excel.Worksheet sheet = ((Excel.Worksheet)_thisAddIn.Application.ActiveWorkbook.ActiveSheet);
             sheet.Cells.Clear();
@@ -295,6 +296,8 @@ namespace Prediktor.ExcelImport
                 if (row > MAX_ROWS)
                     break;
             }
+
+            _dataStyle = 1;
             sheet.Columns.AutoFit();
             _thisAddIn.CloseBrowse();
         }
@@ -458,137 +461,15 @@ namespace Prediktor.ExcelImport
             sheet.Cells[row, col] = value;
         }      
 
-        private bool ExportExcelDialog()
+        public void UpdateDataToExcel()
         {
-            var excelViewModel = new ExportExcelDialogViewModel(_startCol,
-                                                            _isIncludeTimestamps, _isTimestampsInFirstCol,
-                                                            _isTimestampsInLocalZone, _isQualityInSeperateCol);
-            var excelDialog = new ExportExcelDialog(excelViewModel);
-            var r = excelDialog.ShowDialog();
+            IResult<IHistoricalPropertyValue>[] valuesResult = _objectServiceOperations.GetHistoricalPropertyValues(_queries);
+            IHistoricalPropertyValue[] values = valuesResult.Select(a => a.Value).ToArray();
 
-            if (r.HasValue && r.Value)
-            {
-                _startCol = excelViewModel.SelectedStartInColumn.Col;
-                _isIncludeTimestamps = excelViewModel.IsIncludeTimestamps;
-                _isTimestampsInFirstCol = excelViewModel.IsTimestampsInFirstCol;
-                _isTimestampsInLocalZone = excelViewModel.IsTimestampsInLocalZone;
-                _isQualityInSeperateCol = excelViewModel.IsQuelityInSeperateCol;
-
-                //WriteDataTable(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
-                //rt = WriteEventlist(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
-
-                _thisAddIn.CloseBrowse();
-                return true;
-            }
-
-            return false;
-        }
-
-        public bool UpdateDataToExcel()
-        {
-            //UpdateExcelDialogViewModel viewModel = new UpdateExcelDialogViewModel(endTime, _isUseCurrentTime, _isAppendNewData);
-            //var updateDialog = new UpdateExcelDialog(viewModel);
-            //var r = updateDialog.ShowDialog();
-
-            //if (r.HasValue && r.Value)
-            //{
-            //    _isUseCurrentTime = viewModel.IsUseCurrentTime;
-            //    _isAppendNewData = viewModel.IsAppendNewData;
-
-            //    if (viewModel.IsUseCurrentTime)
-            //        viewModel.NewTime = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss t\\M");
-
-            //    var newtime = _historicalTimeUtility.Parse(viewModel.NewTime);
-            //    if (newtime.Success)
-            //    {
-            //        //_mainViewModel.TimePeriodViewModel.EndTime = viewModel.NewTime;
-            //        if (!viewModel.IsAppendNewData)
-            //            ;
-            //        //WriteDataTable(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
-            //        else
-            //        {
-            //            if (newtime.Value.AbsoluteTime > _actualEndtime)        //new time is newer than actualendtime
-            //            {
-            //                // WriteDataTable(_mainViewModel.ListViewModel, _mainViewModel.TimePeriodViewModel);
-            //            }
-            //        }
-            //    }
-
-            //    return true;
-            //}
-
-            return false;
-        }
-
-        public void WriteExcelTest()
-        {
-            WriteTest();
-        }
-
-        private void WriteTest()
-        {
-            Excel.Worksheet sheet = ((Excel.Worksheet)_thisAddIn.Application.ActiveWorkbook.Sheets[1]);
-
-            sheet.Select();
-            sheet.Cells.Clear();
-            int signals = 10;
-            int timerows = 30;
-            int startcol = 2;
-
-            sheet.Cells.ColumnWidth = 30;
-            sheet.Range["A1"].ColumnWidth = 14;
-
-            sheet.Range["A13"].Value2 = "Timestamps";
-            sheet.Range["A14"].Value2 = "(Local time)";
-
-            //sheet.Range["A13"].AddComment("ssss");
-
-            //sheet.Rows[1] = "ddd";
-            //sheet.Cells.get_Offset(1, 1).Value2 = "test";
-            //sheet.Cells[1, 1] = "ddd";
-            //sheet.Range[1, 13].Value2 = "ddd";
-
-            //sheet.Rows.Width = 40;
-            //sheet.Cells.NumberFormat = @"m/d/yyyy h:mm";
-
-            //sheet.get_Range("B1", "B5").Value2 = 2312;
-            //sheet.get_Range("1:1").AddComment("ddd");
-            //sheet.Range["B2"].AddComment("Item ID");
-            //Excel.Range rg = sheet.get_Range(sheet.Cells[1, 2], sheet.Cells[1, 3]); invalid
-            //rg.Value = 3;
-            //sheet.Columns[Type.Missing, "1:2"].
-
-            for (int row = 15; row < timerows + 15; row++)
-            {
-                sheet.Cells[row, 1] = DateTime.Now.ToString("M/d/yyyy h:mm");
-            }
-
-            for (int col = startcol; col < startcol + signals; col++)
-            {
-                sheet.Cells[1, col] = "ApisLogger1.ApisWorker1.Signal" + (col - startcol + 1).ToString();
-                sheet.Range[sheet.Cells[1, col], sheet.Cells[1, col]].AddComment("Item ID");
-                sheet.Cells[4, col] = "Prediktor.ApisOPCHDAServer.1";
-                sheet.Cells[13, col] = "Local time";
-                sheet.Cells[13, col] = "Values";
-
-                for (int row = 15; row < timerows + 15; row++)
-                {
-                    //sheet.Cells.get_Offset(row, col).Value2 = "row" + row.ToString() + ":" + "col" + col.ToString();
-                    //sheet.Cells[row, col] = "row" + row.ToString() + ":" + "col" + col.ToString() + "many other";
-
-                    //Excel.Range rg = 
-                    //rg.Value = "dss0";
-                    //.AddComment("Item ID");
-                    sheet.Cells[row, col] = ((col - 1) * 100 / 71).ToString();
-                }
-
-            }
-
-            //Excel.Range rg = sheet.Range[sheet.Cells[3, 2], sheet.Cells[3, 3]];
-            //rg.Value = "dddd";
-
-            Excel.Range rg2 = sheet.Range[sheet.Cells[10, 2], sheet.Cells[10, 2]];
-            rg2.AddComment("sss");
+            if (0 == _dataStyle)
+                DataTableToExcel(_displayTime, _displayQuality, _localTime, _queries, values);
+            else
+                EventListToExcel(_displayTime, _displayQuality, _localTime, _queries, values);
         }
     }
 }
