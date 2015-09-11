@@ -161,7 +161,7 @@ namespace Prediktor.ExcelImport
         private void Export()
         {
             if (HistoricalExcelService.Current != null)
-                HistoricalExcelService.Current.ExportDataToExcel();
+                HistoricalExcelService.Current.ExportDataTableToExcel();
         }
 
         private void SolutionExplorerSelectionChanged(SolutionExplorerSelection obj)
