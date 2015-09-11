@@ -184,6 +184,10 @@
     <Reference Include="Prediktor.Carbon.Configuration.Windsor">
       <HintPath>..\Prediktor.Carbon.Configuration.Windsor\bin\Debug\Prediktor.Carbon.Configuration.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="Prediktor.Carbon.Controls, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Prediktor.Carbon.Controls\bin\Debug\Prediktor.Carbon.Controls.dll</HintPath>
+    </Reference>
     <Reference Include="Prediktor.Carbon.Infrastructure, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Prediktor.Carbon.Infrastructure\bin\Debug\Prediktor.Carbon.Infrastructure.dll</HintPath>
@@ -260,7 +264,6 @@
       <HintPath>..\..\..\Dependencies\Telerik\Telerik.Windows.Data.dll</HintPath>
     </Reference>
     <Reference Include="UIAutomationProvider" />
-    <Reference Include="UIAutomationTypes" />
     <Reference Include="WindowsBase" />
     <Reference Include="WpfAnimatedGif">
       <HintPath>..\..\..\Dependencies\UI\WpfAnimatedGif.dll</HintPath>

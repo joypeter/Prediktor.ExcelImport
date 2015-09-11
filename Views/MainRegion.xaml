@@ -16,51 +16,27 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
         <Views:ItemsHistoricalTimePeriodView 
             Grid.Row="0"
-            DataContext="{Binding ItemsViewModel}" 
+            DataContext="{Binding ItemsHistoricalTimePeriodViewModel}" 
             Margin="10,10,10,10"/>
-        
-        <!--Row 1: 3 buttons to switch view type-->
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Button Name="tableViewButton" Content="{trn:Translation NativeText='Table view'}" IsEnabled="False" Click="tableViewButton_Click" />
-            <Button Name="eventListViewButton" Content="{trn:Translation NativeText='Event list view'}" Click="eventListViewButton_Click" />
-            <Button Name="graphViewButton" Content="{trn:Translation NativeText='Graph view'}" Click="graphViewButton_Click" />
-        </StackPanel>
 
-        <!--Row 2: different types of view: list view, eventlist view, chart view-->
-        <TabControl Name="viewTab" Grid.Row="2">
-            <TabControl.ItemContainerStyle>
-                <Style TargetType="{x:Type TabItem}">
-                    <Style.Setters>
-                        <Setter Property="Visibility" Value="Collapsed"/>
-                    </Style.Setters>
-                </Style>
-            </TabControl.ItemContainerStyle>
+        <TabControl Name="viewTab" Grid.Row="1">
             <TabItem Header="{trn:Translation NativeText='Table view'}">
-                <Views:HistoricalPropertyListView VerticalAlignment="Stretch" DataContext="{Binding ListViewModel}" Margin="10,10,10,10">
-                </Views:HistoricalPropertyListView>
+                <Views:ItemsHistoricalPropertyListView VerticalAlignment="Stretch" DataContext="{Binding ListViewModel}" Margin="10,10,10,10">
+                </Views:ItemsHistoricalPropertyListView>
             </TabItem>
             <TabItem Header="{trn:Translation NativeText='Event list view'}">
                 <Views:HistoricalEventListView VerticalAlignment="Stretch" DataContext="{Binding EventListViewModel}" Margin="10,10,10,10">
                 </Views:HistoricalEventListView>
             </TabItem>
-            <TabItem Name="HistoryTrendTab" Header="{trn:Translation NativeText='Graph view'}">
-                <local:HistoryTrend  VerticalAlignment="Stretch" DataContext="{Binding ChartModel}" Margin="10,10,10,10">
-                </local:HistoryTrend>
+            <TabItem Header="{trn:Translation NativeText='Graph view'}">
+                <Views:ItemsHistoryTrend VerticalAlignment="Stretch" DataContext="{Binding ChartModel}" Margin="10,10,10,10">
+                </Views:ItemsHistoryTrend>
             </TabItem>
         </TabControl>
-        
-        <!--Row 3: import button-->
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="{trn:Translation NativeText='Import'}" 
-                    Command="{Binding ExportCommand}"
-                    IsEnabled="{Binding HasItems}"/>
-        </StackPanel>
     </Grid>
 </UserControl>

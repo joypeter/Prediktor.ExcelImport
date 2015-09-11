@@ -1,20 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Reflection;
 using System.IO;
+using System.Deployment.Application;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
 using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Modularity;
+using Microsoft.Practices.Prism.Regions;
+using Microsoft.Practices.Prism.UnityExtensions;
 using Microsoft.Practices.ServiceLocation;
 using Prediktor.Carbon.Configuration;
+using Prediktor.Carbon.Configuration.ViewModels;
+using Prediktor.Carbon.Configuration.Windsor;
 using Prediktor.Carbon.Infrastructure.Implementation;
 using Prediktor.Configuration.Windsor;
 using Prediktor.Ioc;
 using Prediktor.Log;
 using PrismContrib.WindsorExtensions;
+using Prediktor.Carbon.Configuration.Definitions.ModuleServices;
 
 namespace Prediktor.ExcelImport
 {
@@ -114,6 +122,8 @@ namespace Prediktor.ExcelImport
 
         public void Browse()
         {
+            Connect();
+
             var shellViewModel = ((Window)Shell).DataContext as ShellViewModel;
             shellViewModel.BrowseCommand.Execute(null);
             _log.DebugFormat("Browsed");
