@@ -179,5 +179,65 @@ namespace Prediktor.ExcelImport
                 Properties.Settings.Default.TimestampsInLocalZone = value;
             }
         }
+
+        public string CommonName
+        {
+            get
+            {
+                return Properties.Settings.Default.CommonName;
+            }
+            set
+            {
+                Properties.Settings.Default.CommonName = value;
+            }
+        }
+
+        public string Domain
+        {
+            get
+            {
+                return Properties.Settings.Default.Domain;
+            }
+            set
+            {
+                Properties.Settings.Default.Domain = value;
+            }
+        }
+
+        public string Organization
+        {
+            get
+            {
+                return Properties.Settings.Default.Organization;
+            }
+            set
+            {
+                Properties.Settings.Default.Organization = value;
+            }
+        }
+
+        public string KeyLength
+        {
+            get
+            {
+                return Properties.Settings.Default.KeyLength;
+            }
+            set
+            {
+                Properties.Settings.Default.KeyLength = value;
+            }
+        }
+
+        public string Validity
+        {
+            get
+            {
+                return Properties.Settings.Default.Validity;
+            }
+            set
+            {
+                Properties.Settings.Default.Validity = value;
+            }
+        }
     }
 }
