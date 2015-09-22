@@ -193,7 +193,7 @@ namespace Prediktor.ExcelImport.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("ExcelImport")]
         public string CommonName {
             get {
                 return ((string)(this["CommonName"]));
@@ -205,7 +205,7 @@ namespace Prediktor.ExcelImport.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("localhost")]
         public string Domain {
             get {
                 return ((string)(this["Domain"]));
@@ -217,7 +217,7 @@ namespace Prediktor.ExcelImport.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Preditkor")]
         public string Organization {
             get {
                 return ((string)(this["Organization"]));

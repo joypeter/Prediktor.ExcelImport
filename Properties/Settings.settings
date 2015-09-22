@@ -45,13 +45,13 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="CommonName" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">ExcelImport</Value>
     </Setting>
     <Setting Name="Domain" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">localhost</Value>
     </Setting>
     <Setting Name="Organization" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Preditkor</Value>
     </Setting>
     <Setting Name="KeyLength" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

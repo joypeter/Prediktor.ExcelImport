@@ -70,6 +70,7 @@ namespace Prediktor.ExcelImport
         {
             var appProperties = (ApplicationProperties)_applicationProperties;
             var viewModel = new ConnectionDialogViewModel(_eventAggregator, _interactionService, _serviceFactory, _networkBrowser, appProperties.LastUri);
+            viewModel.CertificateCommand = new DelegateCommand(CheckCertificate);
             var connectionDialog = new ConnectionDialog(viewModel);
             var result = connectionDialog.ShowDialog();
             if (result.HasValue && result.Value)
@@ -162,6 +163,7 @@ namespace Prediktor.ExcelImport
 
         private void OpenCertificateLocation()
         {
+            string path = System.IO.Directory.GetCurrentDirectory();
             System.Diagnostics.Process.Start("Explorer.exe", _uaCertificateUtility.GetCertificatePath());
         }
 
