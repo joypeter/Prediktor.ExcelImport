@@ -15,6 +15,7 @@ using Prediktor.Configuration.Definitions;
 using Prediktor.Log;
 using Prediktor.Services.Definitions;
 using System.Linq;
+using System.Net;
 
 namespace Prediktor.ExcelImport
 {
@@ -142,7 +143,7 @@ namespace Prediktor.ExcelImport
             var appProperties = (ApplicationProperties)_applicationProperties;
             var viewModel = new CertificateDialogViewModel(_interactionService, _uaCertificateUtility);
             viewModel.CommonName = appProperties.CommonName;
-            viewModel.Domain = appProperties.Domain;
+            viewModel.Domain = Dns.GetHostName(); //appProperties.Domain;
             viewModel.Organization = appProperties.Organization;
             viewModel.SelectValidity = appProperties.Validity.Equals("") ? viewModel.ValidityList[0] :
                 viewModel.ValidityList.Where<Validity>(V => V.Name == appProperties.Validity).First<Validity>();
