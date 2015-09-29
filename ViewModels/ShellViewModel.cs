@@ -14,6 +14,8 @@ using Prediktor.Carbon.Infrastructure.Definitions;
 using Prediktor.Configuration.Definitions;
 using Prediktor.Log;
 using Prediktor.Services.Definitions;
+using System.Linq;
+using System.Net;
 
 namespace Prediktor.ExcelImport
 {
@@ -25,6 +27,7 @@ namespace Prediktor.ExcelImport
         private readonly IApplicationProperties _applicationProperties;
         private readonly IApplicationFeatures _applicationFeatures;
         private readonly IConfigApplicationService _applicationService;
+        private readonly IUACertificateUtility _uaCertificateUtility;
         private readonly string _title;
         private readonly IServiceFactory _serviceFactory;
         private readonly INetworkBrowser _networkBrowser;
@@ -37,7 +40,8 @@ namespace Prediktor.ExcelImport
 
         public ShellViewModel(IThemeProvider themeProvider, IEventAggregator eventAggregator, IInteractionService interactionService,
             IApplicationProperties applicationProperties, IApplicationFeatures applicationFeatures,
-            IConfigApplicationService applicationService, string title, IServiceFactory serviceFactory, INetworkBrowser networkBrowser)
+            IConfigApplicationService applicationService, string title, IServiceFactory serviceFactory, INetworkBrowser networkBrowser,
+            IUACertificateUtility uaCertificateUtility)
         {
             _themeProvider = themeProvider;
             _eventAggregator = eventAggregator;
@@ -45,6 +49,7 @@ namespace Prediktor.ExcelImport
             _applicationProperties = applicationProperties;
             _applicationFeatures = applicationFeatures;
             _applicationService = applicationService;
+            _uaCertificateUtility = uaCertificateUtility;
             _title = title;
             _serviceFactory = serviceFactory;
             _networkBrowser = networkBrowser;
@@ -55,6 +60,8 @@ namespace Prediktor.ExcelImport
             CloseBrowseCommand = new DelegateCommand(CloseBrowse);
             AboutCommand = new DelegateCommand(About);
             HelpCommand = new DelegateCommand(Help);
+            CertGenCommand = new DelegateCommand(GenerateCertificate);
+            CertLocCommand = new DelegateCommand(OpenCertificateLocation);
 
             _configFile = _applicationService.CurrentFile;
             _connected = false;
@@ -64,6 +71,7 @@ namespace Prediktor.ExcelImport
         {
             var appProperties = (ApplicationProperties)_applicationProperties;
             var viewModel = new ConnectionDialogViewModel(_eventAggregator, _interactionService, _serviceFactory, _networkBrowser, appProperties.LastUri);
+            viewModel.CertificateCommand = new DelegateCommand(CheckCertificate);
             var connectionDialog = new ConnectionDialog(viewModel);
             var result = connectionDialog.ShowDialog();
             if (result.HasValue && result.Value)
@@ -129,12 +137,56 @@ namespace Prediktor.ExcelImport
             dlg.GetMessageDialog().ShowInfo(about.ToString(), tr.GetSystemText("About " + _title));
         }
 
+
+        private void GenerateCertificate()
+        {
+            var appProperties = (ApplicationProperties)_applicationProperties;
+            var viewModel = new CertificateDialogViewModel(_interactionService, _uaCertificateUtility);
+            viewModel.CommonName = appProperties.CommonName;
+            viewModel.Domain = Dns.GetHostName(); //appProperties.Domain;
+            viewModel.Organization = appProperties.Organization;
+            viewModel.SelectValidity = appProperties.Validity.Equals("") ? viewModel.ValidityList[0] :
+                viewModel.ValidityList.Where<Validity>(V => V.Name == appProperties.Validity).First<Validity>();
+            viewModel.SelectKeyLength = appProperties.KeyLength.Equals("") ? viewModel.KeyLengthList[0] :
+                viewModel.KeyLengthList.Where<KeyLength>(K => K.Name == appProperties.KeyLength).First<KeyLength>();
+            var certificateDialog = new CertificateDialog(viewModel);
+            var result = certificateDialog.ShowDialog();
+            if (result.HasValue && result.Value)
+            {
+                appProperties.CommonName = viewModel.CommonName;
+                appProperties.Domain = viewModel.Domain;
+                appProperties.Organization = viewModel.Organization;
+                appProperties.KeyLength = viewModel.SelectKeyLength.Name;
+                appProperties.Validity = viewModel.SelectValidity.Name;
+                appProperties.Save();
+            }
+        }
+
+        private void OpenCertificateLocation()
+        {
+            string path = System.IO.Directory.GetCurrentDirectory();
+            System.Diagnostics.Process.Start("Explorer.exe", _uaCertificateUtility.GetCertificatePath());
+        }
+
+        private void CheckCertificate()
+        {
+            if (!_uaCertificateUtility.IsCertificateExisted())
+            {
+                _interactionService.DialogService.GetMessageDialog().ShowInfo(
+                    _interactionService.TranslatingService.GetSystemText("There is no UA certificate, please generate a new certificate first!"));
+
+                GenerateCertificate();
+            }
+        }
+
         public ICommand ConnectCommand { get; private set; }
         public ICommand BrowseCommand { get; private set; }
         public ICommand UpdateCommand { get; private set; }
         public ICommand AboutCommand { get; private set; }
         public ICommand HelpCommand { get; private set; }
         public ICommand CloseBrowseCommand { get; private set; }
+        public ICommand CertGenCommand { get; private set; }
+        public ICommand CertLocCommand { get; private set; }
 
         private void InitializeTheme()
         {

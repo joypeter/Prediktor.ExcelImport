@@ -14,29 +14,36 @@
              AllowDrop="True">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <xctk:BusyIndicator IsBusy="{Binding BusyIndicator}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-        <Views:ItemsHistoricalTimePeriodView 
-            Grid.Row="0"
-            DataContext="{Binding ItemsHistoricalTimePeriodViewModel}" 
-            Margin="10,10,10,10"/>
+                    <Views:ItemsHistoricalTimePeriodView DataContext="{Binding ItemsHistoricalTimePeriodViewModel}" Margin="10,10,10,10"/>
 
-        <TabControl Name="viewTab" Grid.Row="1">
-            <TabItem Header="{trn:Translation NativeText='Table view'}">
-                <Views:ItemsHistoricalPropertyListView VerticalAlignment="Stretch" DataContext="{Binding ListViewModel}" Margin="10,10,10,10">
-                </Views:ItemsHistoricalPropertyListView>
-            </TabItem>
-            <TabItem Header="{trn:Translation NativeText='Event list view'}">
-                <Views:HistoricalEventListView VerticalAlignment="Stretch" DataContext="{Binding EventListViewModel}" Margin="10,10,10,10">
-                </Views:HistoricalEventListView>
-            </TabItem>
-            <TabItem Header="{trn:Translation NativeText='Graph view'}">
-                <Views:ItemsHistoryTrend VerticalAlignment="Stretch" DataContext="{Binding ChartModel}" Margin="10,10,10,10">
-                </Views:ItemsHistoryTrend>
-            </TabItem>
-        </TabControl>
+                    <TabControl Name="viewTab" Grid.Row="1">
+                        <TabItem Header="{trn:Translation NativeText='Table view'}">
+                            <Views:ItemsHistoricalPropertyListView VerticalAlignment="Stretch" DataContext="{Binding ListViewModel}" Margin="10,10,10,10">
+                            </Views:ItemsHistoricalPropertyListView>
+                        </TabItem>
+                        <TabItem Header="{trn:Translation NativeText='Event list view'}">
+                            <Views:HistoricalEventListView VerticalAlignment="Stretch" DataContext="{Binding EventListViewModel}" Margin="10,10,10,10">
+                            </Views:HistoricalEventListView>
+                        </TabItem>
+                        <TabItem Header="{trn:Translation NativeText='Graph view'}">
+                            <Views:ItemsHistoryTrend VerticalAlignment="Stretch" DataContext="{Binding ChartModel}" Margin="10,10,10,10">
+                            </Views:ItemsHistoryTrend>
+                        </TabItem>
+                    </TabControl>
+
+                </Grid>
+            </Grid>
+        </xctk:BusyIndicator>
     </Grid>
 </UserControl>

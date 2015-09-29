@@ -69,9 +69,7 @@ namespace Prediktor.ExcelImport
 
         private void SolutionExplorerSelectionChanged(SolutionExplorerSelection obj)
         {
-            IObjectId[] objs = obj.Selection.ToArray();
-
-            _eventContext.ContextualEventAggregator.GetEvent<ObjectsAddedToViewEvent>().Publish(obj.Selection.ToArray());
+            ItemsHistoricalTimePeriodViewModel.InsertObjects(obj.Selection.ToArray());
         }
 
         private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
